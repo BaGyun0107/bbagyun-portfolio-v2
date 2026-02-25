@@ -37,12 +37,12 @@ const featureUseCases = new FeatureUseCases(new FeaturePrismaRepository());
  *                 example: ["React", "TypeScript"]
  *               status:
  *                 type: string
- *                 description: 기능의 현재 상태 (예: "개발 중", "완료")
- *                 example: "개발 중"
+ *                 description: '기능의 현재 상태 (예: "개발 중", "완료")'
+ *                 example: '개발 중'
  *               overview:
  *                 type: string
- *                 description: 기능의 상세 개요
- *                 example: "이 기능은 사용자 경험을 향상시키기 위해 개발되었습니다."
+ *                 description: '기능의 상세 개요'
+ *                 example: '이 기능은 사용자 경험을 향상시키기 위해 개발되었습니다.'
  *     responses:
  *       201:
  *         description: 기능 생성 성공

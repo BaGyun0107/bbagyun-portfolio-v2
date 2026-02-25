@@ -6,13 +6,32 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+/**
+ * DATABASE_URL 환경 변수 기반으로 DB 접속 URL을 결정합니다.
+ * 환경 변수에 절대 경로가 이미 포함되어 있으면 그대로 사용하고,
+ * 상대경로(file:./)인 경우에만 process.cwd() 기반 절대경로로 변환합니다.
+ */
+const getDbUrl = (): string | undefined => {
+  const envUrl = process.env.DATABASE_URL;
+  if (!envUrl) return undefined;
+
+  // 이미 절대경로면 그대로 사용
+  if (envUrl.startsWith("file:/") || envUrl.startsWith("/")) return envUrl;
+
+  // 상대경로(file:./)인 경우 → process.cwd() 기반 절대경로로 변환
+  // e.g. "file:./prisma/dev.db" → "file:/absolute/path/to/prisma/dev.db"
+  const relativePart = envUrl.replace(/^file:\.\//, "");
+  const absolutePath = path.resolve(process.cwd(), relativePart);
+  return `file:${absolutePath}`;
+};
+
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: ["query", "error", "warn"],
+    log: ["error", "warn"],
     datasources: {
       db: {
-        url: `file:${path.join(process.cwd(), "prisma", "dev.db")}`,
+        url: getDbUrl(),
       },
     },
   });

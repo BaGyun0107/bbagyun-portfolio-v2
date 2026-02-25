@@ -18,20 +18,20 @@ export const api = {
       ...(options?.headers as Record<string, string> || {})
     };
 
-    // 만약 로컬 스토리지에 토큰이 있다면 (CSR 환경 한정)
-    // if (typeof window !== "undefined") {
-    //   const token = localStorage.getItem("accessToken");
-    //   if (token) headers["Authorization"] = `Bearer ${token}`;
-    // }
-
     const response = await fetch(url, { ...options, headers });
 
     // 응답 상태 파싱 연동 (api-response.util 양식 따름)
     const json = await response.json().catch(() => null);
 
+    // HTTP 레벨 에러 검사 (일부 환경에선 실제 HTTP 에러가 날 수 있음)
     if (!response.ok) {
-      // 서버에서 에러 응답 객체를 보낸 경우 (errorMessage 필드 추출)
-      const errorMsg = json?.errorMessage || response.statusText || "알 수 없는 오류가 발생했습니다.";
+      const errorMsg = json?.message || json?.errorMessage || response.statusText || "알 수 없는 오류가 발생했습니다.";
+      throw new Error(errorMsg);
+    }
+
+    // ⚠️ API가 HTTP 200을 항상 반환하는 설계이므로 success 필드를 추가로 확인
+    if (json && json.success === false) {
+      const errorMsg = json.message || json.errorMessage || "서버 오류가 발생했습니다.";
       throw new Error(errorMsg);
     }
 
