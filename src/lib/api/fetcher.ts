@@ -1,0 +1,66 @@
+import { API_CONFIG } from "./config";
+
+/**
+ * 프론트엔드 공통 API Fetcher 유틸리티
+ */
+export const api = {
+  /**
+   * 공통 Fetch 로직 및 응답 에러 핸들링
+   * @param endpoint API 엔드포인트 주소 (예: '/features')
+   * @param options RequestInit 옵션 객체
+   */
+  async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    const url = `${API_CONFIG.BASE_URL}${endpoint}`;
+    
+    // 추가할 공용 헤더 설정
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      ...(options?.headers as Record<string, string> || {})
+    };
+
+    // 만약 로컬 스토리지에 토큰이 있다면 (CSR 환경 한정)
+    // if (typeof window !== "undefined") {
+    //   const token = localStorage.getItem("accessToken");
+    //   if (token) headers["Authorization"] = `Bearer ${token}`;
+    // }
+
+    const response = await fetch(url, { ...options, headers });
+
+    // 응답 상태 파싱 연동 (api-response.util 양식 따름)
+    const json = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      // 서버에서 에러 응답 객체를 보낸 경우 (errorMessage 필드 추출)
+      const errorMsg = json?.errorMessage || response.statusText || "알 수 없는 오류가 발생했습니다.";
+      throw new Error(errorMsg);
+    }
+
+    // 서버의 response.data 항목이 있는 경우 해당 값만 추출
+    if (json && 'data' in json) {
+        return json.data as T;
+    }
+
+    // 만약 래핑되지 않은 응답이라면 그대로 반환
+    return json as T;
+  },
+
+  get<T>(endpoint: string, options?: Omit<RequestInit, 'method'>) {
+    return this.request<T>(endpoint, { ...options, method: 'GET' });
+  },
+
+  post<T>(endpoint: string, body: unknown, options?: Omit<RequestInit, 'method' | 'body'>) {
+    return this.request<T>(endpoint, { ...options, method: 'POST', body: JSON.stringify(body) });
+  },
+
+  put<T>(endpoint: string, body: unknown, options?: Omit<RequestInit, 'method' | 'body'>) {
+    return this.request<T>(endpoint, { ...options, method: 'PUT', body: JSON.stringify(body) });
+  },
+
+  patch<T>(endpoint: string, body: unknown, options?: Omit<RequestInit, 'method' | 'body'>) {
+    return this.request<T>(endpoint, { ...options, method: 'PATCH', body: JSON.stringify(body) });
+  },
+
+  delete<T>(endpoint: string, options?: Omit<RequestInit, 'method'>) {
+    return this.request<T>(endpoint, { ...options, method: 'DELETE' });
+  },
+};

@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String         @id @default(cuid())
+  name      String
+  email     String         @unique
+  password  String?
+  role      String // "Admin", "Editor", "Viewer"
+  status    String // "Active", "Inactive"
+  lastLogin DateTime       @map("last_login")
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+  tokens    RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model Feature {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  iconName    String   @map("icon_name")
+  category    String // "Backend", "Frontend", "DevOps"
+  techStack   String   @map("tech_stack") // Stored as JSON string since SQLite doesn't support arrays directly
+  status      String // "Production", "Beta", "Archived"
+  apiCount    Int      @default(0) @map("api_count")
+  overview    String
+  diagramUrl  String?  @map("diagram_url")
+  period      String?
+  version     String?
+  team        String?
+  content     String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("features")
+}
+
+model Insight {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  excerpt   String
+  content   String
+  date      DateTime
+  tags      String // Stored as JSON string
+  readTime  String   @map("read_time")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("insights")
+}
+
+model Log {
+  id           String   @id @default(cuid())
+  method       String
+  path         String
+  status       Int
+  latency      Int
+  requestData  String?  @map("request_data")
+  responseData String?  @map("response_data")
+  errorMessage String?  @map("error_message")
+  timestamp    DateTime @default(now())
+
+  @@map("logs")
+}
+
+model SystemSettings {
+  id               String   @id @default(cuid())
+  siteName         String   @map("site_name")
+  seoDescription   String   @map("seo_description")
+  maintenanceMode  Boolean  @default(false) @map("maintenance_mode")
+  analyticsEnabled Boolean  @default(true) @map("analytics_enabled")
+  apiVersion       String   @map("api_version")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("system_settings")
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  status    String   @default("UNREAD") // "UNREAD", "READ", "REPLIED"
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contact_messages")
+}

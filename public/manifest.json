@@ -1,0 +1,15 @@
+{
+  "short_name": "BbaGyun's Portfolio",
+  "name": "BbaGyun's Portfolio",
+  "icons": [
+    {
+      "src": "/BbaGyun_white_logo.png",
+      "type": "image/png",
+      "sizes": "any"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
