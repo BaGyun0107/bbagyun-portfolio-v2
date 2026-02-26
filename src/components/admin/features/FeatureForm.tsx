@@ -37,7 +37,7 @@ export function FeatureForm({
   interface FeatureFormValues {
     title: string;
     slug: string;
-    category: "Backend" | "Frontend" | "DevOps";
+    category: "Backend" | "Frontend" | "DevOps" | "Fullstack";
     status: "Production" | "Beta" | "Archived";
     techStack: string;
     overview: string;
@@ -124,7 +124,7 @@ export function FeatureForm({
             <div className="space-y-2">
               <Label htmlFor="category">카테고리</Label>
               <Select
-                onValueChange={(value) => setValue("category", value as "Backend" | "Frontend" | "DevOps")}
+                onValueChange={(value) => setValue("category", value as "Backend" | "Frontend" | "DevOps" | "Fullstack")}
                 defaultValue={initialData?.category || "Backend"}
               >
                 <SelectTrigger>
@@ -134,6 +134,7 @@ export function FeatureForm({
                   <SelectItem value="Backend">Backend</SelectItem>
                   <SelectItem value="Frontend">Frontend</SelectItem>
                   <SelectItem value="DevOps">DevOps</SelectItem>
+                  <SelectItem value="Fullstack">Fullstack</SelectItem>
                 </SelectContent>
               </Select>
             </div>

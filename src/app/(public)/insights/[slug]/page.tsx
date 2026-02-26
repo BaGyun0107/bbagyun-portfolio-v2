@@ -4,9 +4,10 @@ import { InsightService } from "@/lib/api/services/insight.service";
 
 export const dynamic = 'force-dynamic';
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, Clock, Share2 } from "lucide-react";
+import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { MarkdownViewer } from "@/components/ui/MarkdownViewer";
+import { ShareButton } from "@/components/ui/ShareButton";
+
 
 export default async function InsightDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -42,7 +43,7 @@ export default async function InsightDetailPage({ params }: { params: Promise<{ 
           <div className="flex items-center gap-6 text-sm text-muted-foreground border-b pb-8">
             <span className="flex items-center gap-1">
               <Calendar className="h-4 w-4" />
-              {String(insight.date)}
+              {new Date(insight.date).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, '')}
             </span>
             <span className="flex items-center gap-1">
               <Clock className="h-4 w-4" />
@@ -65,13 +66,7 @@ export default async function InsightDetailPage({ params }: { params: Promise<{ 
              <div className="text-sm text-muted-foreground">
                Thanks for reading!
              </div>
-             <Button variant="outline" size="sm" onClick={() => {
-               navigator.clipboard.writeText(window.location.href);
-               alert("Link copied to clipboard!");
-             }}>
-               <Share2 className="mr-2 h-4 w-4" />
-               Share this post
-             </Button>
+             <ShareButton />
           </div>
         </div>
       </article>

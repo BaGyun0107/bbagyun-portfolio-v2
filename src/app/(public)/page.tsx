@@ -1,5 +1,13 @@
 import Link from "next/link";
-import { ArrowRight, Server, Terminal, Database, Code, Cpu, Globe, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Server, Cloud, Globe, Cpu, Terminal } from "lucide-react";
+import { 
+  SiNodedotjs, SiExpress, SiNestjs, SiPhp, 
+  SiJavascript, SiTypescript, SiReact, 
+  SiMysql, SiPrisma, SiSequelize,
+  SiAmazonwebservices, SiRockylinux, SiJenkins, SiGithubactions,
+  SiPm2, SiSocketdotio, SiFigma,
+  SiAnthropic, SiOpenai, SiGithubcopilot
+} from "react-icons/si";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,12 +22,37 @@ export default async function HomePage() {
     InsightService.getAllInsights()
   ]);
   const techStack = [
-    { icon: Server, name: "Node.js" },
-    { icon: Database, name: "PostgreSQL" },
-    { icon: Cpu, name: "Redis" },
-    { icon: Globe, name: "AWS" },
-    { icon: Code, name: "TypeScript" },
-    { icon: Terminal, name: "Docker" },
+    // Backend
+    { icon: SiNodedotjs, name: "Node.js", color: "text-[#339933]" },
+    { icon: SiExpress, name: "Express", color: "text-black dark:text-white" },
+    { icon: SiNestjs, name: "NestJS", color: "text-[#E0234E]" },
+    { icon: SiPhp, name: "PHP", color: "text-[#777BB4]" },
+    // Frontend
+    { icon: SiJavascript, name: "JavaScript", color: "text-[#F7DF1E]" },
+    { icon: SiTypescript, name: "TypeScript", color: "text-[#3178C6]" },
+    { icon: SiReact, name: "React", color: "text-[#61DAFB]" },
+    // Database
+    { icon: SiMysql, name: "MySQL", color: "text-[#4479A1]" },
+    { icon: SiPrisma, name: "Prisma", color: "text-[#2D3748] dark:text-white" },
+    { icon: SiSequelize, name: "Sequelize", color: "text-[#52B0E7]" },
+    // Infra & Cloud
+    { icon: SiAmazonwebservices, name: "AWS", color: "text-[#FF9900]" },
+    { icon: Cloud, name: "NHN Cloud", color: "text-[#3366FF]" }, 
+    { icon: Server, name: "Cafe24", color: "text-black dark:text-white" }, 
+    { icon: Globe, name: "Gabia", color: "text-[#333333] dark:text-white" }, 
+    { icon: SiRockylinux, name: "Rocky Linux", color: "text-[#10B981]" },
+    // DevOps & Tools
+    { icon: SiJenkins, name: "Jenkins", color: "text-[#D33833]" },
+    { icon: SiGithubactions, name: "GitHub Actions", color: "text-[#2088FF]" },
+    { icon: SiPm2, name: "PM2", color: "text-[#2B037A]" },
+    { icon: SiSocketdotio, name: "Socket.io", color: "text-black dark:text-white" },
+    // AI-Assisted Dev
+    { icon: SiFigma, name: "Figma", color: "text-[#F24E1E]" },
+    { icon: Terminal, name: "Claude Code", color: "text-[#D97757]" }, 
+    { icon: SiOpenai, name: "ChatGPT", color: "text-[#412991] dark:text-white" },
+    { icon: SiGithubcopilot, name: "GitHub Copilot", color: "text-black dark:text-white" },
+    { icon: Cpu, name: "Antigravity", color: "text-primary" }, 
+    { icon: Terminal, name: "Cursor", color: "text-black dark:text-white" }, 
   ];
 
   return (
@@ -32,7 +65,7 @@ export default async function HomePage() {
         .animate-marquee {
           display: flex;
           width: max-content;
-          animation: marquee 30s linear infinite;
+          animation: marquee 90s linear infinite;
         }
         .animate-marquee:hover {
           animation-play-state: paused;
@@ -45,11 +78,10 @@ export default async function HomePage() {
       >
         <Badge variant="secondary" className="mb-4">Open to work</Badge>
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight lg:text-7xl">
-          Backend-focused <br className="hidden md:block"/> Fullstack Developer
+          단순한 기능 구현을 넘어, <br className="hidden md:block"/> 견고한 아키텍처를 설계합니다.
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Building scalable systems, not just websites. <br/>
-          Specialized in high-concurrency, distributed architecture, and developer tools.
+        <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed break-keep">
+          사용자에게는 끊김 없는 경험을, 팀에게는 유지보수하기 좋은 아키텍처를 제공하는,<br className="hidden md:block"/>시스템의 방향을 정하고 기술의 깊이를 더하는 백엔드 중심의 3년 차 개발자입니다.
         </p>
         <div className="flex items-center justify-center gap-4 pt-4">
           <Button size="lg" asChild>
@@ -68,8 +100,8 @@ export default async function HomePage() {
         <div className="animate-marquee">
            <div className="flex gap-12 px-6">
               {[...techStack, ...techStack, ...techStack, ...techStack].map((tech, i) => (
-                 <div key={i} className="flex items-center gap-2 text-muted-foreground/50 grayscale opacity-70 whitespace-nowrap">
-                    <tech.icon className="h-6 w-6"/> <span className="text-lg font-medium">{tech.name}</span>
+                 <div key={i} className="flex items-center gap-2 whitespace-nowrap">
+                    <tech.icon className={`h-6 w-6 ${tech.color}`}/> <span className="text-lg font-medium text-foreground/80">{tech.name}</span>
                  </div>
               ))}
            </div>
@@ -123,27 +155,18 @@ export default async function HomePage() {
                         <h3 className="font-bold text-xl group-hover:text-primary transition-colors flex items-center gap-2 mb-1.5">
                           {feature.title}
                         </h3>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <span>2024.07 ~ 2024.11</span>
-                          <span className="text-zinc-300 dark:text-zinc-700">•</span>
-                          <span>BackEnd</span>
+                        <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+                          {feature.period && <span>{feature.period}</span>}
+                          <span>{feature.category}</span>
                         </div>
                       </div>
                       <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-1.5">
-                      <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">Node v20.11.0</Badge>
-                      <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">Npm 10.2.4</Badge>
-                      <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">nest.js v11.0.6</Badge>
-                      <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">typescript v5.8.3</Badge>
-                      <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">Rocky 8.9</Badge>
                     </div>
 
                     <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
                       {feature.description}
                     </p>
-                    
+
                     <div className="mt-auto pt-2 flex flex-wrap gap-1.5">
                       {feature.techStack.map(tech => (
                         <span key={tech} className="text-xs text-muted-foreground bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">
@@ -165,22 +188,18 @@ export default async function HomePage() {
         </div>
         
         <div className="space-y-8 pl-4 border-l-2 border-zinc-100 dark:border-zinc-800 ml-2">
-           {INSIGHTS.slice(0, 2).map((insight) => (
+           {INSIGHTS.slice(0, 3).map((insight) => (
              <div key={insight.id} className="relative pl-8">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-zinc-200 dark:bg-zinc-800 border-4 border-background" />
-               <span className="text-sm text-muted-foreground mb-1 block">{String(insight.date)}</span>
+               <span className="text-sm text-muted-foreground mb-1 block">
+                 {new Date(insight.date).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, '')}
+               </span>
                <h3 className="text-lg font-semibold hover:text-primary cursor-pointer transition-colors">
-                 <Link href="/insights">{insight.title}</Link>
+                 <Link href={`/insights/${insight.slug}`}>{insight.title}</Link>
                </h3>
                <p className="text-muted-foreground mt-2">{insight.excerpt}</p>
              </div>
            ))}
-           <div className="relative pl-8">
-             <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-zinc-200 dark:bg-zinc-800 border-4 border-background" />
-             <span className="text-sm text-muted-foreground mb-1 block">2025-08-15</span>
-             <h3 className="text-lg font-semibold">Deployed Admin System v2.0</h3>
-             <p className="text-muted-foreground mt-2">Migrated the entire dashboard to a new design system and improved data fetching performance by 40%.</p>
-           </div>
         </div>
       </section>
 

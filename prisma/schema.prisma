@@ -2,9 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client"
+  provider      = "prisma-client"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
-  output   = "../src/generated/prisma"
+  output        = "../src/generated/prisma"
 }
 
 datasource db {
@@ -45,18 +45,18 @@ model Feature {
   title       String
   description String
   iconName    String   @map("icon_name")
-  category    String // "Backend", "Frontend", "DevOps"
+  category    String // "Backend", "Frontend", "DevOps", "Fullstack"
   techStack   String   @map("tech_stack") // Stored as JSON string since SQLite doesn't support arrays directly
   status      String // "Production", "Beta", "Archived"
   apiCount    Int      @default(0) @map("api_count")
   overview    String
   diagramUrl  String?  @map("diagram_url")
   period      String?
-  version     String?
   team        String?
   content     String?
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
+  insights    Insight[]
 
   @@map("features")
 }
@@ -70,6 +70,8 @@ model Insight {
   date      DateTime
   tags      String // Stored as JSON string
   readTime  String   @map("read_time")
+  featureId String?  @map("feature_id")
+  feature   Feature? @relation(fields: [featureId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

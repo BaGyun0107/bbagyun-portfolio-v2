@@ -60,8 +60,8 @@ export default function ContactPage() {
           
           <div className="mt-8 pt-8 border-t text-center">
             <p className="text-sm text-muted-foreground mb-2">또는 이메일로 직접 연락주세요</p>
-            <a href="mailto:hello@example.com" className="inline-flex items-center gap-2 font-medium hover:text-primary transition-colors">
-              <Mail className="h-4 w-4" /> hello@example.com
+            <a href="mailto:pus1789@gmail.com" className="inline-flex items-center gap-2 font-medium hover:text-primary transition-colors">
+              <Mail className="h-4 w-4" /> pus1789@gmail.com
             </a>
           </div>
         </CardContent>

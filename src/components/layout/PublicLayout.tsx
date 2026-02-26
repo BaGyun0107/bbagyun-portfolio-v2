@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Github, Linkedin, Twitter } from "lucide-react";
+import { Menu, X, Github } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
@@ -96,20 +96,19 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         {children}
       </main>
 
-      <footer className="border-t py-12 bg-zinc-50 dark:bg-zinc-900/50">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+      <footer className="border-t py-8 bg-zinc-50 dark:bg-zinc-900/50">
+         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-sm text-muted-foreground">
-            © 2024 BbaGyun. Built with React & Tailwind.
+            © 2026 BbaGyun. Built with Next.js & Tailwind.
           </div>
           <div className="flex gap-4">
-            <a href="#" className="text-muted-foreground hover:text-primary">
+            <a
+              href="https://github.com/BaGyun0107"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
               <Github className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary">
-              <Linkedin className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary">
-              <Twitter className="h-5 w-5" />
             </a>
           </div>
         </div>
@@ -117,3 +116,4 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     </div>
   );
 }
+

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { FeatureService } from "@/lib/api/services/feature.service";
 
 export const dynamic = 'force-dynamic';
@@ -27,21 +26,12 @@ export default async function ProjectsPage() {
                     <h3 className="font-bold text-xl group-hover:text-primary transition-colors flex items-center gap-2 mb-1.5">
                       {feature.title}
                     </h3>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span>2024.07 ~ 2024.11</span>
-                      <span className="text-zinc-300 dark:text-zinc-700">•</span>
-                      <span>BackEnd ( 본인 1명 )</span>
+                    <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+                      {feature.period && <span>{feature.period}</span>}
+                      {feature.team && <span>{feature.team}</span>}
                     </div>
                   </div>
                   <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                </div>
-
-                <div className="flex flex-wrap gap-1.5">
-                  <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">Node v20.11.0</Badge>
-                  <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">Npm 10.2.4</Badge>
-                  <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">nest.js v11.0.6</Badge>
-                  <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">typescript v5.8.3</Badge>
-                  <Badge variant="outline" className="font-mono text-[10px] px-1.5 h-5 rounded-sm bg-zinc-50/50 dark:bg-zinc-900/50 text-muted-foreground">Rocky 8.9</Badge>
                 </div>
 
                 <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">

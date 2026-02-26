@@ -1,7 +1,7 @@
 /**
  * 기능 파트의 카테고리 정의
  */
-export type FeatureCategory = "Backend" | "Frontend" | "DevOps";
+export type FeatureCategory = "Backend" | "Frontend" | "DevOps" | "Fullstack";
 
 /**
  * 기능 파트의 상태 정의
@@ -28,7 +28,6 @@ export interface FeatureDto {
   overview: string;
   diagramUrl?: string;
   period?: string;
-  version?: string;
   team?: string;
   content?: string;
   createdAt: Date | string;

@@ -88,9 +88,11 @@ export default function LoginPage() {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? <Loader2 className="animate-spin h-4 w-4" /> : "로그인"}
             </Button>
-            <div className="text-center text-xs text-muted-foreground mt-4">
-              * 이것은 데모입니다. 로그인 버튼을 누르기만 하면 됩니다.
-            </div>
+            {process.env.NEXT_PUBLIC_USE_MOCK_API === "true" && (
+              <div className="text-center text-xs text-muted-foreground mt-4">
+                * 이것은 데모입니다. 로그인 버튼을 누르기만 하면 됩니다.
+              </div>
+            )}
           </form>
         </CardContent>
       </Card>
