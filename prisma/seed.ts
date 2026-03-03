@@ -1,4 +1,4 @@
-import { PrismaClient } from '../src/generated/prisma/client';
+import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import * as path from 'path';
 import { REAL_FEATURES } from './data/features';
