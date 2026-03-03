@@ -1,7 +1,7 @@
 import { IContactMessageRepository } from "../../core/domain/repositories/contact-message.repository";
 import { ContactMessageDto, CreateContactMessageDto, UpdateContactMessageStatusDto, ContactMessageStatus } from "../../core/application/dtos/contact-message.dto";
 import { prisma } from "../config/prisma";
-import type { ContactMessage } from "@/generated/prisma/client";
+import type { ContactMessage } from "@prisma/client";
 
 export class ContactMessagePrismaRepository implements IContactMessageRepository {
   async findById(id: string): Promise<ContactMessageDto | null> {

@@ -1,7 +1,7 @@
 import { ILogRepository } from "../../core/domain/repositories/log.repository";
 import { LogDto, CreateLogDto, LogMethod } from "../../core/application/dtos/log.dto";
 import { prisma } from "../config/prisma";
-import type { Log } from "@/generated/prisma/client";
+import type { Log } from "@prisma/client";
 
 export class LogPrismaRepository implements ILogRepository {
   async findById(id: string): Promise<LogDto | null> {

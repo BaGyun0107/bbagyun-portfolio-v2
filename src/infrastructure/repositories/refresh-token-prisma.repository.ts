@@ -1,7 +1,7 @@
 import { IRefreshTokenRepository } from "../../core/domain/repositories/refresh-token.repository";
 import { RefreshTokenDto } from "../../core/application/dtos/auth.dto";
 import { prisma } from "../config/prisma";
-import type { RefreshToken } from "@/generated/prisma/client";
+import type { RefreshToken } from "@prisma/client";
 
 /**
  * Prisma를 이용한 리프레시 토큰 저장소 구현체

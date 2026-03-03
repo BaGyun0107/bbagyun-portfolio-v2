@@ -1,7 +1,7 @@
 import { IInsightRepository } from "../../core/domain/repositories/insight.repository";
 import { InsightDto, CreateInsightDto, UpdateInsightDto } from "../../core/application/dtos/insight.dto";
 import { prisma } from "../config/prisma";
-import type { Prisma } from "@/generated/prisma/client";
+import type { Prisma } from "@prisma/client";
 
 /**
  * Prisma를 이용한 인사이트 저장소 구현체

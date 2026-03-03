@@ -1,4 +1,4 @@
-import { User } from "@/generated/prisma/client";
+import { User } from "@prisma/client";
 import { IUserRepository } from "../../core/domain/repositories/user.repository";
 import { UserDto, CreateUserDto, UpdateUserDto } from "../../core/application/dtos/user.dto";
 

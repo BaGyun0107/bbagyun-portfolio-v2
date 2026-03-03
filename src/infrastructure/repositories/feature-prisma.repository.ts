@@ -1,7 +1,7 @@
 import { IFeatureRepository } from "../../core/domain/repositories/feature.repository";
 import { FeatureDto, CreateFeatureDto, UpdateFeatureDto, FeatureStatus, FeatureCategory } from "../../core/application/dtos/feature.dto";
 import { prisma } from "../config/prisma";
-import type { Feature } from "@/generated/prisma/client";
+import type { Feature } from "@prisma/client";
 
 export class FeaturePrismaRepository implements IFeatureRepository {
   async findById(id: string): Promise<FeatureDto | null> {

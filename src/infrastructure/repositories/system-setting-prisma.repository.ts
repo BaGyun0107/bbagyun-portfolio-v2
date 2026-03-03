@@ -1,7 +1,7 @@
 import { ISystemSettingsRepository } from "../../core/domain/repositories/system-setting.repository";
 import { SystemSettingsDto, UpdateSystemSettingsDto } from "../../core/application/dtos/system-setting.dto";
 import { prisma } from "../config/prisma";
-import type { SystemSettings } from "@/generated/prisma/client";
+import type { SystemSettings } from "@prisma/client";
 
 export class SystemSettingsPrismaRepository implements ISystemSettingsRepository {
   async getSettings(): Promise<SystemSettingsDto | null> {

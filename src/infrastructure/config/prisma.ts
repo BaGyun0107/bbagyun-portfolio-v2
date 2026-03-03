@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient } from "@prisma/client";
 import path from "path";
 
 // Next.js 개발 환경을 위한 전역 Prisma Client 인스턴스화 (핫 리로드 시 다중 인스턴스 생성 방지용)
