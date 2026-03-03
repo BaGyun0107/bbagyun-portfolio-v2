@@ -21,7 +21,7 @@ const featureUseCases = new FeatureUseCases(new FeaturePrismaRepository());
  *     responses:
  *       200:
  *         description: 조회 성공
- *   put:
+ *   patch:
  *     summary: 기능(Feature) 수정
  *     tags: [Features]
  *     security:
@@ -82,7 +82,7 @@ async function getHandler(req: NextRequest, params: Promise<{ slug: string }>) {
  * @param {Object} params - 경로 파라미터 (slug 포함)
  * @returns {Promise<Response>} 갱신 응답 반환
  */
-async function putHandler(req: NextRequest, params: Promise<{ slug: string }>) {
+async function patchHandler(req: NextRequest, params: Promise<{ slug: string }>) {
   const { slug } = await params;
   const feature = await featureUseCases.getFeatureBySlug(slug);
   if (!feature) {
@@ -114,5 +114,5 @@ async function deleteHandler(req: NextRequest, params: Promise<{ slug: string }>
 const adminOptions = { requireAuth: true, allowedRoles: ["Admin", "Editor"] };
 
 export const GET = withApiHandler(getHandler);
-export const PUT = withApiHandler(putHandler, adminOptions);
+export const PATCH = withApiHandler(patchHandler, adminOptions);
 export const DELETE = withApiHandler(deleteHandler, adminOptions);

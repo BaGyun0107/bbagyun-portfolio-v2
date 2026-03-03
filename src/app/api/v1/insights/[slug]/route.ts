@@ -21,7 +21,7 @@ const insightUseCases = new InsightUseCases(new InsightPrismaRepository());
  *     responses:
  *       200:
  *         description: Success
- *   put:
+ *   patch:
  *     summary: Update insight
  *     tags: [Insights]
  *     security:
@@ -70,7 +70,7 @@ async function getHandler(req: NextRequest, params: Promise<{ slug: string }>) {
   return successResponse(insight);
 }
 
-async function putHandler(req: NextRequest, params: Promise<{ slug: string }>) {
+async function patchHandler(req: NextRequest, params: Promise<{ slug: string }>) {
   const { slug } = await params;
   const insight = await insightUseCases.getInsightBySlug(slug);
   if (!insight) {
@@ -96,5 +96,5 @@ async function deleteHandler(req: NextRequest, params: Promise<{ slug: string }>
 const adminOptions = { requireAuth: true, allowedRoles: ["Admin", "Editor"] };
 
 export const GET = withApiHandler(getHandler);
-export const PUT = withApiHandler(putHandler, adminOptions);
+export const PATCH = withApiHandler(patchHandler, adminOptions);
 export const DELETE = withApiHandler(deleteHandler, adminOptions);

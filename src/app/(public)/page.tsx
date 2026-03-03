@@ -81,7 +81,7 @@ export default async function HomePage() {
           단순한 기능 구현을 넘어, <br className="hidden md:block"/> 견고한 아키텍처를 설계합니다.
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed break-keep">
-          사용자에게는 끊김 없는 경험을, 팀에게는 유지보수하기 좋은 아키텍처를 제공하는,<br className="hidden md:block"/>시스템의 방향을 정하고 기술의 깊이를 더하는 백엔드 중심의 {Math.max(1, new Date().getFullYear() - 2023 + (new Date().getMonth() >= 3 ? 1 : 0))}년 차 개발자입니다.
+          사용자를 위한 매끄러운 경험과 팀을 위한 견고한 아키텍처.<br className="hidden md:block"/>시스템의 방향을 설계하고 기술의 깊이를 더하는 {Math.max(1, new Date().getFullYear() - 2023 + (new Date().getMonth() >= 3 ? 1 : 0))}년 차 백엔드 중심 풀스택 개발자입니다.
         </p>
         <div className="flex items-center justify-center gap-4 pt-4">
           <Button size="lg" asChild>
