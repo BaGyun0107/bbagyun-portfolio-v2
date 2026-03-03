@@ -56,7 +56,7 @@ async function refreshHandler(req: NextRequest) {
   }
 
   if (!refreshToken) {
-    return errorResponse("Refresh token is required", 400);
+    return errorResponse("리프레시 토큰은 필수 항목입니다.", 400);
   }
 
   const result = await authUseCases.refresh(refreshToken);

@@ -77,7 +77,7 @@ async function getHandler(req: NextRequest, params: Promise<{ id: string }>) {
   const { id } = await params;
   const user = await userUseCases.getUser(id);
   if (!user) {
-    return errorResponse("User not found", 404);
+    return errorResponse("사용자를 찾을 수 없습니다.", 404);
   }
   return successResponse(user);
 }

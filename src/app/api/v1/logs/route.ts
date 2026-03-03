@@ -28,4 +28,4 @@ async function getHandler(req: NextRequest) {
   return successResponse(logs);
 }
 
-export const GET = withApiHandler(getHandler, { requireAuth: true, allowedRoles: ["Admin"] });
+export const GET = withApiHandler(getHandler, { requireAuth: true, allowedRoles: ["Admin", "Editor", "Viewer"] });

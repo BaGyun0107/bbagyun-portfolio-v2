@@ -1,4 +1,5 @@
 import { API_CONFIG } from "./config";
+import { toast } from "sonner";
 
 /**
  * 프론트엔드 공통 API Fetcher 유틸리티
@@ -25,12 +26,22 @@ export const api = {
 
     // HTTP 레벨 에러 검사 (일부 환경에선 실제 HTTP 에러가 날 수 있음)
     if (!response.ok) {
+      if (response.status === 403 || json?.message?.includes("Forbidden: Insufficient permissions")) {
+        toast.error("권한이 없습니다.", { description: "해당 기능을 수행할 권한이 존재하지 않습니다." });
+        throw new Error("권한이 없습니다.");
+      }
+
       const errorMsg = json?.message || json?.errorMessage || response.statusText || "알 수 없는 오류가 발생했습니다.";
       throw new Error(errorMsg);
     }
 
     // ⚠️ API가 HTTP 200을 항상 반환하는 설계이므로 success 필드를 추가로 확인
     if (json && json.success === false) {
+      if (json?.message?.includes("Forbidden: Insufficient permissions")) {
+        toast.error("권한이 없습니다.", { description: "해당 기능을 수행할 권한이 존재하지 않습니다." });
+        throw new Error("권한이 없습니다.");
+      }
+
       const errorMsg = json.message || json.errorMessage || "서버 오류가 발생했습니다.";
       throw new Error(errorMsg);
     }

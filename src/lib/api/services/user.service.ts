@@ -59,7 +59,7 @@ export const UserService = {
     if (isMock) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       const existing = USERS.find((u) => u.id === id);
-      if (!existing) throw new Error("User not found in mock data");
+      if (!existing) throw new Error("모의 데이터에서 사용자를 찾을 수 없습니다.");
       return { ...existing, ...data, updatedAt: new Date().toISOString() };
     }
     return api.patch<UserDto>(`/users/${id}`, data);

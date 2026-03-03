@@ -34,7 +34,7 @@ export class UserUseCases {
   async createUser(data: CreateUserDto): Promise<UserDto> {
     const existingUser = await this.userRepository.findByEmail(data.email);
     if (existingUser) {
-      throw new Error("User with this email already exists");
+      throw new Error("이미 해당 이메일로 가입된 사용자가 있습니다.");
     }
     return this.userRepository.create(data);
   }
@@ -49,7 +49,7 @@ export class UserUseCases {
   async updateUser(id: string, data: UpdateUserDto): Promise<UserDto> {
     const user = await this.userRepository.findById(id);
     if (!user) {
-      throw new Error("User not found");
+      throw new Error("사용자를 찾을 수 없습니다.");
     }
     return this.userRepository.update(id, data);
   }
@@ -62,7 +62,7 @@ export class UserUseCases {
   async deleteUser(id: string): Promise<void> {
     const user = await this.userRepository.findById(id);
     if (!user) {
-      throw new Error("User not found");
+      throw new Error("사용자를 찾을 수 없습니다.");
     }
     return this.userRepository.delete(id);
   }

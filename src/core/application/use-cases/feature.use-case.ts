@@ -43,7 +43,7 @@ export class FeatureUseCases {
   async createFeature(data: CreateFeatureDto): Promise<FeatureDto> {
     const existingFeature = await this.featureRepository.findBySlug(data.slug);
     if (existingFeature) {
-      throw new Error(`Feature with slug ${data.slug} already exists`);
+      throw new Error(`이미 존재하는 작업물 슬러그입니다: ${data.slug}`);
     }
     return this.featureRepository.create(data);
   }
@@ -58,12 +58,12 @@ export class FeatureUseCases {
   async updateFeature(id: string, data: UpdateFeatureDto): Promise<FeatureDto> {
     const feature = await this.featureRepository.findById(id);
     if (!feature) {
-      throw new Error("Feature not found");
+      throw new Error("작업물을 찾을 수 없습니다.");
     }
     if (data.slug && data.slug !== feature.slug) {
       const existing = await this.featureRepository.findBySlug(data.slug);
       if (existing) {
-        throw new Error(`Feature with slug ${data.slug} already exists`);
+        throw new Error(`이미 존재하는 작업물 슬러그입니다: ${data.slug}`);
       }
     }
     return this.featureRepository.update(id, data);
@@ -77,7 +77,7 @@ export class FeatureUseCases {
   async deleteFeature(id: string): Promise<void> {
     const feature = await this.featureRepository.findById(id);
     if (!feature) {
-      throw new Error("Feature not found");
+      throw new Error("작업물을 찾을 수 없습니다.");
     }
     return this.featureRepository.delete(id);
   }

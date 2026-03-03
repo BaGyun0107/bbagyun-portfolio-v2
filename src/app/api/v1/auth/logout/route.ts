@@ -35,7 +35,7 @@ import { TokenPayload } from "@/core/application/utils/jwt.util";
  */
 async function logoutHandler(req: NextRequest, params: unknown, user?: TokenPayload) {
   if (!user || !user.userId) {
-    return errorResponse("User context missing", 401);
+    return errorResponse("사용자 컨텍스트를 찾을 수 없습니다.", 401);
   }
 
   await authUseCases.logout(user.userId);

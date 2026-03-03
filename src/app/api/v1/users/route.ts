@@ -61,7 +61,7 @@ async function getHandler(req: NextRequest) {
 async function postHandler(req: NextRequest) {
   const body = await req.json();
   if (!body.name || !body.email || !body.role) {
-    return errorResponse("Missing required fields", 400);
+    return errorResponse("필수 항목이 누락되었습니다.", 400);
   }
   const newUser = await userUseCases.createUser(body);
   return successResponse(newUser, "User created successfully", 201);

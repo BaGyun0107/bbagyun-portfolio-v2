@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Github, Linkedin, Mail, Twitter } from "lucide-react";
+import Link from "next/link";
 
 export default function AboutPage() {
   return (
@@ -21,8 +22,10 @@ export default function AboutPage() {
           
           <div className="space-y-4">
              <div className="flex gap-2 justify-center md:justify-start">
-               <Button variant="outline" size="icon">
-                 <Github className="h-4 w-4" />
+               <Button variant="outline" size="icon" asChild>
+                 <Link href="https://github.com/BaGyun0107" target="_blank" rel="noopener noreferrer">
+                   <Github className="h-4 w-4" />
+                 </Link>
                </Button>
              </div>
              
@@ -52,8 +55,7 @@ export default function AboutPage() {
               <p className="text-lg text-muted-foreground">
                 지난 3년간 호텔 예약 시스템부터 B2B 도소매 화훼 플랫폼에 이르기까지, 다양한 비즈니스 도메인의 기반을 다지고 시스템을 고도화해 왔습니다. React를 활용한 프론트엔드 최적화부터 Node.js, NestJS 기반의 견고한 백엔드 설계까지 전체 시스템의 흐름을 꿰뚫어 보는 시야를 갖추고 있습니다. <br/><br/>
                 저의 개발 철학은 단순한 구현자에 머물지 않는 것입니다. 주어진 API 명세서를 코드로 옮기기보다 프론트엔드와 백엔드의 요구사항을 조율하는 <span className="text-primary">공동 설계자</span>로 임합니다. <br/><br/>
-                외부 API 장애를 방어하기 위해 간이 Outbox 패턴을 도입하거나, 분산 DB 환경에서 Soft FK 기반의 인증 플랫폼을 설계했던 경험 모두 <span className="text-primary">"이 기능이 왜 필요한가?"</span> 그리고 <span className="text-primary">"어떻게 해야 무너지지 않는가?"</span>에 대한 치열한 고민의 결과물이었습니다.<br/><br/>
-                코드를 작성하는 것만큼이나 동료, 고객과의 소통을 중요하게 생각합니다. 언제나 문제의 원인을 다각도에서 분석하고, 제가 내린 아키텍처적 결정에는 끝까지 책임을 다하며 시스템과 함께 성장해 나가겠습니다.
+                코드를 작성하는 것만큼이나 동료, 고객과의 소통을 중요하게 생각합니다. 언제나 문제의 원인을 다각도에서 분석하고, 제가 내린 프로젝트 기능 설계 및 개발 공수 산정에는 끝까지 책임을 다하며 시스템과 함께 성장해 나가겠습니다.
               </p>
             </div>
           </div>

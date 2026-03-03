@@ -37,7 +37,7 @@ async function putHandler(req: NextRequest, params: Promise<{ id: string }>) {
     return successResponse(updated, "Message marked as read");
   } catch(error) {
     const e = error as Error;
-    return errorResponse(e.message || "Failed to update", 400);
+    return errorResponse(e.message || "상태 업데이트에 실패했습니다.", 400);
   }
 }
 

@@ -15,7 +15,13 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ 
+  children,
+  userRole
+}: { 
+  children: React.ReactNode;
+  userRole?: "Admin" | "Editor" | "Viewer";
+}) {
   const pathname = usePathname();
 
   const sidebarItems = [

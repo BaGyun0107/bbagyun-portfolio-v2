@@ -43,10 +43,10 @@ const authUseCases = new AuthUseCases(
 async function loginHandler(req: NextRequest) {
   const body = await req.json();
   if (!body.email) {
-    return errorResponse("Email is required", 400);
+    return errorResponse("이메일은 필수 항목입니다.", 400);
   }
   if (!body.password) {
-    return errorResponse("Password is required", 400);
+    return errorResponse("비밀번호는 필수 항목입니다.", 400);
   }
 
   const result = await authUseCases.login(body.email, body.password);

@@ -25,17 +25,17 @@ export class AuthUseCases {
   async login(email: string, password?: string): Promise<AuthResultDto> {
     const user = await this.userRepository.findByEmail(email);
     if (!user || user.status !== "Active") {
-      throw new Error("Invalid credentials or inactive user");
+      throw new Error("잘못된 자격 증명이거나 비활성화된 사용자입니다.");
     }
 
     if (user.password && password) {
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-         throw new Error("Invalid credentials");
+         throw new Error("잘못된 자격 증명입니다.");
       }
     } else if (password) {
         // DB에 패스워드가 없는 계정이지만 프론트에서 전송한 경우 (또는 그 반대)
-        throw new Error("Invalid credentials");
+        throw new Error("잘못된 자격 증명입니다.");
     }
 
     // 마지막 로그인 시간 갱신
@@ -82,18 +82,18 @@ export class AuthUseCases {
     // 2. DB에 존재하는지 검증
     const savedToken = await this.refreshTokenRepository.findByToken(token);
     if (!savedToken) {
-      throw new Error("Invalid or revoked refresh token");
+      throw new Error("유효하지 않거나 폐기된 리프레시 토큰입니다.");
     }
     
     // 3. 만료 여부 확인
     if (new Date(savedToken.expiresAt) < new Date()) {
       await this.refreshTokenRepository.deleteByToken(token);
-      throw new Error("Refresh token expired");
+      throw new Error("리프레시 토큰이 만료되었습니다.");
     }
 
     const user = await this.userRepository.findById(payload.userId);
     if (!user || user.status !== "Active") {
-      throw new Error("User not found or inactive");
+      throw new Error("사용자를 찾을 수 없거나 비활성화되었습니다.");
     }
 
     const tokenPayload = { userId: user.id, email: user.email, role: user.role };

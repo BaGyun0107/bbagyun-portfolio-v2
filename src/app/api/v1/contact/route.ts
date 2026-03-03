@@ -55,7 +55,7 @@ async function getHandler(req: NextRequest) {
 async function postHandler(req: NextRequest) {
   const body = await req.json();
   if (!body.name || !body.email || !body.message) {
-    return errorResponse("Name, email, and message are required fields", 400);
+    return errorResponse("이름, 이메일, 그리고 메시지는 필수 항목입니다.", 400);
   }
 
   const newMessage = await contactUseCases.createMessage(body);

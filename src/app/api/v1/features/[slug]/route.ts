@@ -71,7 +71,7 @@ async function getHandler(req: NextRequest, params: Promise<{ slug: string }>) {
   const { slug } = await params;
   const feature = await featureUseCases.getFeatureBySlug(slug);
   if (!feature) {
-    return errorResponse("Feature not found", 404);
+    return errorResponse("작업물을 찾을 수 없습니다.", 404);
   }
   return successResponse(feature);
 }
@@ -86,7 +86,7 @@ async function putHandler(req: NextRequest, params: Promise<{ slug: string }>) {
   const { slug } = await params;
   const feature = await featureUseCases.getFeatureBySlug(slug);
   if (!feature) {
-    return errorResponse("Feature not found", 404);
+    return errorResponse("작업물을 찾을 수 없습니다.", 404);
   }
 
   const body = await req.json();
@@ -104,7 +104,7 @@ async function deleteHandler(req: NextRequest, params: Promise<{ slug: string }>
   const { slug } = await params;
   const feature = await featureUseCases.getFeatureBySlug(slug);
   if (!feature) {
-    return errorResponse("Feature not found", 404);
+    return errorResponse("작업물을 찾을 수 없습니다.", 404);
   }
 
   await featureUseCases.deleteFeature(feature.id);

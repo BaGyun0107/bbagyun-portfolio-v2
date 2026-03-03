@@ -57,7 +57,7 @@ export const InsightService = {
     if (isMock) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       const existing = INSIGHTS.find((i) => i.slug === slug);
-      if (!existing) throw new Error("Insight not found in mock data");
+      if (!existing) throw new Error("모의 데이터에서 인사이트를 찾을 수 없습니다.");
       return { ...existing, ...data, updatedAt: new Date().toISOString() };
     }
     return api.patch<InsightDto>(`/insights/${slug}`, data);

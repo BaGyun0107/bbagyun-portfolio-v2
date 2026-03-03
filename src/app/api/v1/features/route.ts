@@ -80,7 +80,7 @@ async function postHandler(req: NextRequest) {
   const missing = requiredFields.filter(field => !body[field]);
   
   if (missing.length > 0) {
-    return errorResponse(`Missing required fields: ${missing.join(", ")}`, 400);
+    return errorResponse(`필수 항목이 누락되었습니다: ${missing.join(", ")}`, 400);
   }
 
   const newFeature = await featureUseCases.createFeature(body);

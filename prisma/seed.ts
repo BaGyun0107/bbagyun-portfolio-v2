@@ -31,6 +31,22 @@ async function main() {
   });
   console.log(`✅ Admin: ${admin.email}`);
 
+  // 1-1. Viewer User
+  const viewerPassword = await bcrypt.hash('viewer', 10);
+  const viewer = await prisma.user.upsert({
+    where: { email: 'viewer@bbagyun.com' },
+    update: { password: viewerPassword },
+    create: {
+      name: 'Viewer',
+      email: 'viewer@bbagyun.com',
+      password: viewerPassword,
+      role: 'Viewer',
+      status: 'Active',
+      lastLogin: new Date(),
+    },
+  });
+  console.log(`✅ Viewer: ${viewer.email}`);
+
   // 2. Features — prisma/data/features.ts 에서 관리
   await prisma.feature.deleteMany({});
   for (const feature of REAL_FEATURES) {

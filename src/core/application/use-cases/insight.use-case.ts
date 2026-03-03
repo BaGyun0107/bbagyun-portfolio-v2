@@ -43,7 +43,7 @@ export class InsightUseCases {
   async createInsight(data: CreateInsightDto): Promise<InsightDto> {
     const existing = await this.insightRepository.findBySlug(data.slug);
     if (existing) {
-      throw new Error(`Insight with slug ${data.slug} already exists`);
+      throw new Error(`이미 존재하는 인사이트 슬러그입니다: ${data.slug}`);
     }
     return this.insightRepository.create(data);
   }
@@ -58,12 +58,12 @@ export class InsightUseCases {
   async updateInsight(id: string, data: UpdateInsightDto): Promise<InsightDto> {
     const insight = await this.insightRepository.findById(id);
     if (!insight) {
-      throw new Error("Insight not found");
+      throw new Error("인사이트를 찾을 수 없습니다.");
     }
     if (data.slug && data.slug !== insight.slug) {
       const existing = await this.insightRepository.findBySlug(data.slug);
       if (existing) {
-        throw new Error(`Insight with slug ${data.slug} already exists`);
+        throw new Error(`이미 존재하는 인사이트 슬러그입니다: ${data.slug}`);
       }
     }
     return this.insightRepository.update(id, data);
@@ -77,7 +77,7 @@ export class InsightUseCases {
   async deleteInsight(id: string): Promise<void> {
     const insight = await this.insightRepository.findById(id);
     if (!insight) {
-      throw new Error("Insight not found");
+      throw new Error("인사이트를 찾을 수 없습니다.");
     }
     return this.insightRepository.delete(id);
   }

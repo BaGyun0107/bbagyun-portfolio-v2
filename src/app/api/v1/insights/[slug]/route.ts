@@ -65,7 +65,7 @@ async function getHandler(req: NextRequest, params: Promise<{ slug: string }>) {
   const { slug } = await params;
   const insight = await insightUseCases.getInsightBySlug(slug);
   if (!insight) {
-    return errorResponse("Insight not found", 404);
+    return errorResponse("인사이트를 찾을 수 없습니다.", 404);
   }
   return successResponse(insight);
 }
@@ -74,7 +74,7 @@ async function putHandler(req: NextRequest, params: Promise<{ slug: string }>) {
   const { slug } = await params;
   const insight = await insightUseCases.getInsightBySlug(slug);
   if (!insight) {
-    return errorResponse("Insight not found", 404);
+    return errorResponse("인사이트를 찾을 수 없습니다.", 404);
   }
 
   const body = await req.json();
@@ -86,7 +86,7 @@ async function deleteHandler(req: NextRequest, params: Promise<{ slug: string }>
   const { slug } = await params;
   const insight = await insightUseCases.getInsightBySlug(slug);
   if (!insight) {
-    return errorResponse("Insight not found", 404);
+    return errorResponse("인사이트를 찾을 수 없습니다.", 404);
   }
 
   await insightUseCases.deleteInsight(insight.id);

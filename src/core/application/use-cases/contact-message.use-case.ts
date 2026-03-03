@@ -43,7 +43,7 @@ export class ContactMessageUseCases {
   async markAsRead(id: string): Promise<ContactMessageDto> {
     const message = await this.contactMessageRepository.findById(id);
     if (!message) {
-      throw new Error("Contact message not found");
+      throw new Error("문의 메시지를 찾을 수 없습니다.");
     }
     return this.contactMessageRepository.updateStatus(id, { status: "READ" });
   }
@@ -56,7 +56,7 @@ export class ContactMessageUseCases {
   async deleteMessage(id: string): Promise<void> {
     const message = await this.contactMessageRepository.findById(id);
     if (!message) {
-      throw new Error("Contact message not found");
+      throw new Error("문의 메시지를 찾을 수 없습니다.");
     }
     return this.contactMessageRepository.delete(id);
   }

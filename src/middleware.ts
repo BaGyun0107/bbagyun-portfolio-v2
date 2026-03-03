@@ -72,7 +72,7 @@ export async function middleware(req: NextRequest) {
         });
 
         if (!refreshRes.ok) {
-          throw new Error("Refresh failed");
+          throw new Error("리프레시 실패");
         }
 
         const refreshData = await refreshRes.json();
@@ -81,7 +81,7 @@ export async function middleware(req: NextRequest) {
         const newCsrfToken: string = crypto.randomUUID();
 
         if (!newAccessToken) {
-          throw new Error("No new access token from refresh");
+          throw new Error("새로운 액세스 토큰을 발급받지 못했습니다.");
         }
 
         const isProd = process.env.NODE_ENV === "production";

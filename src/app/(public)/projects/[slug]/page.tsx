@@ -48,7 +48,8 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
             {feature.title}
           </h1>
-          <div className="flex gap-2">
+          {/* TODO: 나중에 추가할 예정 */}
+          {/* <div className="flex gap-2">
             <Button variant="outline" size="sm">
               <GitBranch className="mr-2 h-4 w-4" />
               View Repo
@@ -57,7 +58,7 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
               <Globe className="mr-2 h-4 w-4" />
               Live Demo
             </Button>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-col gap-2 mt-4 text-sm text-muted-foreground">
           {feature.period && (

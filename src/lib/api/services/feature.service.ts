@@ -59,7 +59,7 @@ export const FeatureService = {
       await new Promise((resolve) => setTimeout(resolve, 500));
       // 목업 수정을 모방 (실제 배열을 수정하진 않음)
       const existing = FEATURES.find((f) => f.slug === slug);
-      if (!existing) throw new Error("Feature not found in mock data");
+      if (!existing) throw new Error("모의 데이터에서 작업물을 찾을 수 없습니다.");
       return { ...existing, ...data, updatedAt: new Date().toISOString() };
     }
     return api.patch<FeatureDto>(`/features/${slug}`, data);

@@ -9,13 +9,14 @@ import { toast } from "sonner";
 export default function ContactPage() {
   const [loading, setLoading] = useState(false);
 
+  const showPreparingMessage = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    toast.info("해당 기능은 준비중입니다. 이메일로 문의 부탁드립니다");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    // Mock API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setLoading(false);
-    toast.success("Message sent!", { description: "I'll get back to you as soon as possible." });
+    showPreparingMessage(e);
   };
 
   return (
@@ -34,8 +35,10 @@ export default function ContactPage() {
               <input 
                 id="email" 
                 type="email" 
-                required 
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                required
+                readOnly
+                onClick={showPreparingMessage}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 placeholder="you@company.com"
               />
             </div>
@@ -45,7 +48,9 @@ export default function ContactPage() {
                 id="message" 
                 required 
                 rows={5}
-                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                readOnly
+                onClick={showPreparingMessage}
+                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                 placeholder="어떤 기술적 과제에 대해 이야기하고 싶으신가요?"
               />
             </div>

@@ -47,8 +47,8 @@ async function getHandler(req: NextRequest) {
     
     return successResponse({ logs: recentLines });
   } catch (error) {
-    throw new Error("Failed to read combined.log file");
+    throw new Error("combined.log 파일을 읽어오는데 실패했습니다.");
   }
 }
 
-export const GET = withApiHandler(getHandler, { requireAuth: true, allowedRoles: ["Admin"] });
+export const GET = withApiHandler(getHandler, { requireAuth: true, allowedRoles: ["Admin", "Editor", "Viewer"] });

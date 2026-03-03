@@ -66,7 +66,8 @@ export default function AdminSettingsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between rounded-lg border p-4">
+            {/* TODO: 유지보수 모드 및 분석 활성화 기능 구현 */}
+            {/* <div className="flex items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
                 <Label className="text-base">유지보수 모드</Label>
                 <div className="text-sm text-muted-foreground">
@@ -85,7 +86,7 @@ export default function AdminSettingsPage() {
               </div>
               <Switch defaultChecked={settings.analyticsEnabled} />
             </div>
-            <Separator />
+            <Separator /> */}
             <div className="grid gap-2">
               <Label htmlFor="apiVersion">API 버전</Label>
               <Input id="apiVersion" defaultValue={settings.apiVersion} className="max-w-[200px]" />

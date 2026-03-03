@@ -60,7 +60,7 @@ export function withApiHandler<P = unknown>(handler: HandlerWithUser<P>, options
         
         if (!token) {
           logicalStatus = 401;
-          throw new Error("Unauthorized: Token missing");
+          throw new Error("인증 실패: 토큰이 누락되었습니다.");
         }
         
         try {
@@ -68,13 +68,13 @@ export function withApiHandler<P = unknown>(handler: HandlerWithUser<P>, options
           user = JwtUtil.verifyAccessToken(token) as TokenPayload;
         } catch (_err) {
           logicalStatus = 401;
-          throw new Error("Unauthorized: Invalid or expired token");
+          throw new Error("인증 실패: 유효하지 않거나 만료된 토큰입니다.");
         }
 
         if (options.allowedRoles && options.allowedRoles.length > 0) {
           if (!user || !options.allowedRoles.includes(user.role)) {
             logicalStatus = 403;
-            throw new Error("Forbidden: Insufficient permissions");
+            throw new Error("권한 없음: 관리자 권한이 필요합니다.");
           }
         }
       }
