@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MarkdownViewer } from "@/components/ui/MarkdownViewer";
+import { InlineMarkdown } from "@/components/ui/InlineMarkdown";
 import {
   Card,
   CardContent,
@@ -74,18 +75,25 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
             </div>
           )}
         </div>
+        
+        {/* Description / Summary */}
+        <div className="mt-6 p-4 bg-muted/30 rounded-lg border-l-4 border-primary/50 text-muted-foreground">
+          <InlineMarkdown content={feature.description} className="text-sm leading-relaxed" />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
           {feature.content ? (
-            <MarkdownViewer content={feature.content} />
+            <div className="mt-4">
+              <MarkdownViewer content={feature.content} />
+            </div>
           ) : (
             <>
-              <section className="space-y-4">
+              <section className="space-y-4 mt-4">
                 <h2 className="text-2xl font-semibold border-b pb-2">프로젝트 개요</h2>
-                <MarkdownViewer content={feature.overview + "\n\n" + feature.description} />
+                <MarkdownViewer content={feature.overview || "내용이 없습니다."} />
               </section>
             </>
           )}
@@ -127,9 +135,7 @@ export default async function FeatureDetailPage({ params }: { params: Promise<{ 
                     <h4 className="font-medium text-sm group-hover:text-primary transition-colors mb-1">
                       {insight.title}
                     </h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {insight.excerpt}
-                    </p>
+                    <InlineMarkdown content={insight.excerpt} className="text-xs text-muted-foreground line-clamp-2" />
                   </Link>
                 ))
               ) : (

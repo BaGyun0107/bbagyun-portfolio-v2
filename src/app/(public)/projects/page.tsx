@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { FeatureService } from "@/lib/api/services/feature.service";
+import { InlineMarkdown } from "@/components/ui/InlineMarkdown";
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,7 @@ export default async function ProjectsPage() {
       <div className="mb-12 space-y-4">
         <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">작업물</h1>
         <p className="text-xl text-muted-foreground max-w-2xl">
-          제가 설계한 프로덕션 수준의 시스템과 컴포넌트 모음입니다.
+          단순한 기능 구현을 넘어, 견고한 아키텍처로 비즈니스 문제를 해결한 실무 프로젝트 기록입니다.
         </p>
       </div>
 
@@ -34,9 +35,7 @@ export default async function ProjectsPage() {
                   <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
 
-                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                  {feature.description}
-                </p>
+                <InlineMarkdown content={feature.description} className="text-sm text-muted-foreground leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all" />
 
                 <div className="mt-auto pt-2 flex flex-wrap gap-1.5">
                   {feature.techStack.map(tech => (

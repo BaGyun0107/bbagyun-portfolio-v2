@@ -9,6 +9,7 @@ import {
   SiAnthropic, SiOpenai, SiGithubcopilot
 } from "react-icons/si";
 import { Badge } from "@/components/ui/badge";
+import { InlineMarkdown } from "@/components/ui/InlineMarkdown";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FeatureService } from "@/lib/api/services/feature.service";
@@ -163,9 +164,7 @@ export default async function HomePage() {
                       <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                     </div>
 
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
-                      {feature.description}
-                    </p>
+                    <InlineMarkdown content={feature.description} className="text-sm text-muted-foreground leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all" />
 
                     <div className="mt-auto pt-2 flex flex-wrap gap-1.5">
                       {feature.techStack.map(tech => (
@@ -183,7 +182,7 @@ export default async function HomePage() {
       {/* Recent Activity / Updates */}
       <section className="container mx-auto px-4 max-w-3xl space-y-8">
         <div className="flex items-center justify-between">
-           <h2 className="text-2xl font-bold tracking-tight">최근 업데이트</h2>
+           <h2 className="text-2xl font-bold tracking-tight">최근 인사이트</h2>
            <Link href="/insights" className="text-sm text-primary hover:underline">전체 보기</Link>
         </div>
         
@@ -197,7 +196,7 @@ export default async function HomePage() {
                <h3 className="text-lg font-semibold hover:text-primary cursor-pointer transition-colors">
                  <Link href={`/insights/${insight.slug}`}>{insight.title}</Link>
                </h3>
-               <p className="text-muted-foreground mt-2">{insight.excerpt}</p>
+               <InlineMarkdown content={insight.excerpt} className="text-muted-foreground mt-2 line-clamp-2 group-hover:line-clamp-none transition-all" />
              </div>
            ))}
         </div>

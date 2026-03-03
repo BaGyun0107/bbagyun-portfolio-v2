@@ -22,6 +22,12 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
     blockquote: ({ node, ...props }) => (
       <blockquote {...props} className="border-l-4 border-primary/30 bg-muted/40 px-4 py-2 my-4 rounded-r-md italic text-muted-foreground" />
     ),
+    strong: ({ node, ...props }) => (
+      <strong {...props} className="font-bold text-zinc-900 dark:text-zinc-100" />
+    ),
+    b: ({ node, ...props }) => (
+      <b {...props} className="font-bold text-zinc-900 dark:text-zinc-100" />
+    ),
     // 인라인 코드 (`backtick`)
     code: ({ node, className, children, ...props }) => {
       const isBlock = className?.includes("language-");
@@ -71,7 +77,7 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
                    prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0"
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} components={components}>
-          {content || ""}
+          {content?.replace(/(^|[^\\])\*\*(?=\S)(.*?\S)\*\*/g, '$1 **$2** ') || ""}
         </ReactMarkdown>
       </div>
     </>

@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic';
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { MarkdownViewer } from "@/components/ui/MarkdownViewer";
+import { InlineMarkdown } from "@/components/ui/InlineMarkdown";
 import { ShareButton } from "@/components/ui/ShareButton";
 
 
@@ -53,9 +54,7 @@ export default async function InsightDetailPage({ params }: { params: Promise<{ 
         </div>
 
         <div className="prose prose-zinc dark:prose-invert max-w-none">
-          <p className="text-xl leading-relaxed text-muted-foreground">
-            {insight.excerpt}
-          </p>
+          <InlineMarkdown content={insight.excerpt} className="text-xl leading-relaxed text-muted-foreground block" />
           <div className="my-8 h-px bg-zinc-200 dark:bg-zinc-800" />
           
           <MarkdownViewer content={insight.content} />

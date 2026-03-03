@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, Calendar, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { InlineMarkdown } from "@/components/ui/InlineMarkdown";
 import { InsightService } from "@/lib/api/services/insight.service";
 
 export const dynamic = 'force-dynamic';
@@ -13,7 +14,7 @@ export default async function InsightsPage() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4">인사이트</h1>
         <p className="text-xl text-muted-foreground">
-          아키텍처 결정, 사후 분석, 그리고 트레이드오프에 대한 깊은 탐구.
+          '어떻게'보다 '왜'에 집중하며, 아키텍처 설계 과정의 트레이드오프를 조율한 기술 회고입니다.
         </p>
       </div>
 
@@ -37,9 +38,7 @@ export default async function InsightsPage() {
                     <h2 className="text-2xl font-bold group-hover:text-primary transition-colors flex items-center gap-2">
                       {insight.title}
                     </h2>
-                    <p className="text-muted-foreground leading-relaxed max-w-2xl">
-                      {insight.excerpt}
-                    </p>
+                    <InlineMarkdown content={insight.excerpt} className="text-muted-foreground leading-relaxed max-w-2xl" />
                     <div className="flex gap-2 pt-2">
                       {insight.tags.map(tag => (
                         <Badge key={tag} variant="secondary" className="font-normal">
