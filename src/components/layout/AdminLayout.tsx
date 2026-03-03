@@ -29,9 +29,13 @@ export default function AdminLayout({
     { label: "작업물 관리", path: "/admin/features", icon: Layers },
     { label: "인사이트 관리", path: "/admin/insights", icon: BookOpen },
     { label: "로그", path: "/admin/logs", icon: Activity },
-    { label: "사용자 관리", path: "/admin/users", icon: Users },
-    { label: "설정", path: "/admin/settings", icon: Settings },
-  ];
+    { label: "사용자 관리", path: "/admin/users", icon: Users, reqAdmin: true },
+    { label: "설정", path: "/admin/settings", icon: Settings, hideFromViewer: true },
+  ].filter(item => {
+    if (item.reqAdmin && userRole !== "Admin") return false;
+    if (item.hideFromViewer && userRole === "Viewer") return false;
+    return true;
+  });
 
   return (
     <div className="flex min-h-screen bg-zinc-50/50 dark:bg-zinc-950">

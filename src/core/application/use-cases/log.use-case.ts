@@ -21,8 +21,8 @@ export class LogUseCases {
    * 최근 시스템 로그 목록을 조회합니다.
    * @returns {Promise<LogDto[]>} 시스템 로그 배열
    */
-  async getAllLogs(): Promise<LogDto[]> {
-    return this.logRepository.findAll();
+  async getAllLogs(searchParams?: { path?: string, limit?: number }): Promise<LogDto[]> {
+    return this.logRepository.findAll(searchParams);
   }
 
   /**

@@ -10,10 +10,11 @@ export class LogPrismaRepository implements ILogRepository {
     return this.mapToDto(doc);
   }
 
-  async findAll(): Promise<LogDto[]> {
+  async findAll(searchParams?: { path?: string, limit?: number }): Promise<LogDto[]> {
     const docs = await prisma.log.findMany({
+      where: searchParams?.path ? { path: { contains: searchParams.path } } : undefined,
       orderBy: { timestamp: 'desc' },
-      take: 1000, // Limit for safety
+      take: searchParams?.limit || 1000,
     });
     return docs.map((doc: Log) => this.mapToDto(doc));
   }

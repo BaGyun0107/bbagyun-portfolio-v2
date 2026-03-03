@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { FeatureService } from "@/lib/api/services/feature.service";
+import { toast } from "sonner";
 
 export default function AdminFeatureNewPage() {
   const router = useRouter();
+  const [saving, setSaving] = useState(false);
 
   const { register, handleSubmit, setValue, watch } = useForm<any>({
     defaultValues: {
@@ -44,20 +47,28 @@ export default function AdminFeatureNewPage() {
     }
   }, [title, setValue]);
 
-  const onFormSubmit = (data: any) => {
-    const formattedData = {
-      ...data,
-      techStack: data.techStack.split(",").map((t: string) => t.trim()).filter(Boolean),
-    };
-    console.log("Form Submitted:", formattedData);
-    alert("저장되었습니다.");
-    router.push("/admin/features");
+  const onFormSubmit = async (data: any) => {
+    try {
+      setSaving(true);
+      const formattedData = {
+        ...data,
+        techStack: data.techStack.split(",").map((t: string) => t.trim()).filter(Boolean),
+      };
+      
+      await FeatureService.createFeature(formattedData);
+      toast.success("작업물이 성공적으로 추가되었습니다.");
+      router.push("/admin/features");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-20">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => router.push("/admin/features")}>
+        <Button variant="ghost" size="icon" onClick={() => router.push("/admin/features")} disabled={saving}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
@@ -137,8 +148,11 @@ export default function AdminFeatureNewPage() {
         </div>
 
         <div className="flex justify-end gap-4 pt-4 sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t">
-          <Button type="button" variant="outline" onClick={() => router.push("/admin/features")}>취소</Button>
-          <Button type="submit" size="lg">저장하기</Button>
+          <Button type="button" variant="outline" onClick={() => router.push("/admin/features")} disabled={saving}>취소</Button>
+          <Button type="submit" size="lg" disabled={saving}>
+            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            저장하기
+          </Button>
         </div>
       </form>
     </div>

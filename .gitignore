@@ -42,4 +42,5 @@ env
 *.tsbuildinfo
 next-env.d.ts
 
+/logs
 /src/generated/prisma

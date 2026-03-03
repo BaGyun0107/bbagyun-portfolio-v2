@@ -59,7 +59,7 @@ pipeline {
                     }
                 }
                 sh 'corepack enable pnpm'
-                sh 'pnpm install'
+                sh 'pnpm install --frozen-lockfile'
                 sh 'pnpm prisma generate'
                 sh 'pnpm build'
             }

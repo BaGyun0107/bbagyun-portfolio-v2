@@ -1,21 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { INSIGHTS, Insight } from "@/data/mock";
-import { ArrowLeft } from "lucide-react";
+import { InsightDto } from "@/core/application/dtos/insight.dto";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { InsightService } from "@/lib/api/services/insight.service";
+import { toast } from "sonner";
 
-export default function AdminInsightFormPage() {
-  const { id } = useParams();
+export default function AdminInsightNewPage() {
   const router = useRouter();
-  const isEdit = !!id;
+  const [saving, setSaving] = useState(false);
 
-  const { register, handleSubmit, reset, setValue, watch } = useForm<Insight & { tagsInput: string }>({
+  const { register, handleSubmit, setValue, watch } = useForm<InsightDto & { tagsInput: string }>({
     defaultValues: {
       title: "",
       slug: "",
@@ -29,46 +30,43 @@ export default function AdminInsightFormPage() {
 
   const title = watch("title");
 
-  useEffect(() => {
-    if (isEdit && id) {
-      const insight = INSIGHTS.find((i) => i.id === id);
-      if (insight) {
-        reset({
-          ...insight,
-          tagsInput: insight.tags.join(", "),
-        });
-      }
-    }
-  }, [id, isEdit, reset]);
-
   // Auto-generate slug
   useEffect(() => {
-    if (!isEdit && title) {
+    if (title) {
       setValue("slug", title.toLowerCase().replace(/[^a-z0-9]+/g, "-"));
     }
-  }, [title, isEdit, setValue]);
+  }, [title, setValue]);
 
-  const onFormSubmit = (data: any) => {
-    const formattedData = {
-      ...data,
-      tags: data.tagsInput.split(",").map((t: string) => t.trim()).filter(Boolean),
-    };
-    delete formattedData.tagsInput;
-    
-    console.log("Insight Form Submitted:", formattedData);
-    alert("저장되었습니다. (Note: 실제 데이터베이스가 연결되지 않아 새로고침 시 초기화됩니다)");
-    router.push("/admin/insights");
+  const onFormSubmit = async (data: any) => {
+    try {
+      setSaving(true);
+      const formattedData = {
+        ...data,
+        tags: data.tagsInput.split(",").map((t: string) => t.trim()).filter(Boolean),
+        // DB expects ISO string
+        date: new Date(data.date).toISOString(),
+      };
+      delete formattedData.tagsInput;
+      
+      await InsightService.createInsight(formattedData);
+      toast.success("새 인사이트 글이 성공적으로 등록되었습니다.");
+      router.push("/admin/insights");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-20">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => router.push("/admin/insights")}>
+        <Button variant="ghost" size="icon" onClick={() => router.push("/admin/insights")} disabled={saving}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-           <h1 className="text-3xl font-bold tracking-tight">{isEdit ? "인사이트 수정" : "새 인사이트 작성"}</h1>
-           <p className="text-muted-foreground">{isEdit ? "기존 글을 수정합니다." : "새로운 기술 블로그 글을 작성합니다."}</p>
+           <h1 className="text-3xl font-bold tracking-tight">새 인사이트 작성</h1>
+           <p className="text-muted-foreground">새로운 기술 블로그 글을 작성합니다.</p>
         </div>
       </div>
 
@@ -117,8 +115,11 @@ export default function AdminInsightFormPage() {
         </div>
 
         <div className="flex justify-end gap-4 pt-4 sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t">
-          <Button type="button" variant="outline" onClick={() => router.push("/admin/insights")}>취소</Button>
-          <Button type="submit" size="lg">저장하기</Button>
+          <Button type="button" variant="outline" onClick={() => router.push("/admin/insights")} disabled={saving}>취소</Button>
+          <Button type="submit" size="lg" disabled={saving}>
+            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            저장하기
+          </Button>
         </div>
       </form>
     </div>

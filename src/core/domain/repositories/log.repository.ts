@@ -7,7 +7,7 @@ export interface ILogRepository {
   /** 지정된 ID로 로그 조회 */
   findById(id: string): Promise<LogDto | null>;
   /** 전체 로그 목록 조회 */
-  findAll(): Promise<LogDto[]>;
+  findAll(searchParams?: { path?: string, limit?: number }): Promise<LogDto[]>;
   /** 새로운 로그 생성 */
   create(data: CreateLogDto): Promise<LogDto>;
   /**

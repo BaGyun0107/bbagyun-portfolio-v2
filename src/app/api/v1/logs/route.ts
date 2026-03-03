@@ -24,7 +24,12 @@ const logUseCases = new LogUseCases(new LogPrismaRepository());
  * @returns {Promise<Response>} 전체 시스템 로그 반환
  */
 async function getHandler(req: NextRequest) {
-  const logs = await logUseCases.getAllLogs();
+  const url = new URL(req.url);
+  const pathParam = url.searchParams.get("path") || undefined;
+  const limitParam = url.searchParams.get("limit");
+  const limit = limitParam ? parseInt(limitParam, 10) : 1000;
+
+  const logs = await logUseCases.getAllLogs({ path: pathParam, limit });
   return successResponse(logs);
 }
 

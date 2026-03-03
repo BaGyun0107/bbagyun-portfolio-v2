@@ -1,21 +1,27 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { INSIGHTS, Insight } from "@/data/mock";
-import { ArrowLeft } from "lucide-react";
+import { InsightDto } from "@/core/application/dtos/insight.dto";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { InsightService } from "@/lib/api/services/insight.service";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 export default function AdminInsightFormPage() {
   const { id } = useParams();
   const router = useRouter();
   const isEdit = !!id;
+  const [loading, setLoading] = useState(isEdit);
+  const [saving, setSaving] = useState(false);
+  const [originalSlug, setOriginalSlug] = useState("");
 
-  const { register, handleSubmit, reset, setValue, watch } = useForm<Insight & { tagsInput: string }>({
+  const { register, handleSubmit, reset, setValue, watch } = useForm<InsightDto & { tagsInput: string }>({
     defaultValues: {
       title: "",
       slug: "",
@@ -30,35 +36,74 @@ export default function AdminInsightFormPage() {
   const title = watch("title");
 
   useEffect(() => {
-    if (isEdit && id) {
-      const insight = INSIGHTS.find((i) => i.id === id);
-      if (insight) {
-        reset({
-          ...insight,
-          tagsInput: insight.tags.join(", "),
-        });
-      }
-    }
-  }, [id, isEdit, reset]);
+    const fetchInsight = async () => {
+      try {
+        setLoading(true);
+        const insights = await InsightService.getAllInsights();
+        const insight = insights.find(i => i.id === id);
 
-  // Auto-generate slug
+        if (insight) {
+          setOriginalSlug(insight.slug);
+          // Format date to YYYY-MM-DD for the date input
+          const formattedDate = format(new Date(insight.date), "yyyy-MM-dd");
+          reset({
+            ...insight,
+            date: formattedDate,
+            tagsInput: insight.tags.join(", "),
+          });
+        } else {
+          toast.error("글을 찾을 수 없습니다.");
+          router.push("/admin/insights");
+        }
+      } catch (err) {
+        toast.error("데이터를 불러오는데 실패했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isEdit && id) {
+      fetchInsight();
+    }
+  }, [id, isEdit, reset, router]);
+
+  // Auto-generate slug (only if it's new)
   useEffect(() => {
     if (!isEdit && title) {
       setValue("slug", title.toLowerCase().replace(/[^a-z0-9]+/g, "-"));
     }
   }, [title, isEdit, setValue]);
 
-  const onFormSubmit = (data: any) => {
-    const formattedData = {
-      ...data,
-      tags: data.tagsInput.split(",").map((t: string) => t.trim()).filter(Boolean),
-    };
-    delete formattedData.tagsInput;
-    
-    console.log("Insight Form Submitted:", formattedData);
-    alert("저장되었습니다. (Note: 실제 데이터베이스가 연결되지 않아 새로고침 시 초기화됩니다)");
-    router.push("/admin/insights");
+  const onFormSubmit = async (data: any) => {
+    try {
+      setSaving(true);
+      const formattedData = {
+        ...data,
+        tags: data.tagsInput.split(",").map((t: string) => t.trim()).filter(Boolean),
+        // DB expects ISO string
+        date: new Date(data.date).toISOString(),
+      };
+      delete formattedData.tagsInput;
+      
+      if (isEdit) {
+        await InsightService.updateInsight(originalSlug, formattedData);
+        toast.success("글이 성공적으로 수정되었습니다.");
+      } else {
+        await InsightService.createInsight(formattedData);
+        toast.success("새 글이 성공적으로 등록되었습니다.");
+      }
+      
+      router.push("/admin/insights");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return <div className="flex justify-center p-20"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+  }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-20">
@@ -117,8 +162,11 @@ export default function AdminInsightFormPage() {
         </div>
 
         <div className="flex justify-end gap-4 pt-4 sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t">
-          <Button type="button" variant="outline" onClick={() => router.push("/admin/insights")}>취소</Button>
-          <Button type="submit" size="lg">저장하기</Button>
+          <Button type="button" variant="outline" onClick={() => router.push("/admin/insights")} disabled={saving}>취소</Button>
+          <Button type="submit" size="lg" disabled={saving}>
+            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            저장하기
+          </Button>
         </div>
       </form>
     </div>

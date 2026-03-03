@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { FeatureDto } from "@/core/application/dtos/feature.dto";
 import { FeatureService } from "@/lib/api/services/feature.service";
+import { toast } from "sonner";
 
 export default function AdminFeaturesPage() {
   const [features, setFeatures] = useState<FeatureDto[]>([]);
@@ -27,6 +28,7 @@ export default function AdminFeaturesPage() {
         setFeatures(data);
       } catch (e) {
         console.error(e);
+        toast.error("데이터를 불러오는데 실패했습니다.");
       }
     };
     loadFeatures();
@@ -37,8 +39,13 @@ export default function AdminFeaturesPage() {
       try {
         await FeatureService.deleteFeature(slug);
         setFeatures(features.filter((f) => f.id !== id));
-      } catch (e) {
+        toast.success("작업물이 삭제되었습니다.");
+      } catch (e: any) {
         console.error(e);
+        // 권한 에러는 fetcher에서 토스트를 띄우므로 중복 방지를 위해 메시지 확인
+        if (e.message !== "권한이 없습니다.") {
+          toast.error(e.message || "삭제에 실패했습니다.");
+        }
       }
     }
   };

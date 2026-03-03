@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -14,13 +14,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { FeatureService } from "@/lib/api/services/feature.service";
+import { toast } from "sonner";
+import { FeatureDto } from "@/core/application/dtos/feature.dto";
 
 export default function AdminFeatureEditPage() {
   const { id } = useParams();
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [originalSlug, setOriginalSlug] = useState("");
 
-  const { register, handleSubmit, setValue, watch } = useForm<any>({
+  const { register, handleSubmit, setValue, watch, reset } = useForm<any>({
     defaultValues: {
       title: "",
       slug: "",
@@ -39,27 +45,61 @@ export default function AdminFeatureEditPage() {
   const title = watch("title");
 
   useEffect(() => {
-    if (id) {
-      // TODO: fetch feature by id from API and reset form
-    }
-  }, [id]);
-
-  // Auto-generate slug
-  useEffect(() => {
-    if (title) {
-      setValue("slug", title.toLowerCase().replace(/[^a-z0-9]+/g, "-"));
-    }
-  }, [title, setValue]);
-
-  const onFormSubmit = (data: any) => {
-    const formattedData = {
-      ...data,
-      techStack: data.techStack.split(",").map((t: string) => t.trim()).filter(Boolean),
+    const fetchFeature = async () => {
+      try {
+        setLoading(true);
+        // Note: The API currently fetches by slug, but the list page passes the ID to this route.
+        // Let's get all features and find by ID since we don't have the slug in the URL.
+        const allFeatures = await FeatureService.getAllFeatures();
+        const feature = allFeatures.find(f => f.id === id);
+        
+        if (feature) {
+          setOriginalSlug(feature.slug);
+          reset({
+            ...feature,
+            techStack: feature.techStack.join(", "),
+          });
+        } else {
+          toast.error("작업물을 찾을 수 없습니다.");
+          router.push("/admin/features");
+        }
+      } catch (err) {
+        toast.error("데이터를 불러오는데 실패했습니다.");
+      } finally {
+        setLoading(false);
+      }
     };
-    console.log("Form Submitted:", formattedData);
-    alert("저장되었습니다.");
-    router.push("/admin/features");
+
+    if (id) {
+      fetchFeature();
+    }
+  }, [id, reset, router]);
+
+  // Auto-generate slug (only if it's a new feature, skip for edit)
+  // Removed to prevent accidental slug changes on edit unless intended.
+
+  const onFormSubmit = async (data: any) => {
+    try {
+      setSaving(true);
+      const formattedData = {
+        ...data,
+        techStack: data.techStack.split(",").map((t: string) => t.trim()).filter(Boolean),
+      };
+      
+      await FeatureService.updateFeature(originalSlug, formattedData);
+      toast.success("작업물이 성공적으로 수정되었습니다.");
+      router.push("/admin/features");
+    } catch (err) {
+      // The fetcher already shows a toast, but just in case
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
   };
+
+  if (loading) {
+    return <div className="flex justify-center p-20"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+  }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-20">
@@ -144,8 +184,11 @@ export default function AdminFeatureEditPage() {
         </div>
 
         <div className="flex justify-end gap-4 pt-4 sticky bottom-0 bg-background/80 backdrop-blur-sm p-4 border-t">
-          <Button type="button" variant="outline" onClick={() => router.push("/admin/features")}>취소</Button>
-          <Button type="submit" size="lg">저장하기</Button>
+          <Button type="button" variant="outline" onClick={() => router.push("/admin/features")} disabled={saving}>취소</Button>
+          <Button type="submit" size="lg" disabled={saving}>
+            {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            저장하기
+          </Button>
         </div>
       </form>
     </div>

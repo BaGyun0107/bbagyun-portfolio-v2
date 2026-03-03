@@ -15,6 +15,8 @@ import { Badge } from "@/components/ui/badge";
 import { Edit2, Plus, Trash2 } from "lucide-react";
 import { InsightDto } from "@/core/application/dtos/insight.dto";
 import { InsightService } from "@/lib/api/services/insight.service";
+import { format } from "date-fns";
+import { toast } from "sonner";
 
 export default function AdminInsightsPage() {
   const [insights, setInsights] = useState<InsightDto[]>([]);
@@ -27,6 +29,7 @@ export default function AdminInsightsPage() {
         setInsights(data);
       } catch (e) {
         console.error(e);
+        toast.error("데이터를 불러오는데 실패했습니다.");
       }
     };
     loadInsights();
@@ -37,8 +40,12 @@ export default function AdminInsightsPage() {
       try {
         await InsightService.deleteInsight(slug);
         setInsights(insights.filter((i) => i.id !== id));
-      } catch (e) {
+        toast.success("클이 삭제되었습니다.");
+      } catch (e: any) {
         console.error(e);
+        if (e.message !== "권한이 없습니다.") {
+          toast.error(e.message || "삭제에 실패했습니다.");
+        }
       }
     }
   };
@@ -77,7 +84,7 @@ export default function AdminInsightsPage() {
                     {insight.excerpt}
                   </div>
                 </TableCell>
-                <TableCell>{String(insight.date)}</TableCell>
+                <TableCell>{format(new Date(insight.date), "yyyy-MM-dd")}</TableCell>
                 <TableCell>
                   <div className="flex gap-1">
                     {insight.tags.map((tag) => (
