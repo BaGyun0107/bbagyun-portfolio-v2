@@ -11,8 +11,8 @@ export default async function ProjectsPage() {
   return (
     <div className="container mx-auto px-4 py-12 md:py-20 max-w-6xl">
       <div className="mb-12 space-y-4">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">작업물</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl">
+        <h1 className="text-4xl font-bold tracking-tight lg:text-5xl">작업물</h1>
+        <p className="text-xl font-medium text-zinc-600 dark:text-zinc-400 max-w-2xl">
           단순한 기능 구현을 넘어, 견고한 아키텍처로 비즈니스 문제를 해결한 실무 프로젝트 기록입니다.
         </p>
       </div>

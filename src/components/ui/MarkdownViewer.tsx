@@ -68,11 +68,13 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
       />
       <div
         className="prose prose-zinc max-w-none dark:prose-invert
-                   prose-headings:font-semibold prose-headings:tracking-tight
+                   prose-headings:font-bold prose-headings:tracking-tight
                    prose-h1:text-3xl prose-h1:mb-4 prose-h1:mt-8
                    prose-h2:text-2xl prose-h2:mb-4 prose-h2:mt-8 prose-h2:border-b prose-h2:border-zinc-200 prose-h2:dark:border-zinc-700 prose-h2:pb-2
-                   prose-h3:text-xl prose-h3:mb-2 prose-h3:mt-6
-                   prose-p:leading-relaxed prose-p:text-base prose-p:mb-5
+                   prose-h3:text-xl md:prose-h3:text-2xl prose-h3:mb-4 prose-h3:mt-8
+                   prose-h4:text-base prose-h4:font-bold prose-h4:text-primary prose-h4:bg-primary/10 prose-h4:inline-block prose-h4:px-3 prose-h4:py-1 prose-h4:rounded-md prose-h4:mb-3 prose-h4:mt-1
+                   prose-p:leading-7 prose-p:text-base prose-p:mb-4
+                   prose-ul:mb-4 prose-ol:mb-4
                    prose-hr:border-zinc-200 dark:prose-hr:border-zinc-800
                    prose-pre:m-0 prose-pre:bg-transparent prose-pre:p-0"
       >

@@ -13,7 +13,7 @@ export default async function InsightsPage() {
     <div className="container mx-auto px-4 py-12 md:py-20 max-w-4xl">
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4">인사이트</h1>
-        <p className="text-xl text-muted-foreground">
+        <p className="text-xl font-medium text-zinc-600 dark:text-zinc-400">
           '어떻게'보다 '왜'에 집중하며, 아키텍처 설계 과정의 트레이드오프를 조율한 기술 회고입니다.
         </p>
       </div>
