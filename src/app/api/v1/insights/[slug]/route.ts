@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { withApiHandler } from "@/core/application/middlewares/api-handler";
 import { successResponse, errorResponse } from "@/core/application/utils/api-response.util";
 import { InsightUseCases } from "@/core/application/use-cases/insight.use-case";
@@ -79,6 +80,7 @@ async function patchHandler(req: NextRequest, params: Promise<{ slug: string }>)
 
   const body = await req.json();
   const updatedInsight = await insightUseCases.updateInsight(insight.id, body);
+  revalidatePath("/insights", "layout");
   return successResponse(updatedInsight, "Insight updated successfully");
 }
 
@@ -90,6 +92,7 @@ async function deleteHandler(req: NextRequest, params: Promise<{ slug: string }>
   }
 
   await insightUseCases.deleteInsight(insight.id);
+  revalidatePath("/insights", "layout");
   return successResponse(null, "Insight deleted successfully");
 }
 

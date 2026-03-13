@@ -82,18 +82,30 @@ async function main() {
       }
     }
 
-    await prisma.insight.create({
+    const createdInsight = await prisma.insight.create({
       data: {
         slug: insight.slug,
         title: insight.title,
         excerpt: insight.excerpt,
         content: insight.content,
         date: insight.date,
-        tags: JSON.stringify(insight.tags),
         readTime: insight.readTime,
         featureId,
       },
     });
+
+    for (const tagName of insight.tags) {
+      const tag = await prisma.tag.upsert({
+        where: { name: tagName },
+        update: {},
+        create: { name: tagName },
+      });
+      await prisma.insightTag.upsert({
+        where: { insightId_tagId: { insightId: createdInsight.id, tagId: tag.id } },
+        update: {},
+        create: { insightId: createdInsight.id, tagId: tag.id },
+      });
+    }
     console.log(`✅ Insight: ${insight.title}`);
   }
 

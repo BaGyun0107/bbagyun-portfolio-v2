@@ -13,9 +13,21 @@ export default async function InsightsPage() {
     <div className="container mx-auto px-4 py-12 md:py-20 max-w-4xl">
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight mb-4">인사이트</h1>
-        <p className="text-xl font-medium text-zinc-600 dark:text-zinc-400">
+        <p className="text-xl font-medium text-zinc-600 dark:text-zinc-400 mb-6">
           '어떻게'보다 '왜'에 집중하며, 아키텍처 설계 과정의 트레이드오프를 조율한 기술 회고입니다.
         </p>
+
+        <nav className="flex items-center gap-4 text-sm font-medium">
+          <Link href="/insights" className="text-primary border-b-2 border-primary pb-1">
+            전체글
+          </Link>
+          <Link href="/insights/archive" className="text-muted-foreground hover:text-primary transition-colors pb-1 border-b-2 border-transparent hover:border-zinc-200 dark:hover:border-zinc-800">
+            아카이브
+          </Link>
+          <Link href="/insights/tags" className="text-muted-foreground hover:text-primary transition-colors pb-1 border-b-2 border-transparent hover:border-zinc-200 dark:hover:border-zinc-800">
+            태그
+          </Link>
+        </nav>
       </div>
 
       <div className="space-y-6">

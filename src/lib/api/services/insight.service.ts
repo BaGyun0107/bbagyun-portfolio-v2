@@ -1,6 +1,6 @@
 import { api } from "../fetcher";
 import { API_CONFIG } from "../config";
-import { InsightDto, CreateInsightDto, UpdateInsightDto } from "@/core/application/dtos/insight.dto";
+import { InsightDto, CreateInsightDto, UpdateInsightDto, InsightArchiveDto, InsightTagDto, InsightNavigationDto } from "@/core/application/dtos/insight.dto";
 import { INSIGHTS } from "@/data/mock";
 
 /**
@@ -73,5 +73,54 @@ export const InsightService = {
       return;
     }
     return api.delete<void>(`/insights/${slug}`);
+  },
+
+  /**
+   * 연도별 게시물 목록을 조회합니다.
+   */
+  async getInsightArchive(options?: { useMock?: boolean }): Promise<InsightArchiveDto[]> {
+    const isMock = options?.useMock ?? API_CONFIG.USE_MOCK;
+    if (isMock) {
+      // Mock logic can be improved later
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return [];
+    }
+    return api.get<InsightArchiveDto[]>("/insights/archive");
+  },
+
+  /**
+   * 태그 클라우드를 조회합니다.
+   */
+  async getInsightTags(options?: { useMock?: boolean }): Promise<InsightTagDto[]> {
+    const isMock = options?.useMock ?? API_CONFIG.USE_MOCK;
+    if (isMock) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return [];
+    }
+    return api.get<InsightTagDto[]>("/insights/tags");
+  },
+
+  /**
+   * 특정 태그를 포함한 인사이트 목록을 조회합니다.
+   */
+  async getInsightsByTag(tag: string, options?: { useMock?: boolean }): Promise<InsightDto[]> {
+    const isMock = options?.useMock ?? API_CONFIG.USE_MOCK;
+    if (isMock) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return INSIGHTS.filter(i => i.tags && i.tags.includes(tag));
+    }
+    return api.get<InsightDto[]>(`/insights/tags?tag=${encodeURIComponent(tag)}`);
+  },
+
+  /**
+   * 이전글/다음글 네비게이션을 조회합니다.
+   */
+  async getInsightNavigation(slug: string, options?: { useMock?: boolean }): Promise<{ prev: InsightNavigationDto | null; next: InsightNavigationDto | null }> {
+    const isMock = options?.useMock ?? API_CONFIG.USE_MOCK;
+    if (isMock) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return { prev: null, next: null };
+    }
+    return api.get<{ prev: InsightNavigationDto | null; next: InsightNavigationDto | null }>(`/insights/${slug}/navigation`);
   }
 };

@@ -61,20 +61,41 @@ model Feature {
 }
 
 model Insight {
-  id        String   @id @default(cuid())
+  id        String       @id @default(cuid())
   title     String
-  slug      String   @unique
+  slug      String       @unique
   excerpt   String
   content   String
   date      DateTime
-  tags      String // Stored as JSON string
-  readTime  String   @map("read_time")
-  featureId String?  @map("feature_id")
-  feature   Feature? @relation(fields: [featureId], references: [id])
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  tags      InsightTag[] // Explicit M:N join
+  readTime  String       @map("read_time")
+  featureId String?      @map("feature_id")
+  feature   Feature?     @relation(fields: [featureId], references: [id])
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
 
+  @@index([date])
   @@map("insights")
+}
+
+model Tag {
+  id        String       @id @default(cuid())
+  name      String       @unique
+  insights  InsightTag[]
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  @@map("tags")
+}
+
+model InsightTag {
+  insightId String  @map("insight_id")
+  tagId     String  @map("tag_id")
+  insight   Insight @relation(fields: [insightId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([insightId, tagId])
+  @@index([tagId])
+  @@map("insight_tags")
 }
 
 model Log {

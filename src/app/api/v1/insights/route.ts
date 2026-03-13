@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { withApiHandler } from "@/core/application/middlewares/api-handler";
 import { successResponse, errorResponse } from "@/core/application/utils/api-response.util";
 import { InsightUseCases } from "@/core/application/use-cases/insight.use-case";
@@ -72,6 +73,7 @@ async function postHandler(req: NextRequest) {
   }
 
   const newInsight = await insightUseCases.createInsight(body);
+  revalidatePath("/insights", "layout");
   return successResponse(newInsight, "Insight created successfully", 201);
 }
 

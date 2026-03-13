@@ -1,5 +1,5 @@
 import { IInsightRepository } from "../../domain/repositories/insight.repository";
-import { CreateInsightDto, UpdateInsightDto, InsightDto } from "../dtos/insight.dto";
+import { CreateInsightDto, UpdateInsightDto, InsightDto, InsightArchiveDto, InsightTagDto, InsightNavigationDto } from "../dtos/insight.dto";
 
 /**
  * 인사이트(Insight) 게시물 정보를 처리하는 Use Case 클래스입니다.
@@ -32,6 +32,40 @@ export class InsightUseCases {
    */
   async getAllInsights(): Promise<InsightDto[]> {
     return this.insightRepository.findAll();
+  }
+
+  /**
+   * 인사이트 연도별 아카이브 목록을 조회합니다.
+   * @returns {Promise<InsightArchiveDto[]>} 아카이브 데이터 배열
+   */
+  async getInsightArchive(): Promise<InsightArchiveDto[]> {
+    return this.insightRepository.getArchiveList();
+  }
+
+  /**
+   * 사용된 전체 태그와 해당 태그의 사용 횟수를 조회합니다.
+   * @returns {Promise<InsightTagDto[]>} 태그 데이터 배열
+   */
+  async getInsightTags(): Promise<InsightTagDto[]> {
+    return this.insightRepository.getTags();
+  }
+
+  /**
+   * 기준 날짜를 통해 이전, 다음 인사이트 정보를 조회합니다.
+   * @param {Date | string} currentDate 기준 날짜
+   * @returns {Promise<{prev: InsightNavigationDto | null, next: InsightNavigationDto | null}>} 이전/다음 글 정보
+   */
+  async getInsightNavigation(currentDate: Date | string): Promise<{ prev: InsightNavigationDto | null; next: InsightNavigationDto | null }> {
+    return this.insightRepository.getNavigation(currentDate);
+  }
+
+  /**
+   * 특정 태그가 포함된 인사이트 목록을 조회합니다.
+   * @param {string} tag 조회할 태그
+   * @returns {Promise<InsightDto[]>} 태그가 포함된 게시물 목록
+   */
+  async getInsightsByTag(tag: string): Promise<InsightDto[]> {
+    return this.insightRepository.findByTag(tag);
   }
 
   /**
