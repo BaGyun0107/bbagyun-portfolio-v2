@@ -28,40 +28,34 @@ jobs:
       - name: Save & compress Docker image
         run: docker save portfolio-app:latest | gzip > app-image.tar.gz
 
-      - name: Deploy to server
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          source: "app-image.tar.gz,docker/docker-compose.yml,docker/docker-compose.${{ env.ENV_SUFFIX }}.yml"
-          target: ${{ secrets.DEPLOY_DIR }}
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy files to server
+        run: |
+          scp -i ~/.ssh/deploy_key \
+            app-image.tar.gz \
+            docker/docker-compose.yml \
+            docker/docker-compose.${{ env.ENV_SUFFIX }}.yml \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_DIR }}/
 
       - name: Load image & restart
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'DEPLOY_SCRIPT'
             cd ${{ secrets.DEPLOY_DIR }}
             docker load -i app-image.tar.gz
-            docker compose -f docker/docker-compose.yml \
-              -f docker/docker-compose.${{ env.ENV_SUFFIX }}.yml \
-              up -d app
+            docker compose -f docker-compose.yml -f docker-compose.${{ env.ENV_SUFFIX }}.yml up -d app
             rm -f app-image.tar.gz
             echo "Deployed: ${{ github.sha }} (${{ env.ENV_TAG }})"
+          DEPLOY_SCRIPT
 
       - name: Health check
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'HEALTH_SCRIPT'
             for i in 1 2 3 4 5; do
               if curl -sf http://localhost:3000/api/health > /dev/null 2>&1; then
                 echo "Health check passed"
@@ -72,6 +66,11 @@ jobs:
             done
             echo "Health check failed"
             exit 1
+          HEALTH_SCRIPT
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
 
       - name: Notify Slack (success)
         if: success()
