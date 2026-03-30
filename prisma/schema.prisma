@@ -60,6 +60,25 @@ model Feature {
   @@map("features")
 }
 
+model Study {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  iconName    String   @map("icon_name")
+  category    String // "Backend", "Frontend", "DevOps", "Fullstack", "Language", "Architecture" 등
+  techStack   String   @map("tech_stack") // Stored as JSON string
+  status      String // "Draft", "Published", "Archived"
+  overview    String
+  period      String?
+  content     String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  insights    Insight[]
+
+  @@map("studies")
+}
+
 model Insight {
   id        String       @id @default(cuid())
   title     String
@@ -71,6 +90,8 @@ model Insight {
   readTime  String       @map("read_time")
   featureId String?      @map("feature_id")
   feature   Feature?     @relation(fields: [featureId], references: [id])
+  studyId   String?      @map("study_id")
+  study     Study?       @relation(fields: [studyId], references: [id])
   createdAt DateTime     @default(now()) @map("created_at")
   updatedAt DateTime     @updatedAt @map("updated_at")
 

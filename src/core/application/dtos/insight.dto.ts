@@ -15,6 +15,7 @@ export interface InsightDto {
   tags: string[];
   readTime: string;
   featureSlug?: string | null;
+  studySlug?: string | null;
   createdAt: Date | string;
   updatedAt: Date | string;
 }

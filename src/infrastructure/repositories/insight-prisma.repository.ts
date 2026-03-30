@@ -6,6 +6,7 @@ import { prisma } from "../config/prisma";
 /** 태그를 포함한 Insight include 설정 */
 const INSIGHT_INCLUDE = {
   feature: { select: { slug: true } },
+  study: { select: { slug: true } },
   tags: { include: { tag: { select: { name: true } } } },
 } as const;
 
@@ -158,6 +159,12 @@ export class InsightPrismaRepository implements IInsightRepository {
       if (feature) featureId = feature.id;
     }
 
+    let studyId = null;
+    if (data.studySlug) {
+      const study = await prisma.study.findUnique({ where: { slug: data.studySlug } });
+      if (study) studyId = study.id;
+    }
+
     const doc = await prisma.insight.create({
       data: {
         title: data.title,
@@ -167,6 +174,7 @@ export class InsightPrismaRepository implements IInsightRepository {
         date: new Date(data.date),
         readTime: data.readTime,
         featureId,
+        studyId,
         tags: {
           create: data.tags.map(name => ({
             tag: {
@@ -188,7 +196,7 @@ export class InsightPrismaRepository implements IInsightRepository {
    * 태그 수정 시 기존 연결을 모두 끊고 새로 연결합니다.
    */
   async update(id: string, data: UpdateInsightDto): Promise<InsightDto> {
-    const { tags, featureSlug, date, ...restData } = data;
+    const { tags, featureSlug, studySlug, date, ...restData } = data;
     
     // 1. 태그 업데이트 (있을 경우에만)
     if (tags !== undefined) {
@@ -205,6 +213,16 @@ export class InsightPrismaRepository implements IInsightRepository {
       }
     }
 
+    let newStudyId: string | null | undefined = undefined;
+    if (studySlug !== undefined) {
+      if (studySlug === null) {
+        newStudyId = null;
+      } else {
+        const study = await prisma.study.findUnique({ where: { slug: studySlug } });
+        newStudyId = study ? study.id : null;
+      }
+    }
+
     // Prisma Update Input에 맞게 객체 조립 (null 허용 관계 처리를 위해 필드별 할당)
     const updatePayload: Prisma.InsightUpdateInput = {
       ...restData,
@@ -216,6 +234,13 @@ export class InsightPrismaRepository implements IInsightRepository {
         updatePayload.feature = { disconnect: true };
       } else {
         updatePayload.feature = { connect: { id: newFeatureId } };
+      }
+    }
+    if (newStudyId !== undefined) {
+      if (newStudyId === null) {
+        updatePayload.study = { disconnect: true };
+      } else {
+        updatePayload.study = { connect: { id: newStudyId } };
       }
     }
 
@@ -263,6 +288,7 @@ export class InsightPrismaRepository implements IInsightRepository {
       tags: doc.tags.map((it) => it.tag.name),
       readTime: doc.readTime,
       featureSlug: doc.feature?.slug || null,
+      studySlug: doc.study?.slug || null,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
     };

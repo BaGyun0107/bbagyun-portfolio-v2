@@ -15,6 +15,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   const navItems = [
     { label: "메인", path: "/" },
     { label: "작업물", path: "/projects" },
+    { label: "공부", path: "/study" },
     { label: "인사이트", path: "/insights" },
     { label: "소개", path: "/about" },
     { label: "문의하기", path: "/contact" },
