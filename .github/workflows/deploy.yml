@@ -28,6 +28,13 @@ jobs:
       - name: Save & compress Docker image
         run: docker save portfolio-app:latest | gzip > app-image.tar.gz
 
+      - name: Debug - Test SSH connection
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/ssh_key
+          chmod 600 /tmp/ssh_key
+          ssh -o StrictHostKeyChecking=no -i /tmp/ssh_key -p 22 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'SSH connection successful'" || echo "SSH failed"
+          rm -f /tmp/ssh_key
+
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.7
         with:
