@@ -52,7 +52,6 @@ jobs:
           ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << DEPLOY_SCRIPT
             cd ${{ secrets.DEPLOY_DIR }}
             docker load -i app-image.tar.gz
-            JWT_SECRET=\$(grep JWT_SECRET docker-compose.yml 2>/dev/null | head -1 || echo "")
             docker compose -f docker-compose.yml -f docker-compose.${{ env.ENV_SUFFIX }}.yml up -d app
             rm -f app-image.tar.gz
             echo "Deployed: ${{ github.sha }} (${{ env.ENV_TAG }})"
