@@ -28,6 +28,12 @@ export function MarkdownViewer({ content }: MarkdownViewerProps) {
     b: ({ node, ...props }) => (
       <b {...props} className="font-bold text-zinc-900 dark:text-zinc-100" />
     ),
+    img: ({ node, ...props }) => (
+      <figure className="my-6">
+        <img {...props} className="rounded-lg border border-zinc-200 dark:border-zinc-700 shadow-sm w-full" loading="lazy" />
+        {props.alt && <figcaption className="text-center text-sm text-muted-foreground mt-2">{props.alt}</figcaption>}
+      </figure>
+    ),
     // 인라인 코드 (`backtick`)
     code: ({ node, className, children, ...props }) => {
       const isBlock = className?.includes("language-");

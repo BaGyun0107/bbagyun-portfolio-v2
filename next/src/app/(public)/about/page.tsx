@@ -53,9 +53,15 @@ export default function AboutPage() {
                 방향을 정하고 깊이를 더하는 개발자, 박윤신입니다.
               </p>
               <p className="text-lg text-muted-foreground">
-                지난 3년간 호텔 예약 시스템부터 호텔 예약 · 결제 통합 플랫폼에 이르기까지, 다양한 비즈니스 도메인의 기반을 다지고 시스템을 고도화해 왔습니다. React를 활용한 프론트엔드 최적화부터 Node.js, NestJS 기반의 견고한 백엔드 설계까지 <span className="text-primary">전체 시스템의 흐름을 꿰뚫어 보는 시야</span>를 갖추고 있습니다. <br/><br/>
-                저의 개발 철학은 단순한 구현자에 머물지 않는 것입니다. 주어진 API 명세서를 코드로 옮기기보다 프론트엔드와 백엔드의 요구사항을 조율하는 <span className="text-primary">공동 설계자</span>로 임합니다. <br/><br/>
-                코드를 작성하는 것만큼이나 동료, 고객과의 소통을 중요하게 생각합니다. 표면적인 에러가 아닌 문제의 근본 원인을 다각도로 분석하며, 제가 내린 아키텍처적 의사결정과 작성한 코드에는 끝까지 책임을 다하는 든든한 엔지니어로 성장해 나가겠습니다
+                프론트엔드와 백엔드를 아우르며, 비즈니스의 요구를 안정적인 시스템으로 구현해 온 3년 차 풀스택 개발자입니다. Node.js와 NestJS를 활용한 백엔드 설계부터 React 기반의 사용자 경험 최적화까지, 시스템 전체의 흐름을 이해하고 다루는 데 강점이 있습니다.
+                <br/><br/>
+                <span className="font-bold">[구현자를 넘어선 비즈니스 파트너]</span><br />
+                저의 역할은 주어진 기획을 코드로 번역하는 것에 국한되지 않습니다. 고객의 요구사항을 분석할 때 구현이 어려운 병목 지점이 발견되면, 이를 우회하면서도 본래의 비즈니스 목적을 달성할 수 있는 더 나은 대안을 먼저 제시합니다. 개발자의 시선에 갇히지 않고, 고객 및 동료들과 유연하게 소통하며 최적의 합의점을 찾아냅니다.
+                <br /><br />
+                <span className="font-bold">[확장성을 고려한 유연한 설계]</span><br />
+                당장의 기능 동작에만 만족하지 않습니다. 현재 작성하는 코드가 훗날 기술 부채가 되지 않도록 재사용성을 항상 염두에 둡니다. 새로운 기능 요구가 들어오더라도 기존 시스템에 자연스럽게 녹아들 수 있도록, 유연하고 확장성 있는 아키텍처를 구성하는 것을 중요하게 생각합니다.
+                <br/><br/>
+                제가 작성한 코드와 설계 방향에 대해 끝까지 책임지는 태도로, 팀과 서비스가 함께 성장하는 데 기여하는 든든한 엔지니어가 되겠습니다.
               </p>
             </div>
           </div>
@@ -127,13 +133,14 @@ export default function AboutPage() {
                   
                   <div className="space-y-4">
                     <p className="text-sm text-foreground leading-relaxed">
-                      호텔·골프 예약 플랫폼 및 B2B 구독 시스템의 아키텍처 설계와 풀스택 개발을 주도하고 있습니다. 요구사항 정의부터 배포까지 프로덕트의 전체 라이프사이클을 관리하며, 시스템의 안정성과 유지보수성을 높이는 데 집중합니다.
+                      호텔·골프·리조트 예약 플랫폼과 B2B 화훼 유통 시스템의 풀스택 개발을 담당하고 있습니다. 백엔드 1인 개발자로 7개 프로젝트의 서버 아키텍처를 설계하고 운영했습니다.
                     </p>
                     <ul className="text-sm text-muted-foreground space-y-3 list-disc pl-5">
-                      <li className="pl-1"><strong className="text-foreground">견고한 코어 아키텍처 설계:</strong> 신규 서비스의 초기 인프라/모듈 구조를 수립하고, NestJS 기반의 통합 회원 인증(SSO) 서버를 단독으로 설계 및 구축했습니다.</li>
-                      <li className="pl-1"><strong className="text-foreground">트랜잭션 기반 결제·정산 시스템:</strong> PG사(토스, 나이스페이) 연동, 실시간 구독/빌링 로직을 설계하며 서버 중심의 결제 검증으로 금융 데이터의 정합성을 100% 확보했습니다.</li>
-                      <li className="pl-1"><strong className="text-foreground">성능 및 운영 환경 최적화:</strong> 대용량 텍스트 검색 속도 개선, 결제 안정화 등 지속적인 구조적 리팩토링을 수행하며, Jenkins 기반 CI/CD 파이프라인을 구축해 운영 효율을 높였습니다.</li>
-                      <li className="pl-1"><strong className="text-foreground">주도적인 프로덕트 매니지먼트:</strong> 단순 구현을 넘어 고객사 및 기획자와 직접 협업하며, 비즈니스 요구사항을 기술적 아키텍처로 풀어내는 역할을 수행합니다.</li>
+                      <li className="pl-1">7개 프로젝트 <strong className="text-foreground">PM/PL 겸임</strong>, 고객사 요구사항 정의부터 배포·운영까지 전 과정 수행</li>
+                      <li className="pl-1">NestJS 기반 <strong className="text-foreground">SSO 통합 인증 서버 단독 설계·구축</strong> (4개 서비스 연동)</li>
+                      <li className="pl-1">PG 연동(토스, 나이스페이) 결제·정산 시스템 설계, <strong className="text-foreground">금융 데이터 불일치 0건</strong></li>
+                      <li className="pl-1">검색 최적화 <strong className="text-foreground">1500ms → 400ms (73% 개선)</strong>, 로깅 I/O 95% 감소 등 성능 개선</li>
+                      <li className="pl-1">Jenkins / GitHub Actions 기반 <strong className="text-foreground">CI/CD 구축</strong> 및 배포 자동화</li>
                     </ul>
                   </div>
                 </CardContent>

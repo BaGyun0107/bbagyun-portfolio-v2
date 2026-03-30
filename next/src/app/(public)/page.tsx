@@ -158,7 +158,6 @@ export default async function HomePage() {
                         </h3>
                         <div className="flex flex-col gap-1 text-sm text-muted-foreground">
                           {feature.period && <span>{feature.period}</span>}
-                          <span>{feature.category}</span>
                         </div>
                       </div>
                       <ArrowUpRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
