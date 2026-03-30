@@ -21,8 +21,10 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           echo "StrictHostKeyChecking no" >> ~/.ssh/config
 
-      - name: Create .env file
-        run: echo "${{ secrets.APP_ENV_FILE }}" > next/.env.production
+      - name: Create .env files
+        run: |
+          echo "${{ secrets.APP_ENV_FILE }}" > next/.env.production
+          echo "${{ secrets.APP_ENV_FILE }}" > docker/.env
 
       - name: Build Docker image
         run: |
@@ -42,6 +44,7 @@ jobs:
             app-image.tar.gz \
             docker/docker-compose.yml \
             docker/docker-compose.${{ env.ENV_SUFFIX }}.yml \
+            docker/.env \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_DIR }}/
 
       - name: Load image & restart

@@ -1,16 +1,16 @@
 services:
   app:
+    image: portfolio-app:latest
     build:
       context: ..
       dockerfile: docker/Dockerfile
     ports:
       - "${APP_PORT:-3000}:3000"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - DATABASE_URL=file:/app/data/prod.db
-      - JWT_SECRET=${JWT_SECRET}
-      - NEXT_PUBLIC_USE_MOCK_API=false
-      - SERVER_INTERNAL_URL=http://127.0.0.1:3000
     volumes:
       - sqlite_data:/app/data
     restart: unless-stopped
