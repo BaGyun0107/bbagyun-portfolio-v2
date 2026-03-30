@@ -3,10 +3,6 @@ name: Build & Deploy
 on:
   push:
     branches: [main, dev]
-    paths:
-      - 'next/**'
-      - 'docker/**'
-      - '.github/workflows/deploy.yml'
 
 jobs:
   deploy:
