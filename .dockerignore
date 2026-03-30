@@ -1,0 +1,50 @@
+# Dependencies (installed in Docker)
+next/node_modules
+node_modules
+
+# Build output
+next/.next
+next/dist
+
+# Git
+.git
+.gitignore
+
+# Agent/IDE configs
+.agents
+.claude
+.codex
+.gemini
+.qwen
+
+# Documentation
+docs
+*.md
+
+# Media files (not needed in build)
+*.xlsx
+
+# Test/Coverage
+coverage
+.nyc_output
+
+# Logs
+logs
+
+# OS
+.DS_Store
+
+# Environment (injected at runtime)
+next/.env
+next/.env.*
+
+# Database (volume mounted)
+*.db
+*.db-journal
+*.db-wal
+
+# Scripts (not needed in container)
+scripts
+
+# gstack
+.gstack

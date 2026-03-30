@@ -1,212 +1,122 @@
-# 📁 Portfolio V2 — Backend (Next.js)
+# harness
 
-> 클린 아키텍처 기반의 풀스택 개인 포트폴리오 애플리케이션 (Next.js App Router)
+AI 에이전트 스킬, CI/CD, Docker, Git workflow 설정을 포함합니다.
 
----
+## 사용법
 
-## 📌 소개
-
-`portfolio_v2`의 메인 서버/클라이언트 애플리케이션입니다.  
-Next.js App Router를 활용하여 **공개 포트폴리오 페이지**와 **관리자 백오피스**를 단일 프레임워크에서 제공합니다.  
-클린 아키텍처 원칙을 적용하여 도메인 로직, 인프라, UI를 계층적으로 분리했습니다.
-
----
-
-## 🛠️ 기술 스택
-
-### Core
-
-| 구분      | 기술                                          | 버전   |
-| --------- | --------------------------------------------- | ------ |
-| Framework | [Next.js](https://nextjs.org/)                | 16.1.6 |
-| Runtime   | [React](https://react.dev/)                   | 19.2.3 |
-| Language  | [TypeScript](https://www.typescriptlang.org/) | ^5     |
-
-### Database & ORM
-
-| 구분     | 기술                                     | 버전    |
-| -------- | ---------------------------------------- | ------- |
-| ORM      | [Prisma](https://www.prisma.io/)         | ^6.19.2 |
-| Database | SQLite (개발), 추후 PostgreSQL 전환 예정 | —       |
-
-### Authentication
-
-| 구분       | 기술                                      |
-| ---------- | ----------------------------------------- |
-| Token 방식 | JWT (AccessToken 10분 / RefreshToken 7일) |
-| 라이브러리 | `jsonwebtoken`, `jose`, `bcryptjs`        |
-| 전달 방식  | Authorization Header + HTTP-Only Cookie   |
-
-### UI & 스타일링
-
-| 구분                | 기술                                                                       | 버전     |
-| ------------------- | -------------------------------------------------------------------------- | -------- |
-| CSS Framework       | [Tailwind CSS](https://tailwindcss.com/)                                   | ^4       |
-| 컴포넌트 라이브러리 | [Radix UI](https://www.radix-ui.com/), [shadcn/ui](https://ui.shadcn.com/) | —        |
-| 아이콘              | [Lucide React](https://lucide.dev/)                                        | 0.487.0  |
-| 애니메이션          | [Motion](https://motion.dev/)                                              | 12.23.24 |
-| 차트                | [Recharts](https://recharts.org/)                                          | 2.15.2   |
-| MUI                 | [@mui/material](https://mui.com/)                                          | 7.3.5    |
-
-### 로깅 & 문서
-
-| 구분      | 기술                                                                                        |
-| --------- | ------------------------------------------------------------------------------------------- |
-| 서버 로거 | [Winston](https://github.com/winstonjs/winston)                                             |
-| HTTP 로거 | [Morgan](https://github.com/expressjs/morgan)                                               |
-| API 문서  | [Swagger (next-swagger-doc)](https://github.com/jellydn/next-swagger-doc), swagger-ui-react |
-
-### 코드 품질
-
-| 구분      | 기술                                             |
-| --------- | ------------------------------------------------ |
-| Linter    | ESLint v9 (Flat Config) + `eslint-plugin-import` |
-| Formatter | Prettier ^3                                      |
-| 타입 검사 | TypeScript strict mode                           |
-
-### 배포
-
-| 구분            | 기술                                                   |
-| --------------- | ------------------------------------------------------ |
-| 프로세스 매니저 | [PM2](https://pm2.keymetrics.io/) (Cluster 2 인스턴스) |
-| CI/CD           | Jenkins                                                |
-
----
-
-## 🏗️ 아키텍처
-
-클린 아키텍처(Clean Architecture) 원칙에 따라 아래와 같이 계층을 분리합니다.
-
-```
-src/
-├── app/                    # Next.js App Router (라우팅 진입점)
-│   ├── (public)/           # 공개 페이지 (포트폴리오)
-│   ├── (admin)/            # 관리자 백오피스 (인증 필요)
-│   └── api/                # RESTful API 라우트
-│
-├── core/                   # 핵심 도메인 계층 (비즈니스 로직)
-│   ├── application/
-│   │   ├── dtos/           # 데이터 전송 객체 (TypeScript 인터페이스)
-│   │   ├── middlewares/    # API 핸들러 래퍼 (인증, 로깅)
-│   │   └── utils/          # 공통 유틸리티 (api-response, jwt)
-│   └── domain/
-│       └── repositories/   # Repository 인터페이스 (추상층)
-│
-├── infrastructure/         # 인프라 계층 (DB, 외부 서비스)
-│   └── repositories/       # Prisma 기반 Repository 구현체
-│
-├── components/             # 재사용 가능한 UI 컴포넌트
-│   ├── layout/             # AdminLayout, PublicLayout
-│   └── ui/                 # shadcn/ui 기반 원자 컴포넌트
-│
-└── lib/                    # 공유 유틸리티
-    └── utils/              # logger, jwt, httpLogger
-```
-
----
-
-## 🗄️ 데이터베이스 스키마
-
-Prisma를 통해 관리하며, 모든 테이블·컬럼명은 `snake_case`로 매핑됩니다.
-
-| 테이블             | 설명                                       |
-| ------------------ | ------------------------------------------ |
-| `users`            | 관리자 계정 정보                           |
-| `refresh_tokens`   | JWT 리프레시 토큰 관리 (multi-device 지원) |
-| `features`         | 포트폴리오 작업물(Work) 정보               |
-| `insights`         | 기술 인사이트 게시글                       |
-| `logs`             | API 요청/응답 로그 (상세 로깅 포함)        |
-| `system_settings`  | 전역 시스템 설정                           |
-| `contact_messages` | 사용자 문의 메시지                         |
-
----
-
-## 🚀 시작하기
-
-### 1. 패키지 설치
+### 1. 새 프로젝트에 하네스 적용
 
 ```bash
-pnpm install
+# 프로젝트 디렉터리 생성
+mkdir my-project && cd my-project
+git init -b main
+
+# 하네스 복사
+cp -r /path/to/codi-harness/{.agents,.claude,.codex,.gemini,.qwen,.github,docker,scripts} .
+cp /path/to/codi-harness/{.gitignore,.dockerignore,.mise.toml,AGENTS.md,CONTRIBUTING.md} .
+
+# mise 신뢰 등록 (최초 1회)
+mise trust .mise.toml
+
+# Git hooks 설치
+sh scripts/setup-hooks.sh
+
+# gstack 빌드 (최초 1회)
+sh scripts/setup-gstack.sh
+
+# dev 브랜치 생성
+git branch dev
+
+# 프로젝트 초기화 (Claude Code에서)
+/deepinit   # 또는 /setup
 ```
 
-### 2. 환경 변수 설정
-
-`.env.example`을 복사하여 `.env` 파일을 생성하고 값을 채웁니다.
+### 2. 기존 프로젝트에 하네스 추가
 
 ```bash
-cp .env.example .env
+cd existing-project
+
+# 하네스 파일 복사 (기존 파일 덮어쓰기 주의)
+cp -rn /path/to/codi-harness/{.agents,.claude,.codex,.gemini,.qwen} .
+cp -rn /path/to/codi-harness/{.github,docker,scripts} .
+
+# Git hooks 설치
+sh scripts/setup-hooks.sh
 ```
 
-```env
-DATABASE_URL="file:./dev.db"
-JWT_SECRET="your-secret-key"
-JWT_ACCESS_EXPIRES_IN="10m"
-JWT_REFRESH_EXPIRES_IN="7d"
-```
+## 포함 내용
 
-### 3. 데이터베이스 마이그레이션
-
-```bash
-npx prisma migrate dev
-```
-
-### 4. (선택) 시드 데이터 삽입
-
-```bash
-npx prisma db seed
-```
-
-### 5. 개발 서버 실행
-
-```bash
-pnpm dev
-# → http://localhost:1104
-```
-
----
-
-## 📜 주요 스크립트
-
-| 명령어                   | 설명                       |
-| ------------------------ | -------------------------- |
-| `pnpm dev`               | 개발 서버 실행 (포트 1104) |
-| `pnpm build`             | 프로덕션 빌드              |
-| `pnpm start`             | 프로덕션 서버 실행         |
-| `pnpm lint`              | ESLint 검사                |
-| `npx prisma studio`      | Prisma GUI (DB 조회)       |
-| `npx prisma migrate dev` | DB 마이그레이션 실행       |
-| `npx prisma db seed`     | 시드 데이터 삽입           |
-
----
-
-## 🔐 API 인증 흐름
+### AI 에이전트 (`oh-my-agent`)
 
 ```
-[로그인 요청]
-    ↓
-accessToken (10분) + refreshToken (7일, HTTP-Only Cookie) 발급
-    ↓
-API 요청 시 Authorization: Bearer <accessToken> 헤더 포함
-    ↓
-accessToken 만료 시 → /api/v1/auth/refresh 호출하여 재발급
-    ↓
-refreshToken 만료 시 → 재로그인 필요
+.agents/
+├── config/          # 사용자 설정 (언어, 타임존)
+├── skills/          # 도메인 스킬
+│   ├── _shared/     # 공유 코어 (routing, context-loading)
+│   ├── oma-backend/  # API, DB, 인증, 미들웨어
+│   ├── oma-frontend/ # React, Next.js, Tailwind
+│   ├── oma-db/       # 스키마, 마이그레이션, ERD
+│   ├── oma-qa/       # 보안, 성능, 접근성 감사
+│   └── oma-translator/ # 다국어 번역
+├── workflows/       # deepinit, setup, stack-set
+└── results/         # 에이전트 실행 결과 (.gitkeep)
 ```
 
----
-
-## 📖 API 문서
-
-개발 서버 실행 후 아래 경로에서 Swagger UI를 확인할 수 있습니다.
+### Claude 서브에이전트
 
 ```
-http://localhost:1104/api-doc
+.claude/
+├── agents/          # 7개 전문 에이전트 (backend, frontend, db, qa 등)
+├── hooks/           # 워크플로우 트리거, HUD
+└── skills/
+    ├── gstack/      # 플랜/리뷰/배포 워크플로우 (30+ 스킬)
+    └── ...          # oh-my-agent 스킬 심링크
 ```
 
----
+### CI/CD & 배포
 
-## 🗂️ 버전 히스토리
+```
+.github/workflows/deploy.yml   # GitHub Actions (Docker 기반)
+docker/
+├── Dockerfile.server           # Express multi-stage build
+├── Dockerfile.front            # Next.js standalone build
+├── docker-compose.yml          # 공통 서비스 정의
+├── docker-compose.dev.yml      # 개발계 오버라이드
+└── docker-compose.prod.yml     # 운영계 오버라이드
+```
 
-| 버전    | 날짜       | 변경 내용                                                                |
-| ------- | ---------- | ------------------------------------------------------------------------ |
-| `0.1.0` | 2026-02-25 | 초기 프로젝트 세팅 (Next.js, Prisma, 클린 아키텍처, 인증/인가 기반 구축) |
+### Git Workflow
+
+```
+main    → 운영계 자동 배포 (GitHub Actions)
+dev     → 개발계 자동 배포
+feat/*  → 기능 개발 (dev로 PR)
+fix/*   → 버그 수정 (dev로 PR)
+hotfix/* → 긴급 수정 (main + dev)
+```
+
+## 주요 스킬 명령어
+
+| 명령어          | 역할               |
+| --------------- | ------------------ |
+| `/deepinit`     | 프로젝트 초기화    |
+| `/setup`        | 환경 설정          |
+| `/stack-set`    | 스택 구성          |
+| `/office-hours` | 아이디어 검증      |
+| `/autoplan`     | 자동 플랜 수립     |
+| `/review`       | 코드 리뷰          |
+| `/ship`         | 커밋 + PR 생성     |
+| `/qa`           | 브라우저 QA 테스트 |
+| `/investigate`  | 버그 조사          |
+
+## GitHub Secrets 설정
+
+배포를 위해 GitHub 레포 Settings → Secrets에서 설정 필요.
+상세 항목은 `CONTRIBUTING.md`의 "GitHub Secrets 설정" 섹션 참조.
+
+## 요구사항
+
+- Node.js 24+
+- bun (gstack 빌드용)
+- Docker & Docker Compose (배포용)
+- Claude Code CLI
