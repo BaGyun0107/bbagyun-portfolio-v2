@@ -8,24 +8,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'production' || 'development' }}
+    env:
+      ENV_SUFFIX: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+      ENV_TAG: ${{ github.ref_name == 'main' && 'production' || 'development' }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set environment variables
-        run: |
-          if [ "${{ github.ref_name }}" = "main" ]; then
-            echo "DEPLOY_SERVER=${{ secrets.SERVER_HOST }}" >> $GITHUB_ENV
-            echo "DEPLOY_USER=${{ secrets.SERVER_USER }}" >> $GITHUB_ENV
-            echo "DEPLOY_DIR=${{ secrets.DEPLOY_DIR }}" >> $GITHUB_ENV
-            echo "ENV_SUFFIX=prod" >> $GITHUB_ENV
-            echo "ENV_TAG=production" >> $GITHUB_ENV
-          else
-            echo "DEPLOY_SERVER=${{ secrets.SERVER_HOST }}" >> $GITHUB_ENV
-            echo "DEPLOY_USER=${{ secrets.SERVER_USER }}" >> $GITHUB_ENV
-            echo "DEPLOY_DIR=${{ secrets.DEPLOY_DIR }}" >> $GITHUB_ENV
-            echo "ENV_SUFFIX=dev" >> $GITHUB_ENV
-            echo "ENV_TAG=development" >> $GITHUB_ENV
-          fi
 
       - name: Create .env file
         run: echo "${{ secrets.APP_ENV_FILE }}" > next/.env.production
@@ -44,20 +31,22 @@ jobs:
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ env.DEPLOY_SERVER }}
-          username: ${{ env.DEPLOY_USER }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
           source: "app-image.tar.gz,docker/docker-compose.yml,docker/docker-compose.${{ env.ENV_SUFFIX }}.yml"
-          target: ${{ env.DEPLOY_DIR }}
+          target: ${{ secrets.DEPLOY_DIR }}
 
       - name: Load image & restart
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ env.DEPLOY_SERVER }}
-          username: ${{ env.DEPLOY_USER }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
           script: |
-            cd ${{ env.DEPLOY_DIR }}
+            cd ${{ secrets.DEPLOY_DIR }}
             docker load -i app-image.tar.gz
             docker compose -f docker/docker-compose.yml \
               -f docker/docker-compose.${{ env.ENV_SUFFIX }}.yml \
@@ -68,9 +57,10 @@ jobs:
       - name: Health check
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ env.DEPLOY_SERVER }}
-          username: ${{ env.DEPLOY_USER }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
           script: |
             for i in 1 2 3 4 5; do
               if curl -sf http://localhost:3000/api/health > /dev/null 2>&1; then
@@ -84,7 +74,8 @@ jobs:
             exit 1
 
       - name: Notify Slack (success)
-        if: success()
+        if: success() && secrets.SLACK_WEBHOOK_URL != ''
+        continue-on-error: true
         uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -95,7 +86,8 @@ jobs:
             }
 
       - name: Notify Slack (failure)
-        if: failure()
+        if: failure() && secrets.SLACK_WEBHOOK_URL != ''
+        continue-on-error: true
         uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
