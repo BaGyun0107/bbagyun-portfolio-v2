@@ -1,16 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
-import * as path from 'path';
 import { REAL_FEATURES } from './data/features';
 import { REAL_INSIGHTS } from './data/insights';
 
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: `file:${path.join(process.cwd(), 'prisma', 'dev.db')}`,
-    },
-  },
-});
+const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Seeding started...');

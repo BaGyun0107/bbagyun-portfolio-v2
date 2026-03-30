@@ -22,9 +22,10 @@ ENV DATABASE_URL="file:/app/data/prod.db"
 RUN pnpm prisma generate
 RUN pnpm build
 
-# Run migration at build time to create a template DB with schema applied
+# Run migration + seed at build time to create a template DB with data
 RUN mkdir -p /app/data && \
     pnpm prisma migrate deploy && \
+    pnpm prisma db seed && \
     cp /app/data/prod.db /app/prisma/empty.db && \
     rm -f /app/data/prod.db /app/data/prod.db-journal /app/data/prod.db-wal
 
