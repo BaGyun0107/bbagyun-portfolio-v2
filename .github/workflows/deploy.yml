@@ -14,20 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create .env file
-        run: echo "${{ secrets.APP_ENV_FILE }}" > next/.env.production
-
-      - name: Build Docker image
-        run: |
-          docker build \
-            -f docker/Dockerfile \
-            -t portfolio-app:${{ github.sha }} \
-            -t portfolio-app:latest \
-            .
-
-      - name: Save & compress Docker image
-        run: docker save portfolio-app:latest | gzip > app-image.tar.gz
-
       - name: Setup SSH key
         env:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -37,64 +23,10 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           echo "StrictHostKeyChecking no" > ~/.ssh/config
 
-      - name: Deploy files to server
+      - name: Test SSH connection
         run: |
-          scp -i ~/.ssh/deploy_key \
-            app-image.tar.gz \
-            docker/docker-compose.yml \
-            docker/docker-compose.${{ env.ENV_SUFFIX }}.yml \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_DIR }}/
-
-      - name: Load image & restart
-        run: |
-          ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'DEPLOY_SCRIPT'
-            cd ${{ secrets.DEPLOY_DIR }}
-            docker load -i app-image.tar.gz
-            docker compose -f docker-compose.yml -f docker-compose.${{ env.ENV_SUFFIX }}.yml up -d app
-            rm -f app-image.tar.gz
-            echo "Deployed: ${{ github.sha }} (${{ env.ENV_TAG }})"
-          DEPLOY_SCRIPT
-
-      - name: Health check
-        run: |
-          ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'HEALTH_SCRIPT'
-
-            for i in 1 2 3 4 5; do
-              if curl -sf http://localhost:3000/api/health > /dev/null 2>&1; then
-                echo "Health check passed"
-                exit 0
-              fi
-              echo "Waiting for app... ($i/5)"
-              sleep 5
-            done
-            echo "Health check failed"
-            exit 1
-          HEALTH_SCRIPT
+          ssh -v -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'SSH OK' && hostname && docker --version"
 
       - name: Cleanup SSH key
         if: always()
         run: rm -f ~/.ssh/deploy_key
-
-      - name: Notify Slack (success)
-        if: success()
-        continue-on-error: true
-        uses: slackapi/slack-github-action@v2.0.0
-        with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            {
-              "text": "✅ *DEPLOYED* (${{ env.ENV_TAG }})\nRepo: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCommit: `${{ github.sha }}`\nBy: ${{ github.actor }}\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
-            }
-
-      - name: Notify Slack (failure)
-        if: failure()
-        continue-on-error: true
-        uses: slackapi/slack-github-action@v2.0.0
-        with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            {
-              "text": "❌ *DEPLOY FAILED* (${{ env.ENV_TAG }})\nRepo: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
-            }
