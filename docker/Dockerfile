@@ -29,6 +29,9 @@ RUN mkdir -p /app/data && \
     cp /app/data/prod.db /app/prisma/empty.db && \
     rm -f /app/data/prod.db /app/data/prod.db-journal /app/data/prod.db-wal
 
+# Seed 데이터 + 마이그레이션 해시 기록 (배포 시 변경 감지용)
+RUN cat prisma/data/*.ts prisma/seed.ts prisma/migrations/*/migration.sql | sha256sum | cut -d' ' -f1 > /app/prisma/seed-hash.txt
+
 # ---- Runner ----
 FROM node:20-alpine AS runner
 WORKDIR /app
