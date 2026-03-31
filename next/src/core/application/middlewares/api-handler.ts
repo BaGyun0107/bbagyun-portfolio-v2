@@ -79,7 +79,15 @@ export function withApiHandler<P = unknown>(handler: HandlerWithUser<P>, options
         }
       }
 
-      // 3. 실제 핸들러 실행
+      // 3. 읽기 전용 모드: mutation 요청 차단 (실제 DB 연결 시 READONLY_MODE=false로 변경)
+      const isReadOnly = process.env.READONLY_MODE !== 'false';
+      const isMutationMethod = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method);
+      if (isReadOnly && isMutationMethod && options?.requireAuth) {
+        logicalStatus = 403;
+        throw new Error('현재 읽기 전용 모드입니다. 데이터 변경이 비활성화되어 있습니다.');
+      }
+
+      // 4. 실제 핸들러 실행
       response = await handler(req, params, user || undefined);
       
       // 가능하면 응답 본문에서 논리적 상태 코드를 파싱 시도 (기본값 200)
