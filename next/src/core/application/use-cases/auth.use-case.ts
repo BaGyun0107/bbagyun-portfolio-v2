@@ -38,17 +38,21 @@ export class AuthUseCases {
         throw new Error("잘못된 자격 증명입니다.");
     }
 
-    // 마지막 로그인 시간 갱신
-    await this.userRepository.update(user.id, { lastLogin: new Date() });
+    // 마지막 로그인 시간 갱신 (DB 쓰기 실패 시에도 로그인은 허용)
+    try {
+      await this.userRepository.update(user.id, { lastLogin: new Date() });
+    } catch { /* readonly DB — skip */ }
 
     const tokenPayload = { userId: user.id, email: user.email, role: user.role };
     const accessToken = JwtUtil.generateAccessToken(tokenPayload);
     const refreshToken = JwtUtil.generateRefreshToken(tokenPayload);
 
-    // DB에 리프레시 토큰 저장
+    // DB에 리프레시 토큰 저장 (readonly DB 환경에서는 skip)
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // 현재로부터 7일 후
-    await this.refreshTokenRepository.create(user.id, refreshToken, expiresAt);
+    expiresAt.setDate(expiresAt.getDate() + 7);
+    try {
+      await this.refreshTokenRepository.create(user.id, refreshToken, expiresAt);
+    } catch { /* readonly DB — skip */ }
 
     return {
       accessToken,
@@ -66,7 +70,9 @@ export class AuthUseCases {
    * @param {string} userId - 사용자 ID
    */
   async logout(userId: string): Promise<void> {
-    await this.refreshTokenRepository.deleteAllByUserId(userId);
+    try {
+      await this.refreshTokenRepository.deleteAllByUserId(userId);
+    } catch { /* readonly DB — skip */ }
   }
 
   /**
