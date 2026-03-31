@@ -48,7 +48,17 @@ export function withApiHandler<P = unknown>(handler: HandlerWithUser<P>, options
         }
       }
 
-      // 2. 인증(Authentication) 및 인가(Authorization) 처리
+      // 2. 읽기 전용 모드: 콘텐츠 CRUD만 차단 (실제 DB 연결 시 READONLY_MODE=false로 변경)
+      const isReadOnly = process.env.READONLY_MODE !== 'false';
+      const isMutationMethod = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method);
+      const readonlyPaths = ['/api/v1/features', '/api/v1/insights', '/api/v1/studies', '/api/v1/users', '/api/v1/settings'];
+      const isProtectedPath = readonlyPaths.some(p => req.nextUrl.pathname.startsWith(p));
+      if (isReadOnly && isMutationMethod && isProtectedPath) {
+        logicalStatus = 403;
+        throw new Error('현재 읽기 전용 모드입니다. 데이터 변경이 비활성화되어 있습니다.');
+      }
+
+      // 3. 인증(Authentication) 및 인가(Authorization) 처리
       if (options?.requireAuth) {
         const authHeader = req.headers.get("authorization");
         let token = authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
@@ -57,12 +67,12 @@ export function withApiHandler<P = unknown>(handler: HandlerWithUser<P>, options
           const cookieStore = await cookies();
           token = cookieStore.get("accessToken")?.value || null;
         }
-        
+
         if (!token) {
           logicalStatus = 401;
           throw new Error("인증 실패: 토큰이 누락되었습니다.");
         }
-        
+
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           user = JwtUtil.verifyAccessToken(token) as TokenPayload;
@@ -77,14 +87,6 @@ export function withApiHandler<P = unknown>(handler: HandlerWithUser<P>, options
             throw new Error("권한 없음: 관리자 권한이 필요합니다.");
           }
         }
-      }
-
-      // 3. 읽기 전용 모드: mutation 요청 차단 (실제 DB 연결 시 READONLY_MODE=false로 변경)
-      const isReadOnly = process.env.READONLY_MODE !== 'false';
-      const isMutationMethod = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method);
-      if (isReadOnly && isMutationMethod && options?.requireAuth) {
-        logicalStatus = 403;
-        throw new Error('현재 읽기 전용 모드입니다. 데이터 변경이 비활성화되어 있습니다.');
       }
 
       // 4. 실제 핸들러 실행
