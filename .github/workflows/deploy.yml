@@ -54,6 +54,7 @@ jobs:
             docker load -i app-image.tar.gz
             docker compose -f docker-compose.yml -f docker-compose.${{ env.ENV_SUFFIX }}.yml up -d --force-recreate app
             rm -f app-image.tar.gz
+            docker image prune -f
             echo "Deployed: ${{ github.sha }} (${{ env.ENV_TAG }})"
           DEPLOY_SCRIPT
 
