@@ -18,10 +18,11 @@ const getDbUrl = (): string | undefined => {
   // 이미 절대경로면 그대로 사용
   if (envUrl.startsWith("file:/") || envUrl.startsWith("/")) return envUrl;
 
-  // 상대경로(file:./)인 경우 → process.cwd() 기반 절대경로로 변환
-  // e.g. "file:./prisma/dev.db" → "file:/absolute/path/to/prisma/dev.db"
+  // 상대경로(file:./)인 경우 → prisma 디렉토리 기준 절대경로로 변환
+  // Prisma의 DATABASE_URL 상대경로는 schema.prisma 파일 위치(prisma/) 기준
+  // e.g. "file:./dev.db" → "file:/absolute/path/to/prisma/dev.db"
   const relativePart = envUrl.replace(/^file:\.\//, "");
-  const absolutePath = path.resolve(process.cwd(), relativePart);
+  const absolutePath = path.resolve(process.cwd(), "prisma", relativePart);
   return `file:${absolutePath}`;
 };
 
