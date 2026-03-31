@@ -427,7 +427,7 @@ export class AdminModule implements NestModule {
   },
   {
     slug: 'nextjs-nestjs-domain-separation-and-bff',
-    title: '[Next.js x NestJS] 도메인이 다른 두 프로젝트를 연동하며 깨부순 아키텍처 오해들',
+    title: '[Next.js x NestJS] 프론트엔드와 백엔드의 도메인 분리, 깨부순 아키텍처 오해들',
     excerpt: '"프론트엔드와 백엔드를 물리적으로 분리하자." 현대 웹 개발의 기본처럼 여겨지지만, Next.js와 NestJS를 각각 다른 최상위 도메인(A.com, B.com)으로 배포하고 연동하는 과정은 단순히 API만 연결하는 것으로 끝나지 않았습니다. 인증(Auth), 쿠키(Cookie), 네트워크 보안이라는 거대한 벽을 마주하며 깨부순 과거의 오해들과 아키텍처 개선기를 공유합니다.',
     date: new Date('2026-03-01'),
     tags: ['Architecture', 'Next.js', 'NestJS', 'Security', 'BFF'],
