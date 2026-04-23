@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import { REAL_FEATURES } from './data/features';
 import { REAL_INSIGHTS } from './data/insights';
+import { REAL_STUDIES } from './data/studies';
 
 const prisma = new PrismaClient();
 
@@ -62,7 +63,27 @@ async function main() {
     console.log(`✅ Feature: ${feature.title}`);
   }
 
-  // 3. Insights — prisma/data/insights.ts 에서 관리
+  // 3. Studies — prisma/data/studies.ts 에서 관리
+  await prisma.study.deleteMany({});
+  for (const study of REAL_STUDIES) {
+    await prisma.study.create({
+      data: {
+        slug: study.slug,
+        title: study.title,
+        description: study.description,
+        iconName: study.iconName,
+        category: study.category,
+        techStack: JSON.stringify(study.techStack),
+        status: study.status,
+        overview: study.overview,
+        period: study.period ?? null,
+        content: study.content ?? null,
+      },
+    });
+    console.log(`✅ Study: ${study.title}`);
+  }
+
+  // 4. Insights — prisma/data/insights.ts 에서 관리
   await prisma.insight.deleteMany({});
   for (const insight of REAL_INSIGHTS) {
     let featureId = null;
@@ -75,6 +96,16 @@ async function main() {
       }
     }
 
+    let studyId = null;
+    if (insight.studySlug) {
+      const study = await prisma.study.findUnique({
+        where: { slug: insight.studySlug },
+      });
+      if (study) {
+        studyId = study.id;
+      }
+    }
+
     const createdInsight = await prisma.insight.create({
       data: {
         slug: insight.slug,
@@ -84,6 +115,7 @@ async function main() {
         date: insight.date,
         readTime: insight.readTime,
         featureId,
+        studyId,
       },
     });
 
@@ -102,7 +134,7 @@ async function main() {
     console.log(`✅ Insight: ${insight.title}`);
   }
 
-  // 4. System Settings (최초 1회)
+  // 5. System Settings (최초 1회)
   if ((await prisma.systemSettings.count()) === 0) {
     await prisma.systemSettings.create({
       data: {

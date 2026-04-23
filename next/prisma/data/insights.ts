@@ -19,6 +19,7 @@ export type SeedInsight = {
   tags: string[];
   readTime: string;
   featureSlug?: string;
+  studySlug?: string;
 };
 
 export const REAL_INSIGHTS: SeedInsight[] = [
@@ -717,6 +718,235 @@ export async function ServerProfile() {
 
 단순히 기능을 동작하게 만드는 프론트/백엔드 개발을 넘어, 클라이언트와 서버의 네트워크 경로를 영리하게 분리하고, 내부 통신은 안전한 Private 망에 위임하며, 스트리밍 파이프라이닝으로 Node.js의 약점을 방어하는 법을 배웠습니다.
 아키텍처는 유행을 따르는 것이 아니라, **'보안(Security)'과 '네트워크 룰(Network Rule)'이라는 가장 견고한 기반 위에서 파생되는 필연적인 결과물**임을 뼈저리게 깨달은 값진 경험이었습니다.`
+  },
+  {
+    slug: 'vercel-team-plan-bypass-and-serverless-cost-analysis',
+    title: 'Vercel의 팀 플랜 과금 우회부터 BFF 서버리스 요금 분석까지',
+    excerpt:
+      'Vercel Git Integration의 인당 $20 과금 구조를 GitHub Actions + Vercel CLI 커스텀 CI로 우회하고, BFF 아키텍처에서의 서버리스 실행 비용을 시뮬레이션하여 트래픽 규모별 비용 역전 지점을 분석한 DevOps 의사결정기.',
+    date: new Date('2026-04-23'),
+    tags: ['DevOps', 'Vercel', 'GitHub Actions', 'Cost Optimization', 'Serverless'],
+    readTime: '8 min',
+    studySlug: 'ai-dx-harness-starter-kit',
+    content: `최근 AI 에이전트를 활용한 바이브 코딩이 트렌드로 자리 잡으면서, 프론트엔드 생태계에서 Vercel의 입지는 더욱 강력해진 것으로 알고 있습니다. 사내에서도 비용 절감과 배포 편의성을 위해 Vercel을 도입하자는 의견이 나왔습니다.
+
+솔직히 저는 처음에는 회의적이었습니다. 이미 Cloudflare를 사용하고 있는 상황에서 굳이 기능이 겹쳐 보이는 Vercel을 도입해 러닝 커브를 키울 필요가 있을까 싶었습니다. 하지만 제 개인 포트폴리오를 AWS에 호스팅하며 매월 약 4만 원의 고정 유지비용을 지불하고 있던 터라, 초기 비용이 거의 들지 않는 Vercel의 이점은 직접 테스트해 볼 충분한 가치가 있었습니다.
+
+하지만 Vercel을 실무 하네스에 연동하려다 보니 **두 가지의 비용적 함정**을 만났고, 이를 기술적으로 돌파하고 분석한 과정을 공유합니다.
+
+## The Problem 1: Vercel Git Integration의 함정과 $20
+
+Vercel의 가장 큰 장점은 GitHub 레포지토리를 연결해 두면 자동으로 배포해 주는 'Git Integration'입니다. 하지만 여기에는 치명적인 함정이 있습니다. 프로젝트에 기여하는(Commit을 남기는) 팀원이 늘어날 때마다 **개발자 1명당 매월 $20의 고정 비용**이 발생합니다. 프로젝트 단위로 의뢰를 받는 에이전시 특성상, 이는 눈덩이처럼 불어날 수밖에 없는 구조였습니다.
+
+## The Solution 1: Vercel CLI와 GitHub Actions를 활용한 'Custom CI'
+
+이 비용을 우회하고 배포 제어권을 가져오기 위해, Git Integration을 해제하고 **GitHub Actions와 Vercel CLI를 결합한 Custom CI 파이프라인**을 구축했습니다.
+
+**1. Infisical을 통한 인증 정보 동적 주입**
+
+Vercel에 접근하기 위한 \`VERCEL_TOKEN\` 등을 GitHub Secrets에 하드코딩하지 않고, 실행 시 중앙 환경변수 서버인 Infisical에서 동적으로 주입받아 보안을 극대화했습니다.
+
+**2. GitHub Actions 러너에서 빌드 위임**
+
+\`\`\`yaml
+- name: Pull Vercel environment info
+  run: vercel pull --yes --environment=\${{ steps.env.outputs.vercel_env }} --token=\${{ steps.vercel-creds.outputs.token }}
+
+- name: Build with Vercel
+  run: vercel build \${{ steps.env.outputs.prod_flag }} --token=\${{ steps.vercel-creds.outputs.token }}
+\`\`\`
+
+Vercel 서버의 빌드 리소스를 쓰지 않고, GitHub Actions 환경에서 \`vercel pull\`과 \`build\`를 수행하여 산출물(\`.vercel/output\`)을 생성합니다.
+
+**3. 사전 빌드된 결과물만 Vercel로 전송**
+
+\`\`\`yaml
+- name: Deploy to Vercel
+  run: |
+    vercel deploy --prebuilt \${{ steps.env.outputs.prod_flag }} \\
+      --token=\${{ steps.vercel-creds.outputs.token }} \\
+      --meta githubCommitAuthor="\${{ github.actor }}" \\
+      --meta githubCommitSha="\${{ github.sha }}" ...
+\`\`\`
+
+이 파이프라인의 핵심입니다. \`--prebuilt\` 옵션으로 GitHub Actions에서 완성된 산출물만 쏘아 올립니다. Vercel 대시보드에 커밋 로그를 살리기 위해 \`--meta\` 태그로 GitHub의 메타데이터를 직접 매핑해 주었습니다.
+
+결과적으로 팀원들은 Vercel에 초대받지 않아도, 평소처럼 Push만 하면 토큰 기반으로 배포가 완료되어 **인당 과금($20)을 완벽히 방어**했습니다.
+
+## The Problem 2: 단순 계정료를 넘어선 '서버리스 실행 시간'의 진짜 비용
+
+팀 플랜 과금을 방어하고 나니 안심이 되었지만, 아키텍처를 더 깊게 파고들수록 진짜 고민해야 할 지점은 따로 있었습니다. 바로 **'렌더링 방식과 BFF 구조에 따른 서버리스 실행 비용(GB-hours)'**입니다.
+
+사내 프로젝트들이 BFF(Backend For Frontend) 구조를 띠다 보니, 프론트엔드 서버가 API 서버의 응답을 기다리는 시간이 그대로 Vercel의 실행 시간 요금으로 청구되는 구조였습니다. 트래픽이 적을 땐 클라우드보다 저렴하겠지만, 트래픽이 몰리면 어떻게 될지 요금 시뮬레이션(하루 50만 건, 월 1,500만 건)을 돌려보았습니다.
+
+| **항목** | **평균 1초 응답** | **평균 3초 응답** | **평균 5초 응답** |
+| --- | --- | --- | --- |
+| **구독료 (팀 플랜 기준)** | $20.00 | $20.00 | $20.00 |
+| **호출 횟수 요금** | $8.40 | $8.40 | $8.40 |
+| **실행 시간 요금 (GB-h)** | $126.60 | $459.96 | $793.32 |
+| **예상 총합 (월)** | **약 $155 (21만 원)** | **약 $488 (66만 원)** | **약 $821 (111만 원)** |
+
+결과는 충격적이었습니다. 응답 시간이 1초에서 5초로 늘어나는 것만으로 요금이 **약 5배 폭증**하여 111만 원에 달했습니다. 즉, 외부 API 지연 등 우리가 통제할 수 없는 요인에 의해 인프라 비용이 치솟을 수 있다는 뜻입니다.
+
+## The Result & Retrospective
+
+Vercel은 분명 세팅 비용이 거의 들지 않고 최고의 DX를 제공합니다. 커스텀 CI를 통해 인당 과금 리스크도 해결했습니다. 하지만 대규모 트래픽 스파이크가 발생했을 때의 막대한 스케일 인/아웃(Scale in/out) 비용과, **Cloudflare가 제공하던 강력한 엣지 단의 보안 장치들을 제대로 사용할 수 없다는 점**은 뼈아픈 트레이드오프입니다.
+
+이러한 불확실성 때문에, 당장은 Vercel의 생산성을 누리되 실제 서비스를 운영하며 데이터를 축적해 보기로 했습니다. 만약 트래픽 증가로 인해 비용 효율이 역전되거나 보안적 한계가 명확해진다면, 언제든 다시 AWS나 Docker 기반의 클러스터로 전환할 수 있도록 아키텍처를 유연하게 유지하는 것이 이번 엔지니어링의 최종 결론입니다.`
+  },
+  {
+    slug: 'infisical-centralized-secrets-and-spof-defense',
+    title: 'Infisical 도입기: 환경변수 중앙화와 단일 장애점(SPoF)을 방어하는 CI/CD 아키텍처',
+    excerpt:
+      '파편화된 환경변수 관리를 Infisical Self-Hosted로 중앙화하고, 런타임 의존성을 제거하는 Build-Time Injection 전략으로 단일 장애점(SPoF) 리스크를 방어한 인프라 설계기.',
+    date: new Date('2026-04-23'),
+    tags: ['DevOps', 'Infisical', 'Security', 'SSOT', 'High-Availability'],
+    readTime: '7 min',
+    studySlug: 'ai-dx-harness-starter-kit',
+    content: `프로젝트가 늘어나면서 가장 관리하기 까다로웠던 것은 다름 아닌 **환경변수**였습니다. 데이터베이스 접속 정보, SSH 접근 Private/Public Key, 외부 API 토큰 등 회사의 가장 치명적인 자산들이 슬랙을 통해 공유되거나 개인의 로컬 PC에 파편화되어 있었습니다. 이는 보안적으로 매우 위험할 뿐만 아니라, 환경변수 업데이트 누락으로 인한 배포 장애를 끊임없이 유발했습니다.
+
+이를 해결하고 환경변수의 단일 진실 공급원(Single Source of Truth)을 구축하기 위해 오픈소스 시크릿 매니저인 **Infisical**을 사내 하네스에 도입하며 겪었던 아키텍처적 고민을 공유합니다.
+
+### The Problem: 왜 SaaS가 아닌 Self-Hosted 였는가?
+
+Infisical은 훌륭한 클라우드 버전을 제공하지만, 우리는 굳이 인프라 관리의 수고를 감수하면서까지 **사내 인스턴스 구축**을 택했습니다.
+가장 큰 이유는 **보안 통제권**과 **비용 절감**이었습니다. 회사의 모든 핵심 인프라 Key 값들을 외부 클라우드에 온전히 위임하는 것은 보안 컴플라이언스상 부담이 컸습니다. 또한, 프로젝트와 팀원이 늘어날 때마다 발생하는 SaaS 구독 비용을 방어하고 인프라 고정비용을 최적화하기 위한 전략적 선택이었습니다.
+
+### DX의 혁신: CLI Wrapper와 자동 매핑
+
+Infisical 도입 후, 팀원들의 로컬 개발 워크플로우는 극적으로 쾌적해졌습니다. 더 이상 슬랙에서 \`.env\` 텍스트 블록을 복사해 붙여넣을 필요가 없어졌습니다.
+
+- **CLI Wrapper 적용:** 팀원들은 \`infisical run -- npm run dev\`와 같이 CLI 래퍼(Wrapper) 명령어를 실행하기만 하면 됩니다.
+- **\`.infisical.json\` 기반 브랜치 매핑:** Infisical 내부를 디렉터리(Folder)로 구조화하고, 프로젝트 루트의 \`.infisical.json\`을 통해 로컬의 Git 브랜치와 Infisical의 특정 \`-path\`를 자동으로 매핑시켰습니다.
+
+결과적으로 개발자가 \`main\` 브랜치에 있으면 Production 변수를, \`dev\` 브랜치에 있으면 Development 변수를 알아서 주입받아 실행하는 자동화된 DX 환경을 구축했습니다.
+
+### The Architectural Dilemma: 단일 장애점과 가용성
+
+환경변수 관리는 완벽해졌지만, 아키텍트로서 시스템 전체의 구조를 바라보았을 때 치명적인 딜레마를 마주했습니다. **"만약 사내에 구축한 Infisical 서버가 다운된다면, 실 서비스 중인 프로덕션 서버들도 함께 죽는 것인가?"**
+
+만약 실 서비스 서버들이 런타임에 Infisical 서버를 찔러서 환경변수를 가져오는 구조를 택했다면, Infisical 서버 장애 시 실 서비스 인스턴스가 재시작되거나 스케일 아웃될 때 환경변수를 받지 못해 전체 서비스 장애로 이어질 것입니다. 즉, Infisical 서버가 시스템 전체의 **단일 장애점**이 되는 것입니다.
+
+### The Solution: Build-Time Injection 전략
+
+이러한 시스템적 리스크를 방어하기 위해 **런타임 의존성을 완전히 제거**했습니다.
+
+우리의 CI/CD 파이프라인은 배포 과정에서 딱 한 번 Infisical 서버를 호출하여 필요한 환경변수를 가져온 뒤, 물리적인 \`.env\` 파일을 직접 생성하여 빌드 산출물과 함께 인스턴스로 배포합니다.
+
+- **Infisical 서버가 정상일 때:** 파이프라인이 매끄럽게 동작하여 최신 환경변수로 배포됩니다.
+- **Infisical 서버가 다운되었을 때:** CI/CD 파이프라인 단계에서 배포가 실패합니다. **하지만 가장 중요한 실 서비스는 아무런 타격을 받지 않습니다.** 기존 인스턴스들은 지난번 배포 때 생성된 물리적 \`.env\` 파일을 가지고 독립적으로 동작하기 때문입니다.
+
+### The Result & Retrospective
+
+"배포 장애를 감수하더라도 실 서비스의 장애는 막는다."
+
+이 명확한 원칙을 바탕으로 환경변수 중앙화와 시스템 고가용성이라는 두 마리 토끼를 모두 잡을 수 있었습니다. 문제가 생기면 배포가 멈춘 시점에서 Infisical 서버를 복구한 뒤 재배포하면 그만입니다. Infisical의 도입은 단순히 툴을 바꾼 것이 아니라, 인프라의 결합도를 낮추고 방어적 아키텍처를 설계하는 법을 깨닫게 해 준 최고의 결정이었습니다.`
+  },
+  {
+    slug: 'cloudflare-tunnel-zero-trust-cicd-and-troubleshooting',
+    title: 'Cloudflare Tunnel을 활용한 Zero Trust CI/CD 구축과 3번의 삽질',
+    excerpt:
+      'Jenkins에서 GitHub Actions로 CI/CD를 마이그레이션하며, 인바운드 22번 포트를 원천 봉쇄한 채 Cloudflare Tunnel(Zero Trust)로 배포 파이프라인을 구축하고 WAF 봇 오인, L4/L7 로드밸런싱 충돌, 서브도메인 라우팅 문제를 해결한 트러블슈팅기.',
+    date: new Date('2026-04-23'),
+    tags: ['DevOps', 'Security', 'Cloudflare Tunnel', 'Zero Trust', 'GitHub Actions', 'Troubleshooting'],
+    readTime: '10 min',
+    studySlug: 'ai-dx-harness-starter-kit',
+    content: `사내 하네스의 CI/CD를 Jenkins에서 GitHub Actions로 마이그레이션하면서 가장 먼저 맞닥뜨린 거대한 벽은 **'보안'**이었습니다.
+
+Jenkins는 이미 내부망에 위치해 있어 배포 서버와 통신하기 수월했지만, 클라우드 환경인 GitHub Actions의 러너가 우리 사내 인스턴스에 접근하려면 필연적으로 인바운드 방화벽을 열어야 했습니다.
+GitHub Actions의 수많은 IP 대역을 일일이 화이트리스트로 관리하는 것은 불가능에 가깝고, 그렇다고 22번 포트를 전역으로 개방하는 것은 사실상 서버를 해커들에게 열어두는 것과 다름없었습니다. 이 딜레마를 해결하기 위해 22번 포트를 원천 봉쇄하면서도 안전하게 접근할 수 있는 **Cloudflare Tunnel (Zero Trust)**을 도입하며 겪었던 처절한 트러블슈팅 과정을 공유합니다.
+
+### The Architecture: ProxyCommand와 터널링의 결합
+
+배포의 핵심 로직은 작성한 \`deploy-frontend-pm2.yml\` 파일 내에 존재합니다. 가장 공을 들인 부분은 GitHub Actions 환경 내에서 SSH Config를 동적으로 생성하고, \`cloudflared\` 데몬을 통해 터널을 뚫는 과정입니다.
+
+\`\`\`yaml
+- name: Setup SSH via Cloudflare Tunnel
+  run: |
+    # (중략)
+    echo "  ProxyCommand cloudflared access ssh --hostname %h --id \${CF_ACCESS_CLIENT_ID} --secret \${CF_ACCESS_CLIENT_SECRET}" > ~/.ssh/config
+
+- name: Deploy to server via SCP
+  run: |
+    scp -F ~/.ssh/config apps/front/\${{ env.FRONT_TAR_FILE }} deploy-server:\${{ env.FRONT_DEPLOY_DIR }}/
+\`\`\`
+
+이 로직의 핵심은 \`ProxyCommand\`입니다. 일반적인 SSH 연결을 시도하는 대신, \`cloudflared access ssh\` 명령어를 가로채어 실행합니다. 이때 Infisical에서 런타임으로 가져온 \`CF_ACCESS_CLIENT_ID\`와 \`SECRET\` 토큰을 헤더에 실어 Cloudflare 엣지 네트워크 인증을 통과한 뒤, 내부에 뚫려 있는 아웃바운드 터널을 타고 서버에 안전하게 도달하는 구조입니다.
+
+### The Problem: 이론과 현실의 괴리, 3번의 처절한 삽질
+
+로컬에서는 CLI로 완벽하게 붙던 터널이, 막상 GitHub Actions 러너에만 올라가면 알 수 없는 이유로 Connection Refused를 뱉어냈습니다. Cloudflare 이벤트 로그를 뒤지고, 서버에서 역으로 요청을 쏴보는 등 수많은 삽질 끝에 3가지 치명적인 엣지 케이스를 발견했습니다.
+
+**삽질 1: WAF의 봇 차단 오인**
+Cloudflare에 터널 접속용 서브도메인을 연결했으나, GitHub Actions 환경에서 비정상적인 헤더로 요청이 들어오자 이를 봇 트래픽으로 오인하여 WAF(웹 방화벽)단에서 튕겨내고 있었습니다.
+
+- **해결:** WAF 커스텀 룰에 해당 서브도메인 경로와 특정 헤더 조건일 경우 보안 검사를 우회하도록 규칙을 추가하여 해결했습니다.
+
+**삽질 2: L4/L7 로드밸런싱의 원리 파악 (1 터널 ➝ 2 서버)**
+초기에는 관리 포인트를 줄이고자 '하나의 터널'에 '두 대의 인스턴스'를 묶어 배포 연결을 시도했습니다. 하지만 제가 의도한 특정 서버로 타겟팅되지 않고, 배포 트래픽이 두 서버에 랜덤하게 꽂히는 현상이 발생했습니다. 이 트러블슈팅 과정을 통해 **L4/L7 로드밸런싱의 동작 원리**를 실무적으로 깊게 파악하게 되었습니다.
+
+- **L4 (전송 계층) 로드밸런싱:** IP 주소와 포트 번호만을 기준으로 단순히 트래픽을 분산시킵니다.
+- **L7 (응용 계층) 로드밸런싱:** HTTP 헤더(도메인, URL 등)와 같은 '데이터의 내용'을 까보고 목적지에 맞게 똑똑하게 라우팅합니다.
+
+문제를 분석해 보니, Cloudflare Tunnel은 단순한 1:N 파이프가 아니라 엣지 단에서 거대한 **L7 리버스 프록시 및 로드밸런서** 역할을 하고 있었습니다. HTTP 호스트 헤더(서브도메인)를 기준으로 트래픽을 받은 뒤, 내부에 가용한 여러 대의 \`cloudflared\` 데몬들(L4 연결)로 트래픽을 라운드 로빈 형태로 부하 분산시켜 버리고 있었던 것입니다.
+
+**삽질 3: 서브도메인 충돌 (1 도메인 ➝ 2 터널)**
+그렇다면 서버마다 터널을 따로 만들되, 묶어주는 '서브도메인만 하나'로 통일해 보려 했습니다. 하지만 이 경우 나중에 연결된 서버(혹은 터널) 쪽으로는 라우팅이 잡히지 않아 아예 배포 자체가 먹통이 되는 라우팅 충돌 현상을 겪었습니다.
+
+### The Solution: 1 Domain = 1 Server 원칙과 Jump Host 고민
+
+결국 안정적인 배포를 보장하기 위해 타협 없이 **"1 서브도메인 = 1 터널 = 1 서버"**의 구조를 고수하기로 했습니다. 이로 인해 서버가 늘어날 때마다 WAF 규칙과 서브도메인을 각각 추가해 주어야 하는 관리의 번거로움이 생겼습니다.
+
+이를 아키텍처적으로 근본 해결하기 위해 **Jump Host** 방식의 도입을 깊게 고민했습니다. 터널과 연결된 Bastion를 내부에 단 하나만 두고, 그 Bastion 서버가 사내망을 타고 개별 인스턴스로 배포를 뿌려주는 방식입니다.
+하지만 현재 팀 규모와 트래픽 수준에서 Bastion 전용 서버를 하나 더 운영하는 것은 또 다른 인프라 유지 비용을 발생시키기 때문에, 무리한 오버엔지니어링을 경계하고 현재의 1:1 방식을 최선으로 채택했습니다.
+
+### The Result & Retrospective
+
+이 처절한 터널링 트러블슈팅을 거치며 인바운드 22번 포트를 단 하나도 열지 않고 CI/CD 파이프라인을 완성했습니다.
+
+단순히 튜토리얼을 따라 하는 것을 넘어, WAF의 특성, L4/L7 로드밸런싱의 원리, 그리고 비용 대비 효율을 고려한 아키텍처적 결단(Bastion 보류)까지. Cloudflare Tunnel 도입은 단순한 보안 툴 세팅이 아니라, 네트워크와 인프라의 바닥까지 이해하게 만들어준 가장 값진 성장의 시간이었습니다. 향후 이 터널링 경험을 확장하여, 팀원들이 사내 서버 및 DB 접근 시 복잡한 VPN 대신 Cloudflare Access 기반의 브라우저 인증으로 접근할 수 있도록 인프라를 고도화할 계획입니다.`
+  },
+  {
+    slug: 'jenkins-retirement-and-github-actions-migration',
+    title: '과감한 Jenkins 폐기와 CI/CD 마이그레이션',
+    excerpt:
+      '3대의 Jenkins 인스턴스에 매월 50만 원을 지불하던 레거시 CI/CD를 GitHub Actions로 전면 마이그레이션하고, 빌드 캐싱과 셸 스크립트 범용화로 배포 파이프라인을 고도화한 인프라 최적화기.',
+    date: new Date('2026-04-23'),
+    tags: ['DevOps', 'CI/CD', 'GitHub Actions', 'Jenkins', 'Cost Optimization', 'Refactoring'],
+    readTime: '7 min',
+    studySlug: 'ai-dx-harness-starter-kit',
+    content: `사내 하네스 인프라 대공사의 마지막 퍼즐은 가장 무겁고 오래된 레거시, **Jenkins 서버의 철거**였습니다.
+수많은 기업들이 관성적으로 Jenkins를 사용합니다. 우리 역시 마찬가지였습니다. 하지만 "우리가 과연 Jenkins의 강력한 기능들을 100% 활용하고 있는가?", "이 도구가 지금 우리 비즈니스 규모에 맞는가?"라는 근본적인 의구심이 들기 시작했고, 결국 서버리스 CI/CD인 **GitHub Actions**로의 전면 마이그레이션을 결단했습니다.
+
+그 결단의 배경과 비용 최적화, 그리고 배포 파이프라인을 고도화한 과정을 공유합니다.
+
+### The Problem: 배보다 배꼽이 더 큰 인프라와 핫픽스 병목
+
+과거 우리 팀은 배포 트래픽 비용을 최소화하겠다는 목적 하에, 배포 타겟 서버 혹은 프로젝트별로 Jenkins 인스턴스를 분리하여 총 3대의 서버를 운영하고 있었습니다.
+
+- NHN Cloud: \`r2.c2m8\` (2vCPU, 8GB)
+- AWS: \`t4g.micro\`, \`t2.small\`
+
+트래픽 비용은 아꼈을지 몰라도, 이 3대의 인스턴스를 항시 띄워두는 데 **매월 약 50만 원의 고정 유지비**가 발생하고 있었습니다. 비용도 문제였지만, 진짜 고통은 '개발자 경험'의 하락이었습니다.
+인스턴스의 스펙이 대체로 낮고 파편화되어 있다 보니 메모리 부족으로 배포가 중간에 뻗어버리는 일이 잦았습니다. 특히 보안 이슈로 긴급 핫픽스를 배포해야 할 때, 낮은 스펙 탓에 여러 프로젝트의 동시 빌드가 불가능해 빌드 큐(Queue)에서 하염없이 대기해야 하는 치명적인 병목 현상을 겪었습니다.
+
+### The Solution: 서버리스 전환과 파이프라인 고도화
+
+더 이상 Jenkins를 고집할 이유가 없었습니다. 고정비가 없고 병렬 빌드가 자유로운 **GitHub Actions**로 모든 파이프라인을 옮기기 시작했습니다.
+마이그레이션 자체는 까다롭지 않았습니다. 자체 슬랙 봇을 연동하는 데 1시간 남짓 소요되었을 뿐, 배포의 논리적 흐름은 동일했기 때문입니다. 오히려 저는 단순히 툴을 바꾸는 것을 넘어, **배포 속도와 스크립트의 유지보수성을 고도화**하는 데 집중했습니다.
+
+**1. \`npm ci\`와 캐싱을 통한 빌드 속도 최적화**
+매번 무거운 모듈을 새로 다운로드하는 시간을 줄이기 위해 Actions의 \`actions/cache\`를 적극 도입했습니다. \`package-lock.json\`의 해시값을 키로 삼아 \`node_modules\`와 Next.js 빌드 캐시를 저장하고, \`npm ci\` 명령어를 통해 캐시 적중률을 높여 CI/CD의 생명인 '빌드 속도'를 비약적으로 끌어올렸습니다.
+
+**2. 셸 스크립트의 범용화 및 추상화**
+기존에는 서버마다, 프로젝트마다 압축을 풀고 PM2를 재시작하는 하드코딩된 \`.sh\` 파일이 파편화되어 존재했습니다. 이를 하나의 공통 \`server-deploy.sh\`로 통합하고, GitHub Actions에서 실행 시 **인자값**으로 \`DEPLOY_DIR\`, \`TAR_FILE\`, \`APP_NAME\`, \`APP_TYPE(pm2/static)\`을 주입하도록 리팩토링했습니다. 이제 새로운 프로젝트가 추가되더라도 서버의 스크립트를 건드릴 필요 없이 파이프라인 설정만으로 즉각 대응이 가능한 유연한 구조를 완성했습니다.
+
+### The Result & Retrospective
+
+현재 Jenkins에서 GitHub Actions로의 전환 작업을 점진적으로 진행 중이지만, 이미 그 효과는 명확합니다.
+가장 직관적인 성과는 **매월 50만 원씩 빠져나가던 인프라 유지 비용을 0원으로 수렴**시킨 것입니다. 나아가 Jenkins의 물리적 스펙 한계에 갇혀 있던 '1 빌드' 제약에서 벗어나 다수의 프로젝트를 동시에 병렬로 빌드할 수 있게 되면서, 핫픽스 대기 시간이라는 치명적인 병목을 완벽하게 해소할 수 있을 것으로 기대하고 있습니다.
+
+관성적으로 쓰던 도구를 버리고 현재의 비즈니스 체급과 비용에 가장 알맞은 아키텍처를 새로 그리는 것, 이것이 진정한 의미의 DevOps이자 인프라 최적화임을 깨달았습니다.`
   }
 ];
 

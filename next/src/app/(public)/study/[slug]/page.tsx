@@ -110,7 +110,7 @@ export default async function StudyDetailPage({ params }: { params: Promise<{ sl
             </CardHeader>
             <CardContent className="space-y-4">
               {relatedInsights.length > 0 ? (
-                relatedInsights.slice(0, 3).map((insight) => (
+                relatedInsights.slice(0, 4).map((insight) => (
                   <Link
                     key={insight.id}
                     href={`/insights/${insight.slug}`}
