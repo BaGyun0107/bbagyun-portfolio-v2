@@ -82,7 +82,7 @@ export default async function HomePage() {
           단순한 기능 구현을 넘어, <br className="hidden md:block"/> 견고한 아키텍처를 설계합니다.
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed break-keep">
-          사용자를 위한 매끄러운 경험과 팀을 위한 견고한 아키텍처.<br className="hidden md:block"/>시스템의 방향을 설계하고 기술의 깊이를 더하는 {Math.max(1, new Date().getFullYear() - 2023 + (new Date().getMonth() >= 3 ? 1 : 0))}년 차 백엔드 중심 풀스택 개발자입니다.
+          사용자를 위한 매끄러운 경험과 팀을 위한 견고한 아키텍처.<br className="hidden md:block"/>시스템의 방향을 설계하고 기술의 깊이를 더하는 {Math.max(1, new Date().getFullYear() - 2023)}년 차 백엔드 중심 풀스택 개발자입니다.
         </p>
         <div className="flex items-center justify-center gap-4 pt-4">
           <Button size="lg" asChild>
@@ -135,7 +135,7 @@ export default async function HomePage() {
               <CardTitle className="text-sm font-medium text-muted-foreground">연차</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-4xl font-bold">3+</div>
+              <div className="text-4xl font-bold">{Math.max(1, new Date().getFullYear() - 2023)}+</div>
             </CardContent>
           </Card>
         </div>

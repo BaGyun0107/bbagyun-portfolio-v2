@@ -36,7 +36,7 @@ export default function AboutPage() {
                </div>
                <div className="flex justify-between border-b pb-2">
                  <span>경력</span>
-                 <span className="font-medium text-foreground">3년 차</span>
+                 <span className="font-medium text-foreground">{Math.max(1, new Date().getFullYear() - 2023)}+년 차</span>
                </div>
                <div className="flex justify-between border-b pb-2">
                  <span>상태</span>
@@ -53,7 +53,7 @@ export default function AboutPage() {
                 방향을 정하고 깊이를 더하는 개발자, 박윤신입니다.
               </p>
               <p className="text-lg text-muted-foreground">
-                프론트엔드와 백엔드를 아우르며, 비즈니스의 요구를 안정적인 시스템으로 구현해 온 3년 차 풀스택 개발자입니다. Node.js와 NestJS를 활용한 백엔드 설계부터 React 기반의 사용자 경험 최적화까지, 시스템 전체의 흐름을 이해하고 다루는 데 강점이 있습니다.
+                프론트엔드와 백엔드를 아우르며, 비즈니스의 요구를 안정적인 시스템으로 구현해 온 {Math.max(1, new Date().getFullYear() - 2023)}+년 차 풀스택 개발자입니다. Node.js와 NestJS를 활용한 백엔드 설계부터 React 기반의 사용자 경험 최적화까지, 시스템 전체의 흐름을 이해하고 다루는 데 강점이 있습니다.
                 <br/><br/>
                 <span className="font-bold">[구현자를 넘어선 비즈니스 파트너]</span><br />
                 저의 역할은 주어진 기획을 코드로 번역하는 것에 국한되지 않습니다. 고객의 요구사항을 분석할 때 구현이 어려운 병목 지점이 발견되면, 이를 우회하면서도 본래의 비즈니스 목적을 달성할 수 있는 더 나은 대안을 먼저 제시합니다. 개발자의 시선에 갇히지 않고, 고객 및 동료들과 유연하게 소통하며 최적의 합의점을 찾아냅니다.
