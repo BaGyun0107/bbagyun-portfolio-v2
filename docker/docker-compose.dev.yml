@@ -1,9 +1,0 @@
-# Development environment overrides
-# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
-
-services:
-  app:
-    environment:
-      - NODE_ENV=development
-    ports:
-      - "3000:3000"

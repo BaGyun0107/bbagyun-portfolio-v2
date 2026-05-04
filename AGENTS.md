@@ -37,15 +37,15 @@
 | 버그 조사 | `gstack /investigate` |
 | 브라우저 QA 자동화 | `gstack /qa` |
 | **보안/접근성 감사** | `oma-qa` (oh-my-agent) |
-| **백엔드 구현** | `oma-backend` → `next/src/app/api/`, `core/`, `infrastructure/` |
-| **프론트엔드 구현** | `oma-frontend` → `next/src/app/`, `components/` |
-| **DB 스키마/마이그레이션** | `oma-db` → `next/prisma/` |
+| **백엔드 구현** | `oma-backend` → `apps/front/src/app/api/`, `core/`, `infrastructure/` |
+| **프론트엔드 구현** | `oma-frontend` → `apps/front/src/app/`, `components/` |
+| **DB 스키마/마이그레이션** | `oma-db` → `apps/front/prisma/` |
 | **프로젝트 초기화** | `/deepinit` (oh-my-agent) |
 
 ## Project Structure
 
 ```
-next/                  ← 메인 앱 (Next.js 15 풀스택)
+apps/front/                  ← 메인 앱 (Next.js 15 풀스택)
   src/app/             ← App Router (공개 + 관리자 + API)
   src/core/            ← Domain + Application (Clean Architecture)
   src/infrastructure/  ← Prisma 구현체
@@ -58,7 +58,7 @@ docker/                ← Docker Compose 설정
 .github/workflows/     ← CI/CD 파이프라인
 ```
 
-Boundary: [next/AGENTS.md](next/AGENTS.md)
+Boundary: [apps/front/AGENTS.md](apps/front/AGENTS.md)
 
 ## Quick Rules
 
