@@ -4,9 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Github } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -47,12 +45,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-4">
-             <Button variant="ghost" size="sm" asChild>
-                <Link href="/login">로그인</Link>
-             </Button>
-          </div>
-
           {/* Mobile Menu Toggle */}
           <button
             className="md:hidden"
@@ -81,13 +73,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
                   {item.label}
                 </Link>
               ))}
-              <Link
-                  href="/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-sm font-medium text-muted-foreground"
-              >
-                로그인
-              </Link>
             </nav>
           </div>
         )}
