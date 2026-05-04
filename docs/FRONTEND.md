@@ -15,7 +15,7 @@
 ## Structure
 
 ```
-next/src/
+apps/front/src/
 ├── app/
 │   ├── (public)/          # 공개 페이지 (SSR/RSC)
 │   │   ├── page.tsx       # 메인 포트폴리오
