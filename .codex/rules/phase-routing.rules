@@ -1,0 +1,44 @@
+# Codex execpolicy rules: phase routing.
+#
+# Use external Triple Crown tools for phase work.
+# Before new Medium or larger work, inspect existing .planning state with
+# GSD progress/manager workflows and continue active or paused work first.
+# P1: GStack cso as the default non-trivial security gate, plus other decision gates and Superpowers brainstorming when needed.
+# P2: GSD map, milestone, discuss, and plan.
+# P3: GSD execute plus Superpowers TDD/debugging/plan execution.
+# P4: GSD review/verify plus GStack review and QA.
+# P5: GStack ship release gate plus GSD audit, summary, and complete; use GSD gsd-ship first only when PR prep should come from GSD state.
+# Size: Small requires fixed direction, obvious target, localized edit, easy rollback, low blast radius, and direct verification.
+# Medium starts when the agent must decide what to inspect, change, or verify.
+# Large adds multiple boundaries, role gates, handoff, or user/API impact.
+# Extra large/risky covers production, deploy/rollback, CI/CD, infrastructure, data, auth/permissions/payments, security, secrets, privacy, destructive operations, or hard-to-reverse work.
+#
+# The removed local commands are forbidden so Codex does not route new work
+# through the old local phase/spec/board convention.
+
+prefix_rule(
+    pattern = ["./harness", "phase-prompt"],
+    decision = "forbidden",
+    justification = "Local phase prompts were removed. Use external GSD phase commands and .planning/ state instead.",
+    match = [
+        "./harness phase-prompt demo execution",
+    ],
+)
+
+prefix_rule(
+    pattern = ["./harness", "spec"],
+    decision = "forbidden",
+    justification = "Local feature spec commands were removed. Use external GSD and commit .planning/ state instead.",
+    match = [
+        "./harness spec init demo",
+    ],
+)
+
+prefix_rule(
+    pattern = ["./harness", "board"],
+    decision = "forbidden",
+    justification = "The local spec board was removed with the local spec convention.",
+    match = [
+        "./harness board",
+    ],
+)

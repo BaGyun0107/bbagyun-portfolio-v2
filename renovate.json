@@ -1,0 +1,71 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Asia/Seoul",
+  "baseBranches": ["dev"],
+  "dependencyDashboard": true,
+  "labels": ["dependencies"],
+  "schedule": ["* 2-5 * * 1,3,5"],
+  "prHourlyLimit": 1,
+  "prConcurrentLimit": 3,
+  "rangeStrategy": "bump",
+  "separateMajorMinor": true,
+  "packageRules": [
+    {
+      "description": "patch 업데이트는 그룹으로 묶고 필수 CI 통과 후 자동 병합 후보로 둔다.",
+      "matchUpdateTypes": ["patch"],
+      "groupName": "patch dependency updates",
+      "groupSlug": "patch-dependencies",
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": false
+    },
+    {
+      "description": "개발 의존성 minor/patch는 그룹으로 묶고 필수 CI 통과 후 자동 병합 후보로 둔다.",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "dev dependency updates",
+      "groupSlug": "dev-dependencies",
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": false
+    },
+    {
+      "description": "runtime minor 업데이트는 그룹으로 묶되 사람이 확인한다.",
+      "matchDepTypes": ["dependencies", "optionalDependencies", "peerDependencies"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "runtime minor dependency updates",
+      "groupSlug": "runtime-minor-dependencies",
+      "automerge": false,
+      "labels": ["dependencies", "minor", "manual-review"]
+    },
+    {
+      "description": "프레임워크, 인증, DB, 결제 관련 패키지는 minor/patch여도 사람이 확인한다.",
+      "matchPackageNames": [
+        "next",
+        "react",
+        "react-dom",
+        "@nestjs/**",
+        "express",
+        "prisma",
+        "@prisma/**",
+        "typeorm",
+        "drizzle-orm",
+        "better-auth",
+        "next-auth",
+        "stripe",
+        "@stripe/**"
+      ],
+      "automerge": false,
+      "labels": ["dependencies", "manual-review"]
+    },
+    {
+      "description": "major 업데이트는 항상 사람이 확인한다.",
+      "matchUpdateTypes": ["major"],
+      "groupName": "major dependency updates",
+      "groupSlug": "major-dependencies",
+      "automerge": false,
+      "labels": ["dependencies", "major", "manual-review"]
+    }
+  ]
+}

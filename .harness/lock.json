@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "updated_at": null,
+  "policy": {
+    "default_channel": "stable",
+    "gstack": "managed-latest",
+    "gsd": "external-tool-check-only",
+    "superpowers": "plugin-marketplace-manual"
+  },
+  "tools": {
+    "gstack": {
+      "repo": "https://github.com/garrytan/gstack.git",
+      "ref": "main",
+      "auto_update": true,
+      "notes": "GStack is intentionally managed-latest because team mode is designed to keep role behavior fresh."
+    },
+    "gsd": {
+      "package": "@opengsd/get-shit-done-redux",
+      "bin": "get-shit-done-redux",
+      "repo": "https://github.com/open-gsd/get-shit-done-redux",
+      "version": "latest",
+      "profile": "standard",
+      "auto_update": false,
+      "notes": "GSD is managed by the global harness update-check flow. install.sh installs `@opengsd/get-shit-done-redux` and runs `get-shit-done-redux --claude --global --standard` and `--codex --global --standard` to deploy runtime skills into the user's Claude Code and Codex config directories."
+    },
+    "superpowers": {
+      "install_via": "plugin-marketplace",
+      "marketplace_id": "superpowers@claude-plugins-official",
+      "codex_marketplace": "github.com/openai/plugins",
+      "auto_update": false,
+      "notes": "Superpowers is installed manually through each runtime's plugin marketplace (`/plugin install superpowers@claude-plugins-official` for Claude Code; `/plugins` search inside Codex). The harness does not automate this because the official paths require an interactive plugin host; install.sh prints instructions and `./harness doctor` verifies the result."
+    }
+  }
+}

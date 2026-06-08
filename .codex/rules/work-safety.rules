@@ -1,0 +1,482 @@
+# Codex execpolicy rules: work safety.
+#
+# Starlark format. Loaded by Codex only when the project is trusted.
+# These rules are intentionally prefix-based. Branch-aware and path-aware
+# enforcement lives in .harness/hooks/guardrails.mjs for Claude Code.
+# Prefix rules cannot parse SQL embedded in -c arguments, files, npm scripts, or
+# shell strings. They prompt for representative DB CLIs and reset/drop tools;
+# narrative SQL policy and Claude hooks cover statement-level review.
+
+# PR merges bypass user review and are forbidden for agents.
+prefix_rule(
+    pattern = ["gh", "pr", "merge"],
+    decision = "forbidden",
+    justification = "AI may create PRs but must never merge them. Ask the user to merge in GitHub.",
+    match = [
+        "gh pr merge 123",
+    ],
+)
+
+# Hard reset rewrites local state and requires explicit user approval.
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "prompt",
+    justification = "Hard reset can discard user work. Ask for explicit approval before any history or working-tree destructive operation.",
+    match = [
+        "git reset --hard",
+    ],
+)
+
+# Recursive force delete can destroy user work and requires exact-scope approval.
+prefix_rule(
+    pattern = ["rm", "-rf"],
+    decision = "prompt",
+    justification = "rm -rf can permanently delete files. Ask for explicit approval for the exact path before running it.",
+    match = [
+        "rm -rf dist",
+    ],
+)
+
+prefix_rule(
+    pattern = ["rm", "-fr"],
+    decision = "prompt",
+    justification = "rm -fr can permanently delete files. Ask for explicit approval for the exact path before running it.",
+    match = [
+        "rm -fr dist",
+    ],
+)
+
+# Force push rewrites remote history and requires explicit approval.
+prefix_rule(
+    pattern = ["git", "push", "--force"],
+    decision = "prompt",
+    justification = "Force push rewrites remote history. Ask for explicit approval for the exact branch before running it.",
+    match = [
+        "git push --force origin feature",
+    ],
+)
+
+prefix_rule(
+    pattern = ["git", "push", "--force-with-lease"],
+    decision = "prompt",
+    justification = "Force push rewrites remote history. Ask for explicit approval for the exact branch before running it.",
+    match = [
+        "git push --force-with-lease origin feature",
+    ],
+)
+
+# Force clean can delete untracked user work.
+prefix_rule(
+    pattern = ["git", "clean"],
+    decision = "prompt",
+    justification = "git clean can delete untracked files. Confirm the exact scope before running it.",
+    match = [
+        "git clean -fd",
+    ],
+)
+
+# Database CLIs can mutate persisted data. Prefix rules cannot inspect embedded
+# SQL, so these commands require a manual read/write/drop safety check.
+prefix_rule(
+    pattern = ["psql"],
+    decision = "prompt",
+    justification = "psql can execute database writes or destructive SQL. Confirm the exact target and whether the SQL only reads data before running it.",
+    match = [
+        "psql \"$DATABASE_URL\" -c \"SELECT 1\"",
+        "psql \"$DATABASE_URL\" -f migration.sql",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "exec", "--", "psql"],
+    decision = "prompt",
+    justification = "psql can execute database writes or destructive SQL. Confirm the exact target and whether the SQL only reads data before running it.",
+    match = [
+        "mise exec -- psql \"$DATABASE_URL\" -c \"SELECT 1\"",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mysql"],
+    decision = "prompt",
+    justification = "mysql can execute database writes or destructive SQL. Confirm the exact target and whether the SQL only reads data before running it.",
+    match = [
+        "mysql --execute \"SELECT 1\"",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "exec", "--", "mysql"],
+    decision = "prompt",
+    justification = "mysql can execute database writes or destructive SQL. Confirm the exact target and whether the SQL only reads data before running it.",
+    match = [
+        "mise exec -- mysql --execute \"SELECT 1\"",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mariadb"],
+    decision = "prompt",
+    justification = "mariadb can execute database writes or destructive SQL. Confirm the exact target and whether the SQL only reads data before running it.",
+    match = [
+        "mariadb --execute \"SELECT 1\"",
+    ],
+)
+
+prefix_rule(
+    pattern = ["sqlite3"],
+    decision = "prompt",
+    justification = "sqlite3 can execute database writes or destructive SQL. Confirm the exact database file and whether the SQL only reads data before running it.",
+    match = [
+        "sqlite3 app.db \"SELECT 1\"",
+    ],
+)
+
+prefix_rule(
+    pattern = ["dropdb"],
+    decision = "prompt",
+    justification = "dropdb deletes a PostgreSQL database. Ask for explicit approval for the exact database before running it.",
+    match = [
+        "dropdb app_dev",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mysqladmin", "drop"],
+    decision = "prompt",
+    justification = "mysqladmin drop deletes a database. Ask for explicit approval for the exact database before running it.",
+    match = [
+        "mysqladmin drop app_dev",
+    ],
+)
+
+prefix_rule(
+    pattern = ["prisma", "migrate", "reset"],
+    decision = "prompt",
+    justification = "prisma migrate reset drops and recreates data. Ask for explicit approval and a rollback plan before running it.",
+    match = [
+        "prisma migrate reset",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "exec", "--", "prisma", "migrate", "reset"],
+    decision = "prompt",
+    justification = "prisma migrate reset drops and recreates data. Ask for explicit approval and a rollback plan before running it.",
+    match = [
+        "mise exec -- prisma migrate reset",
+    ],
+)
+
+prefix_rule(
+    pattern = ["npx", "prisma", "migrate", "reset"],
+    decision = "prompt",
+    justification = "prisma migrate reset drops and recreates data. Ask for explicit approval and a rollback plan before running it.",
+    match = [
+        "npx prisma migrate reset",
+    ],
+)
+
+prefix_rule(
+    pattern = ["pnpm", "prisma", "migrate", "reset"],
+    decision = "prompt",
+    justification = "prisma migrate reset drops and recreates data. Ask for explicit approval and a rollback plan before running it.",
+    match = [
+        "pnpm prisma migrate reset",
+    ],
+)
+
+prefix_rule(
+    pattern = ["prisma", "db", "push", "--force-reset"],
+    decision = "prompt",
+    justification = "prisma db push --force-reset resets the database. Ask for explicit approval and a rollback plan before running it.",
+    match = [
+        "prisma db push --force-reset",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "exec", "--", "prisma", "db", "push", "--force-reset"],
+    decision = "prompt",
+    justification = "prisma db push --force-reset resets the database. Ask for explicit approval and a rollback plan before running it.",
+    match = [
+        "mise exec -- prisma db push --force-reset",
+    ],
+)
+
+prefix_rule(
+    pattern = ["drizzle-kit", "drop"],
+    decision = "prompt",
+    justification = "drizzle-kit drop can drop database objects. Ask for explicit approval for the exact target before running it.",
+    match = [
+        "drizzle-kit drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "exec", "--", "drizzle-kit", "drop"],
+    decision = "prompt",
+    justification = "drizzle-kit drop can drop database objects. Ask for explicit approval for the exact target before running it.",
+    match = [
+        "mise exec -- drizzle-kit drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["npx", "drizzle-kit", "drop"],
+    decision = "prompt",
+    justification = "drizzle-kit drop can drop database objects. Ask for explicit approval for the exact target before running it.",
+    match = [
+        "npx drizzle-kit drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["sequelize", "db:drop"],
+    decision = "prompt",
+    justification = "sequelize db:drop drops a database. Ask for explicit approval for the exact database before running it.",
+    match = [
+        "sequelize db:drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "exec", "--", "sequelize", "db:drop"],
+    decision = "prompt",
+    justification = "sequelize db:drop drops a database. Ask for explicit approval for the exact database before running it.",
+    match = [
+        "mise exec -- sequelize db:drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["npx", "sequelize", "db:drop"],
+    decision = "prompt",
+    justification = "sequelize db:drop drops a database. Ask for explicit approval for the exact database before running it.",
+    match = [
+        "npx sequelize db:drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["typeorm", "schema:drop"],
+    decision = "prompt",
+    justification = "typeorm schema:drop drops database schema objects. Ask for explicit approval for the exact database before running it.",
+    match = [
+        "typeorm schema:drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "exec", "--", "typeorm", "schema:drop"],
+    decision = "prompt",
+    justification = "typeorm schema:drop drops database schema objects. Ask for explicit approval for the exact database before running it.",
+    match = [
+        "mise exec -- typeorm schema:drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["npx", "typeorm", "schema:drop"],
+    decision = "prompt",
+    justification = "typeorm schema:drop drops database schema objects. Ask for explicit approval for the exact database before running it.",
+    match = [
+        "npx typeorm schema:drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["npm", "run", "db:drop"],
+    decision = "prompt",
+    justification = "db:drop scripts commonly delete database state. Ask for explicit approval and inspect the script before running it.",
+    match = [
+        "npm run db:drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["pnpm", "run", "db:drop"],
+    decision = "prompt",
+    justification = "db:drop scripts commonly delete database state. Ask for explicit approval and inspect the script before running it.",
+    match = [
+        "pnpm run db:drop",
+    ],
+)
+
+prefix_rule(
+    pattern = ["npm", "run", "db:reset"],
+    decision = "prompt",
+    justification = "db:reset scripts commonly delete or recreate database state. Ask for explicit approval and inspect the script before running it.",
+    match = [
+        "npm run db:reset",
+    ],
+)
+
+prefix_rule(
+    pattern = ["pnpm", "run", "db:reset"],
+    decision = "prompt",
+    justification = "db:reset scripts commonly delete or recreate database state. Ask for explicit approval and inspect the script before running it.",
+    match = [
+        "pnpm run db:reset",
+    ],
+)
+
+# Production data and external side effects need approval. Prefix rules cannot
+# inspect every curl URL, SDK call, npm script, or app command, so these rules
+# cover representative CLIs and production environment wrappers.
+prefix_rule(
+    pattern = ["infisical", "run", "--env=prod"],
+    decision = "prompt",
+    justification = "Running with production secrets can access production data or trigger live side effects. Ask for explicit approval and confirm the exact target.",
+    match = [
+        "infisical run --env=prod -- npm run script",
+    ],
+)
+
+prefix_rule(
+    pattern = ["infisical", "run", "--env", "prod"],
+    decision = "prompt",
+    justification = "Running with production secrets can access production data or trigger live side effects. Ask for explicit approval and confirm the exact target.",
+    match = [
+        "infisical run --env prod -- npm run script",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "exec", "--", "infisical", "run", "--env=prod"],
+    decision = "prompt",
+    justification = "Running with production secrets can access production data or trigger live side effects. Ask for explicit approval and confirm the exact target.",
+    match = [
+        "mise exec -- infisical run --env=prod -- npm run script",
+    ],
+)
+
+prefix_rule(
+    pattern = ["stripe"],
+    decision = "prompt",
+    justification = "Stripe commands can create payments, refunds, customers, or webhooks. Confirm sandbox vs live mode and explicit approval before running.",
+    match = [
+        "stripe refunds create --payment-intent pi_123",
+    ],
+)
+
+prefix_rule(
+    pattern = ["twilio"],
+    decision = "prompt",
+    justification = "Twilio commands can send real SMS or voice messages. Confirm sandbox/dry-run target and explicit approval before running.",
+    match = [
+        "twilio api:core:messages:create --to +15555555555",
+    ],
+)
+
+prefix_rule(
+    pattern = ["sendgrid"],
+    decision = "prompt",
+    justification = "SendGrid commands can send real email. Confirm sandbox/dry-run target and explicit approval before running.",
+    match = [
+        "sendgrid mail send",
+    ],
+)
+
+prefix_rule(
+    pattern = ["resend"],
+    decision = "prompt",
+    justification = "Resend commands can send real email. Confirm sandbox/dry-run target and explicit approval before running.",
+    match = [
+        "resend emails send",
+    ],
+)
+
+prefix_rule(
+    pattern = ["openai"],
+    decision = "prompt",
+    justification = "OpenAI CLI calls may spend API budget or process sensitive data. Confirm cost, data sensitivity, and target before running.",
+    match = [
+        "openai api responses.create",
+    ],
+)
+
+# Secret and environment printing requires explicit approval.
+prefix_rule(
+    pattern = ["env"],
+    decision = "prompt",
+    justification = "Printing the environment may expose secrets. Ask before running env.",
+    match = [
+        "env",
+    ],
+)
+
+prefix_rule(
+    pattern = ["printenv"],
+    decision = "prompt",
+    justification = "Printing environment variables may expose secrets. Ask before running printenv.",
+    match = [
+        "printenv",
+        "printenv INFISICAL_CLIENT_SECRET",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh", "secret"],
+    decision = "prompt",
+    justification = "GitHub secret metadata or values are sensitive. Ask before accessing or changing secrets.",
+    match = [
+        "gh secret list",
+        "gh secret set INFISICAL_CLIENT_ID",
+    ],
+)
+
+# Production deploy and rollback commands require explicit approval.
+prefix_rule(
+    pattern = ["./harness", "server-deploy"],
+    decision = "prompt",
+    justification = "Production deploys and rollbacks require explicit user approval.",
+    match = [
+        "./harness server-deploy production",
+    ],
+)
+
+prefix_rule(
+    pattern = ["vercel", "deploy"],
+    decision = "prompt",
+    justification = "Production deploys require explicit user approval.",
+    match = [
+        "vercel deploy --prod",
+    ],
+)
+
+prefix_rule(
+    pattern = ["fly", "deploy"],
+    decision = "prompt",
+    justification = "Production deploys require explicit user approval.",
+    match = [
+        "fly deploy",
+    ],
+)
+
+prefix_rule(
+    pattern = ["railway", "up"],
+    decision = "prompt",
+    justification = "Production deploys require explicit user approval.",
+    match = [
+        "railway up",
+    ],
+)
+
+prefix_rule(
+    pattern = ["netlify", "deploy"],
+    decision = "prompt",
+    justification = "Production deploys require explicit user approval.",
+    match = [
+        "netlify deploy --prod",
+    ],
+)
+
+prefix_rule(
+    pattern = ["wrangler", "deploy"],
+    decision = "prompt",
+    justification = "Production deploys require explicit user approval.",
+    match = [
+        "wrangler deploy",
+    ],
+)

@@ -1,0 +1,91 @@
+# Codex execpolicy rules: monorepo package management.
+#
+# Starlark format. Loaded by Codex only when the project is trusted.
+# Validate a rule with, for example:
+#   codex execpolicy check --pretty \
+#     --rules .codex/rules/monorepo-packages.rules -- pnpm install
+#
+# prefix_rule() matches a command by its argument prefix only. It cannot see
+# the working directory, so it cannot tell a root install from an app-directory
+# install. Installs are therefore marked "prompt" (ask before running) rather
+# than "forbidden", so an accidental root install surfaces a confirmation.
+# Prefer commands that name the target package directory, such as
+# `pnpm --dir apps/front install` or `npm --prefix apps/front install`, in docs
+# and automation.
+# The precise "root install is blocked, app-directory install is allowed"
+# enforcement lives in .harness/hooks/tool-permission-guard.mjs and the
+# narrative policy in AGENTS.md.
+
+# pnpm install -> prompt
+prefix_rule(
+    pattern = ["pnpm", "install"],
+    decision = "prompt",
+    justification = "Run pnpm install inside the target app directory (apps/front, apps/back); do not hoist dependencies to the monorepo root.",
+    match = [
+        "pnpm install",
+        "pnpm install --frozen-lockfile",
+    ],
+    not_match = [
+        "pnpm test",
+        "pnpm build",
+    ],
+)
+
+# pnpm add -> prompt
+prefix_rule(
+    pattern = ["pnpm", "add"],
+    decision = "prompt",
+    justification = "Add dependencies inside the target app directory; do not add them to a root package.json.",
+    match = [
+        "pnpm add react",
+    ],
+)
+
+# npm install -> prompt
+prefix_rule(
+    pattern = ["npm", "install"],
+    decision = "prompt",
+    justification = "Run npm install inside the target app directory (apps/front, apps/back); do not hoist dependencies to the monorepo root.",
+    match = [
+        "npm install",
+        "npm install express",
+    ],
+    not_match = [
+        "npm test",
+        "npm run build",
+    ],
+)
+
+# npm i (short form of install) -> prompt
+prefix_rule(
+    pattern = ["npm", "i"],
+    decision = "prompt",
+    justification = "npm i is short for npm install; run it inside the target app directory, not the monorepo root.",
+    match = [
+        "npm i",
+        "npm i react",
+    ],
+)
+
+# yarn is not an allowed package manager.
+prefix_rule(
+    pattern = ["yarn"],
+    decision = "forbidden",
+    justification = "This harness allows only npm and pnpm. React/Express use npm; Next.js/NestJS use pnpm.",
+    match = [
+        "yarn",
+        "yarn install",
+        "yarn add react",
+    ],
+)
+
+# bun is not an allowed package manager.
+prefix_rule(
+    pattern = ["bun"],
+    decision = "forbidden",
+    justification = "This harness allows only npm and pnpm. React/Express use npm; Next.js/NestJS use pnpm.",
+    match = [
+        "bun install",
+        "bun add react",
+    ],
+)

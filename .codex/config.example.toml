@@ -1,0 +1,156 @@
+# 필요할 때 로컬 Codex 설정에 병합한다.
+#
+# Codex CLI는 기본적으로 $CODEX_HOME/config.toml을 읽는다.
+# 보통 $CODEX_HOME은 ~/.codex 이므로 실제 적용 파일은 ~/.codex/config.toml이다.
+# 이 저장소의 .codex/config.toml은 로컬 전용 파일이며 git에 올리지 않는다.
+
+# 옵션 역할 요약:
+#
+# model:
+#   기본으로 사용할 Codex 모델. 팀 표준 모델을 고정하고 싶을 때 둔다.
+# model_reasoning_effort:
+#   추론 예산. 코딩/리뷰 중심이면 high, 깊은 감사용 profile은 xhigh를 쓴다.
+# model_reasoning_summary:
+#   추론 요약 밀도. concise는 필요한 근거만 짧게 남긴다.
+# model_verbosity:
+#   일반 응답 길이. medium은 코드 작업 기본값으로 무난하다.
+# personality:
+#   응답 성향. pragmatic은 하네스의 간결한 엔지니어링 톤과 맞춘다.
+# approval_policy:
+#   명령 실행 승인 정책. on-request는 agent가 위험 작업에서 승인을 요청할 수 있게 한다.
+# sandbox_mode:
+#   파일/명령 sandbox 범위. workspace-write는 repo 안 수정은 허용하고 외부는 제한한다.
+# web_search:
+#   웹 검색 기본 정책. cached는 live web보다 안전하고, 최신성이 필요할 때만 --search를 쓴다.
+#
+# [features]
+# multi_agent:
+#   Codex subagent 도구(spawn/resume/wait/close)를 활성화한다. 최신 Codex는 기본 on이지만 명시한다.
+# apps:
+#   Google Calendar/Drive, Figma 같은 app connector 기능을 활성화한다.
+# hooks:
+#   Codex hook/plugin hook 런타임을 활성화한다.
+# shell_snapshot:
+#   shell 상태 snapshot 기능. 장기 작업에서 명령 환경 복원성을 높인다.
+# unified_exec:
+#   통합 exec 런타임. 하네스의 shell tool 사용과 맞춘다.
+# skill_mcp_dependency_install:
+#   skill이 필요한 MCP/app 의존성 설치 흐름을 활성화한다.
+#
+# [agents]
+# max_threads:
+#   동시에 실행할 수 있는 subagent 수 상한. 기본 6을 명시해 fan-out 폭주를 막는다.
+# max_depth:
+#   subagent가 다시 subagent를 spawn하는 깊이 상한. 1이면 메인 오케스트레이터만 직접 spawn한다.
+#
+# [apps._default]
+# enabled:
+#   app connector를 기본 활성화한다.
+# destructive_enabled:
+#   app connector의 삭제/파괴성 작업은 기본 비활성화한다.
+# open_world_enabled:
+#   외부 세계에 넓게 쓰는 작업은 기본 비활성화한다.
+# default_tools_approval_mode:
+#   app tool 승인 기본값. auto는 tool별 정책과 런타임 판단을 따른다.
+#
+# [shell_environment_policy]
+# inherit:
+#   shell에 넘길 환경변수 기본 범위. core는 최소 실행 환경만 상속한다.
+# exclude:
+#   KEY/SECRET/TOKEN/PASSWORD 계열 env가 shell로 흘러가지 않게 막는다.
+#
+# 네 로컬 ~/.codex/config.toml에 이미 [features]와 [agents.gsd-*]가 있다면:
+# - [features]는 새로 만들지 말고 기존 [features] 블록에 값을 합친다.
+# - [agents]는 [agents.gsd-*] 섹션들보다 위에 한 번만 둔다.
+# - [projects.*], [plugins.*], [tui.*], [agents.gsd-*] 섹션은 유지한다.
+
+# 하네스 기본 권장값: repo 안에서는 자율적으로 작업하되, 위험한 명령은 agent가
+# 명시적으로 승인을 요청할 수 있게 둔다. 더 자동화된 모드는 아래 profile 예시를 본다.
+model = "gpt-5.5"
+model_reasoning_effort = "high"
+model_reasoning_summary = "concise"
+model_verbosity = "medium"
+personality = "pragmatic"
+
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "cached"
+
+[features]
+multi_agent = true
+apps = true
+hooks = true
+shell_snapshot = true
+unified_exec = true
+skill_mcp_dependency_install = true
+
+[agents]
+max_threads = 6
+max_depth = 1
+
+[apps._default]
+enabled = true
+destructive_enabled = false
+open_world_enabled = false
+default_tools_approval_mode = "auto"
+
+[shell_environment_policy]
+inherit = "core"
+exclude = [
+  "*KEY*",
+  "*SECRET*",
+  "*TOKEN*",
+  "*PASSWORD*",
+  "INFISICAL_CLIENT_SECRET",
+]
+
+# 프로젝트 신뢰 설정은 사용자별 절대 경로를 포함하므로 로컬 설정에만 둔다.
+# [projects."/absolute/path/to/codi-harness-v2"]
+# trust_level = "trusted"
+
+# 반복 구현 작업에서 승인 질문을 줄이고 싶을 때는 기본 config를 바꾸기보다
+# 별도 profile을 둔다. 파일명은 ~/.codex/auto.config.toml 이고,
+# 실행은 `codex --profile auto` 또는 `./harness codex --profile auto`로 한다.
+#
+# ~/.codex/auto.config.toml 예시:
+#
+# approval_policy = "never"
+# sandbox_mode = "workspace-write"
+# model_reasoning_effort = "high"
+#
+# [agents]
+# max_threads = 6
+# max_depth = 1
+
+# 리뷰/감사용 profile은 읽기 전용 sandbox가 더 안전하다.
+#
+# ~/.codex/deep-review.config.toml 예시:
+#
+# model = "gpt-5.5"
+# model_reasoning_effort = "xhigh"
+# model_reasoning_summary = "detailed"
+# approval_policy = "on-request"
+# sandbox_mode = "read-only"
+#
+# [agents]
+# max_threads = 6
+# max_depth = 1
+
+# 팀 구성원은 Codex를 아래 명령으로 실행한다.
+#   ./harness codex
+#
+# 런처는 Codex 시작 전에 .harness/scripts/agent/agent-preflight.sh를 실행한다.
+# 여기에는 update-check, context-check, JSON config parsing, skill-injector smoke check가 포함된다.
+#
+# 공용 스킬은 .harness/skills에서 관리하고 .agents/skills를 통해 Codex에 노출한다.
+#
+# Phase routing은 안내용이며 Codex CLI가 강제하지 않는다. 새 Medium 이상 작업 전에는
+# 기존 .planning 상태를 먼저 확인한다.
+#   P1 strategy -> P2 GSD plan -> P3 execution discipline -> P4 review/QA -> P5 ship/complete
+# 자세한 내용은 AGENTS.md와 .harness/policies/scenario-phase-routing.md를 본다.
+#
+# 명령 실행 규칙은 .codex/rules/*.rules에 둔다.
+# 프로젝트가 trusted 상태이면 Codex가 자동으로 읽으므로 이 파일에 별도 활성화 키가 필요 없다.
+# .codex/rules/monorepo-packages.rules는 package install 계열 명령을 prompt로 표시해
+# 모노레포 루트 install이 확인을 거치도록 한다. 규칙 검증 예시는 아래와 같다.
+#   codex execpolicy check --pretty --rules .codex/rules/monorepo-packages.rules -- pnpm install

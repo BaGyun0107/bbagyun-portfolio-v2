@@ -1,0 +1,24 @@
+{
+  "name": "codi-harness-v2",
+  "private": true,
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "doctor": "./harness doctor",
+    "check": "npm test && ./harness doctor",
+    "init:project": "./harness init-project",
+    "install:harness": "./harness install",
+    "prepare": "husky",
+    "start": "npm run start:front",
+    "start:back": "npm --prefix apps/back start",
+    "start:front": "npm --prefix apps/front start",
+    "test": "node --test tests/*.test.mjs",
+    "workflow:check": ".harness/scripts/checks/workflow-check.sh",
+    "update:check": "./harness update --check"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
+  }
+}

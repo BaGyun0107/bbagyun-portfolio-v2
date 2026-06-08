@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "priority": [
+    "explicit_user_decision",
+    "permanent_deny",
+    "approval_required",
+    "project_profile_boundary",
+    "role_or_team_policy",
+    "package_manager_policy",
+    "tool_specific_ask_policy",
+    "default_least_privilege"
+  ],
+  "package_managers": {
+    "allowed": ["npm", "pnpm"],
+    "banned": ["yarn", "bun"],
+    "frontend": {
+      "react": "npm",
+      "next": "pnpm"
+    },
+    "backend": {
+      "express": "npm",
+      "nestjs": "pnpm"
+    },
+    "no_root_install": true,
+    "app_install_dirs": ["apps/front", "apps/back"]
+  },
+  "roles": {
+    "default": {
+      "allow": ["read", "edit", "bash:test", "bash:build"],
+      "ask": ["mcp:*", "production:*", "production_data:*", "secret:*", "external_side_effect:*"],
+      "deny": ["destructive:*", "history_rewrite:*"]
+    },
+    "frontend": {
+      "allow": ["read", "edit", "bash:test", "bash:build"],
+      "ask": ["mcp:design:*", "mcp:docs:*", "external_side_effect:*"],
+      "deny": ["mcp:database:write", "mcp:secret:write", "production:deploy", "production_data:raw"]
+    },
+    "backend": {
+      "allow": ["read", "edit", "bash:test", "bash:build", "mcp:database:read"],
+      "ask": ["mcp:database:write", "mcp:secret:read", "production:deploy", "production_data:*", "external_side_effect:*"],
+      "deny": ["mcp:database:drop", "mcp:secret:write"]
+    },
+    "security": {
+      "allow": ["read", "audit", "mcp:secret:metadata"],
+      "ask": ["mcp:secret:read", "mcp:database:read", "production_data:metadata"],
+      "deny": ["mcp:secret:write", "production:deploy", "production_data:raw", "external_side_effect:*"]
+    },
+    "admin": {
+      "allow": ["read", "edit", "bash:test", "bash:build", "mcp:*"],
+      "ask": [
+        "mcp:database:write",
+        "mcp:database:drop",
+        "production:*",
+        "production_data:*",
+        "external_side_effect:*",
+        "destructive:*",
+        "history_rewrite:*"
+      ],
+      "deny": []
+    }
+  }
+}

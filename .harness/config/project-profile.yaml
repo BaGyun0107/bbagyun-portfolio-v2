@@ -1,0 +1,64 @@
+# Project profile controls which app surfaces are allowed.
+#
+# Supported modes:
+# - split-front-back: apps/front + apps/back are both active.
+# - next-fullstack: apps/front owns UI and backend behavior through Next.js route
+#   handlers, server actions, and server components. apps/back must not be used.
+# - frontend-only: apps/front is the only active surface. apps/back must not be
+#   used and backend/API work requires a profile decision first.
+# - backend-only: apps/back is the only active surface. apps/front must not be
+#   used and frontend/UI work requires a profile decision first.
+#
+# Change this file deliberately during project initialization or architecture review.
+
+mode: split-front-back
+
+apps:
+  front:
+    path: apps/front
+    enabled: true
+    owns:
+      - ui
+      - frontend
+      - next
+  back:
+    path: apps/back
+    enabled: true
+    owns:
+      - api
+      - backend
+      - server
+
+rules:
+  split-front-back:
+    forbidden_paths: []
+    frontend_owner_skill: codi-frontend
+    backend_owner_skill: codi-backend
+    notes:
+      - apps/front owns UI, frontend integration, React, and Next.js UI work.
+      - apps/back owns API, backend, server, Express, and NestJS work.
+      - Use codi-frontend for frontend work and codi-backend for backend work.
+  next-fullstack:
+    forbidden_paths:
+      - apps/back/**
+    backend_owner_skill: codi-frontend
+    notes:
+      - Do not create files under apps/back.
+      - Do not use codi-backend for Next.js route handlers, server actions, or server components.
+      - Use codi-frontend for full-stack Next.js work unless the project profile changes.
+  frontend-only:
+    forbidden_paths:
+      - apps/back/**
+    backend_owner_skill: codi-frontend
+    notes:
+      - Do not create files under apps/back.
+      - This profile has no API/backend surface.
+      - Confirm a profile change before accepting backend work.
+  backend-only:
+    forbidden_paths:
+      - apps/front/**
+    backend_owner_skill: codi-backend
+    notes:
+      - Do not create files under apps/front.
+      - Use codi-backend for API, server, Express, and NestJS work.
+      - Confirm a profile change before accepting frontend work.

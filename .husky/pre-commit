@@ -1,0 +1,20 @@
+# harness 레포에서만 의미가 있는 단계. shared-manifest.json이 존재하는
+# 트리에서만(즉 이 레포 자체에서만) 동작하므로 다운스트림 프로젝트의
+# pre-commit에서는 자연히 no-op 가까이로 떨어진다.
+if [ -f .harness/scripts/setup/generate-manifest.mjs ] \
+  && [ -f .harness/shared-manifest.json ]; then
+  node .harness/scripts/setup/generate-manifest.mjs
+  if ! git diff --quiet -- .harness/shared-manifest.json 2>/dev/null; then
+    git add .harness/shared-manifest.json
+  fi
+fi
+
+# .harness/skills/ 또는 .harness/skills-local/ 아래 파일이 staged면 머지 트리를
+# 재생성한다. .claude/skills와 .agents/skills는 untracked이므로 이 단계는
+# 워킹 트리만 갱신하고, lint-staged에는 영향을 주지 않는다.
+if git diff --cached --name-only --diff-filter=ACMR \
+  | grep -E '^\.harness/skills(-local)?/' >/dev/null 2>&1; then
+  .harness/scripts/setup/skills-link.sh
+fi
+
+npx lint-staged
