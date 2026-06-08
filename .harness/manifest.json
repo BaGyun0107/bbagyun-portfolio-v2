@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "name": "codi-harness-v2",
+  "timezone": "Asia/Seoul",
+  "default_channel": "stable",
+  "prompt_style": ".harness/prompt-style/karpathy.md",
+  "context_engineering": {
+    "policy": ".harness/policies/context-engineering.md",
+    "codex_entrypoint": "AGENTS.md",
+    "claude_entrypoint": "CLAUDE.md",
+    "parity_check": "./harness context-check",
+    "source_of_truth": [
+      ".harness/policies",
+      ".harness/imported-rules",
+      ".harness/skills",
+      ".planning"
+    ]
+  },
+  "workflow": [
+    "brainstorming",
+    "planning",
+    "execution",
+    "review",
+    "verification"
+  ],
+  "orchestration": {
+    "model": "main-agent-orchestrates-fresh-phase-sessions",
+    "policy": ".harness/policies/orchestration-loop.md",
+    "profile_command": "./harness profile <list|show|set>",
+    "workflow_check_command": "./harness workflow-check",
+    "harness_apply_command": "./harness update --apply-harness",
+    "headless": {
+      "claude": "claude -p",
+      "codex": "./harness codex exec -C ."
+    }
+  },
+  "integrations": {
+    "gsd": {
+      "responsibility": "milestones, phase state, task boundaries, context continuity, verification",
+      "package": "@opengsd/get-shit-done-redux",
+      "bin": "get-shit-done-redux",
+      "repo": "https://github.com/open-gsd/get-shit-done-redux",
+      "install_mode": "npm-global + runtime skill deploy (--claude --codex)",
+      "profile": "standard",
+      "update_cadence": "weekly",
+      "update_mode": "check-only"
+    },
+    "gstack": {
+      "responsibility": "decision roles and review gates",
+      "repo": "https://github.com/garrytan/gstack.git",
+      "install_mode": "team",
+      "update_cadence": "daily",
+      "update_mode": "managed-latest"
+    },
+    "superpowers": {
+      "responsibility": "execution discipline and test-driven development",
+      "install_mode": "plugin-marketplace",
+      "claude_marketplace": "superpowers@claude-plugins-official",
+      "codex_marketplace": "github.com/openai/plugins",
+      "update_cadence": "weekly",
+      "update_mode": "manual"
+    }
+  },
+  "team_skills": {
+    "source_of_truth": ".harness/skills",
+    "codex": ".agents/skills",
+    "claude": ".claude/skills",
+    "enabled": [
+      "codi-phase-routing",
+      "karpathy-style",
+      "codi-backend",
+      "codi-frontend",
+      "codi-db",
+      "codi-dev-workflow",
+      "codi-dependency-review",
+      "init-project",
+      "nestjs-expert",
+      "skill-creator",
+      "team-mode-operator"
+    ],
+    "disabled_as_overlapping": [
+      "codi-architecture",
+      "codi-qa",
+      "codi-debug",
+      "codi-scm"
+    ]
+  },
+  "runtime": {
+    "version_manager": "mise",
+    "node": "24",
+    "package_manager": "npm"
+  },
+  "app_package_managers": {
+    "frontend": {
+      "react": "npm",
+      "next": "pnpm"
+    },
+    "backend": {
+      "express": "npm",
+      "nestjs": "pnpm"
+    },
+    "banned": [
+      "yarn",
+      "bun"
+    ],
+    "policy": ".harness/policies/tool-permissions.md"
+  },
+  "project_profile": {
+    "path": ".harness/config/project-profile.yaml",
+    "policy": ".harness/policies/project-profile.md",
+    "supported_modes": [
+      "split-front-back",
+      "next-fullstack",
+      "frontend-only",
+      "backend-only"
+    ]
+  }
+}

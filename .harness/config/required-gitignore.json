@@ -1,0 +1,5 @@
+{
+  "$schema": "../schemas/required-gitignore.schema.json",
+  "description": "Entries the harness guarantees are present in every downstream .gitignore. update.sh and init-project append missing entries idempotently. Project-owned .gitignore is otherwise never modified.",
+  "entries": []
+}

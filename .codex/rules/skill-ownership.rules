@@ -1,0 +1,37 @@
+# Codex execpolicy rules: skill ownership.
+#
+# The substantive policy is in .claude/rules/skill-ownership.md (mirrored from
+# this file's narrative). Codex execpolicy prefix_rule() can only match an
+# argument prefix — it cannot inspect a path argument like
+# `.harness/skills/my-skill` because that token is not itself a prefix of the
+# command. The directory placement rule is therefore enforced at the narrative
+# layer and by .harness/scripts/setup/skills-link.sh (which fails fast on a
+# name collision), not by prefix_rule().
+#
+# This file declares the allow-list bits that *can* be encoded as prefixes:
+# the routine harness commands related to skill management. Downstream writes
+# to .harness/skills/** remain forbidden by policy, while read-only inspection
+# and safe diffs are allowed. Codex execpolicy cannot encode that path-aware
+# split, so the rest is intentionally narrative and mirrored in
+# .harness/hooks/guardrails.mjs where hook enforcement is available.
+
+# Rebuilding the merged skill trees is routine and idempotent. Allow it
+# without confirmation.
+prefix_rule(
+    pattern = ["./harness", "skills-link"],
+    decision = "allow",
+    justification = "Rebuilding the .claude/skills and .agents/skills merged trees from .harness/skills and .harness/skills-local is safe and idempotent.",
+    match = [
+        "./harness skills-link",
+    ],
+)
+
+# Regenerating the shared manifest in the harness repo is routine.
+prefix_rule(
+    pattern = ["./harness", "manifest"],
+    decision = "allow",
+    justification = "Regenerating .harness/shared-manifest.json from git-tracked files is safe and idempotent.",
+    match = [
+        "./harness manifest",
+    ],
+)

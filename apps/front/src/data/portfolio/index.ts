@@ -60,7 +60,24 @@ const insightToDto = (i: SeedInsight): InsightDto => ({
   updatedAt: BUILD_TIME,
 });
 
-const FEATURES: FeatureDto[] = REAL_FEATURES.map(featureToDto);
+const getPeriodSortTime = (period?: string): number => {
+  if (!period) return 0;
+  if (/현재|진행|present|now/i.test(period)) return Number.MAX_SAFE_INTEGER;
+
+  const matches = Array.from(period.matchAll(/(\d{4})\.(\d{2})/g));
+  const latest = matches.at(-1);
+
+  if (!latest) return 0;
+
+  const year = Number(latest[1]);
+  const month = Number(latest[2]);
+
+  return year * 100 + month;
+};
+
+const FEATURES: FeatureDto[] = REAL_FEATURES
+  .map(featureToDto)
+  .sort((a, b) => getPeriodSortTime(b.period) - getPeriodSortTime(a.period));
 const STUDIES: StudyDto[] = REAL_STUDIES.map(studyToDto);
 const INSIGHTS: InsightDto[] = REAL_INSIGHTS
   .map(insightToDto)

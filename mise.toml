@@ -1,0 +1,21 @@
+[tools]
+node = "24"
+
+[env]
+npm_config_engine_strict = "true"
+
+[tasks.doctor]
+description = "Verify the harness structure and local toolchain"
+run = "./harness doctor"
+
+[tasks.install]
+description = "Install or refresh harness integrations"
+run = "./harness install"
+
+[tasks.update-check]
+description = "Run date-based harness update checks"
+run = "./harness update-check"
+
+[tasks.update]
+description = "Check harness dependency updates"
+run = "./harness update --check"

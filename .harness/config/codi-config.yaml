@@ -1,0 +1,54 @@
+language: ko
+runtime:
+  node: "24"
+  package_manager: npm
+  version_manager: mise
+
+app_package_managers:
+  frontend:
+    react: npm
+    next: pnpm
+  backend:
+    express: npm
+    nestjs: pnpm
+  banned:
+    - yarn
+    - bun
+
+project_profile:
+  path: .harness/config/project-profile.yaml
+  default_mode: split-front-back
+
+skills:
+  source_of_truth: .harness/skills
+  codex_path: .agents/skills
+  claude_path: .claude/skills
+
+enabled_skills:
+  - codi-phase-routing
+  - karpathy-style
+  - codi-backend
+  - codi-frontend
+  - codi-db
+  - codi-dev-workflow
+  - codi-dependency-review
+  - init-project
+  - nestjs-expert
+  - skill-creator
+  - team-mode-operator
+
+disabled_as_overlapping:
+  - codi-architecture
+  - codi-qa
+  - codi-debug
+  - codi-scm
+
+notes:
+  - Codi phase routing maps work to external GSD, GStack, and Superpowers tools.
+  - Existing .planning state is checked before opening new Medium or larger work.
+  - GStack owns role review and decision gates.
+  - Superpowers owns TDD and execution discipline.
+  - GSD owns milestones, phase state, and .planning context continuity.
+  - Karpathy-style owns prompt shape and phase handoff clarity.
+  - Team-mode-operator owns cmux/tmux role-pane operating rules.
+  - Codi skills only provide stack-specific implementation guidance.
