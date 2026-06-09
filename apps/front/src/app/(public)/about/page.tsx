@@ -59,7 +59,7 @@ export default function AboutPage() {
                 저의 역할은 주어진 기획을 그대로 코드로 옮기는 데서 끝나지 않는다고 생각합니다. 고객의 요구사항을 분석하는 과정에서 구현 복잡도나 운영 리스크가 보이면, 본래의 목적을 해치지 않는 범위에서 더 단순하고 안전한 대안을 제안하려고 합니다. 개발자의 시선에만 갇히지 않고 고객, 기획자, 동료와 대화하며 현실적인 합의점을 찾는 것을 중요하게 생각합니다.
                 <br /><br />
                 <span className="font-bold">[운영을 고려한 구조 설계]</span><br />
-                당장의 기능 동작에만 만족하지 않습니다. 예약 상태와 결제 상태를 분리하고, 정산 스케줄러에 재시도 가능한 흐름을 두고, 인증 서버와 개별 서비스의 책임을 나누는 것처럼 운영 중 문제가 생겼을 때 추적하고 복구할 수 있는 구조를 중요하게 봅니다. 최근에는 Jenkins 기반 배포 환경을 GitHub Actions와 Infisical 중심의 사내 하네스로 전환하며, 팀이 반복해서 사용할 수 있는 개발·배포 기준도 함께 정리했습니다.
+                당장의 기능 동작보다 운영 중 문제가 드러나는 지점을 먼저 생각합니다. 장애가 발생했을 때 원인을 추적할 수 있는지, 실패한 작업을 다시 처리할 수 있는지, 환경변수와 배포 권한이 명확히 분리되어 있는지 같은 기준을 설계 초기에 확인하려고 합니다. 최근에는 배포와 환경 관리가 개인의 기억에 의존하지 않도록 사내 하네스를 만들며, 팀이 같은 기준으로 개발·배포할 수 있는 흐름을 정리했습니다.
                 <br/><br/>
                 제가 작성한 코드와 설계 방향에 책임을 갖고, 제품이 안정적으로 운영될 수 있는 구조를 만드는 개발자가 되고자 합니다.
               </p>
@@ -133,11 +133,11 @@ export default function AboutPage() {
                   
                   <div className="space-y-4">
                     <p className="text-sm text-foreground leading-relaxed">
-                      호텔·골프·리조트 예약 플랫폼과 B2B 화훼 유통 시스템의 풀스택 개발을 담당하고 있습니다. 백엔드 1인 개발자로 7개 프로젝트의 서버 아키텍처를 설계하고 운영했습니다.
+                      백엔드 개발을 주도하고, 필요한 경우 프론트엔드와 운영 도구까지 함께 구현했습니다. 1인 백엔드 개발자로 여러 프로젝트의 서버 구조, 외부 연동, 배포·운영 흐름을 설계하고 개선했습니다.
                     </p>
                     <ul className="text-sm text-muted-foreground space-y-3 list-disc pl-5">
                       <li className="pl-1">7개 프로젝트 <strong className="text-foreground">백엔드 개발 주도</strong>, 일부 프로젝트에서 PM/PL을 겸임하며 요구사항 정의부터 배포·운영까지 수행</li>
-                      <li className="pl-1">NestJS 기반 <strong className="text-foreground">SSO 통합 인증 서버 단독 설계·구축</strong> (4개 서비스 연동)</li>
+                      <li className="pl-1">NestJS 기반 <strong className="text-foreground">SSO 통합 인증 서버 단독 설계·구축</strong>, 초기 서비스 연동까지 적용</li>
                       <li className="pl-1">PG 연동(토스, 나이스페이) 결제·정산 시스템 설계, <strong className="text-foreground">운영 중 확인된 결제·정산 데이터 불일치 0건</strong></li>
                       <li className="pl-1">MySQL FULLTEXT 기반 검색 최적화로 응답 시간 <strong className="text-foreground">1500ms → 400ms</strong> 개선, 파일 기반 로깅 구조 개선으로 I/O 약 95% 감소</li>
                       <li className="pl-1">Jenkins 기반 배포 환경을 <strong className="text-foreground">GitHub Actions·Infisical 중심의 사내 DX 하네스</strong>로 전환</li>
