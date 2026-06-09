@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { Github } from "lucide-react";
 import Link from "next/link";
 
 export default function AboutPage() {
@@ -53,15 +53,15 @@ export default function AboutPage() {
                 방향을 정하고 깊이를 더하는 개발자, 박윤신입니다.
               </p>
               <p className="text-lg text-muted-foreground">
-                프론트엔드와 백엔드를 아우르며, 비즈니스의 요구를 안정적인 시스템으로 구현해 온 {Math.max(1, new Date().getFullYear() - 2023)}+년 차 풀스택 개발자입니다. Node.js와 NestJS를 활용한 백엔드 설계부터 React 기반의 사용자 경험 최적화까지, 시스템 전체의 흐름을 이해하고 다루는 데 강점이 있습니다.
+                예약, 결제, 정산, 인증처럼 데이터 정합성과 운영 안정성이 중요한 기능을 주로 설계해 온 {Math.max(1, new Date().getFullYear() - 2023)}+년 차 백엔드 중심 풀스택 개발자입니다. Node.js와 NestJS 기반의 서버 설계부터 React 기반 화면 구현까지 경험했지만, 강점은 시스템 전체 흐름을 이해하고 안정적으로 운영될 수 있는 구조를 만드는 데 있습니다.
                 <br/><br/>
-                <span className="font-bold">[구현자를 넘어선 비즈니스 파트너]</span><br />
-                저의 역할은 주어진 기획을 코드로 번역하는 것에 국한되지 않습니다. 고객의 요구사항을 분석할 때 구현이 어려운 병목 지점이 발견되면, 이를 우회하면서도 본래의 비즈니스 목적을 달성할 수 있는 더 나은 대안을 먼저 제시합니다. 개발자의 시선에 갇히지 않고, 고객 및 동료들과 유연하게 소통하며 최적의 합의점을 찾아냅니다.
+                <span className="font-bold">[요구사항의 목적을 함께 보는 개발자]</span><br />
+                저의 역할은 주어진 기획을 그대로 코드로 옮기는 데서 끝나지 않는다고 생각합니다. 고객의 요구사항을 분석하는 과정에서 구현 복잡도나 운영 리스크가 보이면, 본래의 목적을 해치지 않는 범위에서 더 단순하고 안전한 대안을 제안하려고 합니다. 개발자의 시선에만 갇히지 않고 고객, 기획자, 동료와 대화하며 현실적인 합의점을 찾는 것을 중요하게 생각합니다.
                 <br /><br />
-                <span className="font-bold">[확장성을 고려한 유연한 설계]</span><br />
-                당장의 기능 동작에만 만족하지 않습니다. 현재 작성하는 코드가 훗날 기술 부채가 되지 않도록 재사용성을 항상 염두에 둡니다. 새로운 기능 요구가 들어오더라도 기존 시스템에 자연스럽게 녹아들 수 있도록, 유연하고 확장성 있는 아키텍처를 구성하는 것을 중요하게 생각합니다.
+                <span className="font-bold">[운영을 고려한 구조 설계]</span><br />
+                당장의 기능 동작에만 만족하지 않습니다. 예약 상태와 결제 상태를 분리하고, 정산 스케줄러에 재시도 가능한 흐름을 두고, 인증 서버와 개별 서비스의 책임을 나누는 것처럼 운영 중 문제가 생겼을 때 추적하고 복구할 수 있는 구조를 중요하게 봅니다. 최근에는 Jenkins 기반 배포 환경을 GitHub Actions와 Infisical 중심의 사내 하네스로 전환하며, 팀이 반복해서 사용할 수 있는 개발·배포 기준도 함께 정리했습니다.
                 <br/><br/>
-                제가 작성한 코드와 설계 방향에 대해 끝까지 책임지는 태도로, 팀과 서비스가 함께 성장하는 데 기여하는 든든한 엔지니어가 되겠습니다.
+                제가 작성한 코드와 설계 방향에 책임을 갖고, 제품이 안정적으로 운영될 수 있는 구조를 만드는 개발자가 되고자 합니다.
               </p>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default function AboutPage() {
               <div className="space-y-3">
                 <h3 className="font-medium text-sm text-muted-foreground border-b pb-1">DevOps & Tools</h3>
                 <div className="flex flex-wrap gap-2">
-                  {["Jenkins", "GitHub Actions", "PM2", "Socket.io"].map(skill => (
+                  {["Jenkins", "GitHub Actions", "Infisical", "PM2", "Docker", "Vercel", "Socket.io"].map(skill => (
                     <Badge key={skill} variant="secondary" className="px-2.5 py-0.5 text-xs font-normal">{skill}</Badge>
                   ))}
                 </div>
@@ -136,11 +136,11 @@ export default function AboutPage() {
                       호텔·골프·리조트 예약 플랫폼과 B2B 화훼 유통 시스템의 풀스택 개발을 담당하고 있습니다. 백엔드 1인 개발자로 7개 프로젝트의 서버 아키텍처를 설계하고 운영했습니다.
                     </p>
                     <ul className="text-sm text-muted-foreground space-y-3 list-disc pl-5">
-                      <li className="pl-1">7개 프로젝트 <strong className="text-foreground">PM/PL 겸임</strong>, 고객사 요구사항 정의부터 배포·운영까지 전 과정 수행</li>
+                      <li className="pl-1">7개 프로젝트 <strong className="text-foreground">백엔드 개발 주도</strong>, 일부 프로젝트에서 PM/PL을 겸임하며 요구사항 정의부터 배포·운영까지 수행</li>
                       <li className="pl-1">NestJS 기반 <strong className="text-foreground">SSO 통합 인증 서버 단독 설계·구축</strong> (4개 서비스 연동)</li>
-                      <li className="pl-1">PG 연동(토스, 나이스페이) 결제·정산 시스템 설계, <strong className="text-foreground">금융 데이터 불일치 0건</strong></li>
-                      <li className="pl-1">검색 최적화 <strong className="text-foreground">1500ms → 400ms (73% 개선)</strong>, 로깅 I/O 95% 감소 등 성능 개선</li>
-                      <li className="pl-1">Jenkins / GitHub Actions 기반 <strong className="text-foreground">CI/CD 구축</strong> 및 배포 자동화</li>
+                      <li className="pl-1">PG 연동(토스, 나이스페이) 결제·정산 시스템 설계, <strong className="text-foreground">운영 중 확인된 결제·정산 데이터 불일치 0건</strong></li>
+                      <li className="pl-1">MySQL FULLTEXT 기반 검색 최적화로 응답 시간 <strong className="text-foreground">1500ms → 400ms</strong> 개선, 파일 기반 로깅 구조 개선으로 I/O 약 95% 감소</li>
+                      <li className="pl-1">Jenkins 기반 배포 환경을 <strong className="text-foreground">GitHub Actions·Infisical 중심의 사내 DX 하네스</strong>로 전환</li>
                     </ul>
                   </div>
                 </CardContent>
