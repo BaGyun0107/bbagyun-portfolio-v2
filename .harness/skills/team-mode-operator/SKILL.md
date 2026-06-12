@@ -102,6 +102,10 @@ For broad parallel implementation, prefer worktree isolation. A useful pattern:
 Never let multiple agent panes edit the same files in the same checkout unless
 the orchestrator has explicitly serialized the work.
 
+## References
+
+- Transient pane file-exchange protocol (task board / progress / result files): `resources/memory-protocol.md` — durable state stays in GSD `.planning/`.
+
 ## cmux Practices
 
 - Use cmux status/log/notification commands for team readiness and long-running

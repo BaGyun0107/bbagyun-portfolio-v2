@@ -8,46 +8,11 @@ workspace they produce.
 Users do not need to name GSD, GStack, or Superpowers in every prompt. Route to
 the smallest useful tool set according to phase, task size, and risk.
 
-| Framework | Owns |
-| --- | --- |
-| GStack | strategy, role review, security, QA, release decision gates |
-| GSD | project structure, milestones, phase state, verification records, retroactive validation gaps, `.planning/` |
-| Superpowers | implementation method, TDD, debugging, verification discipline |
+## Work Size and Phase Routing
 
-## Work Size Routing
-
-Size controls routing, not elapsed time or raw file count. Use the detailed
-criteria in `.harness/policies/scenario-phase-routing.md` as the source of
-truth.
-
-| Size | Criteria | Default handling |
-| --- | --- | --- |
-| Small | Fixed direction, obvious target, localized edit, low blast radius, easy rollback, and direct verification | Handle directly |
-| Medium | Any point where the agent must decide what to inspect, what to change, or how to verify it, even in one file | Use the matching phase and record the decision where the external tool expects it |
-| Large | Medium plus multiple phases, ownership boundaries, role gates, handoff, user workflow/API impact, or cross-cutting changes | Use GSD phase commands and the relevant GStack gate |
-| Extra large or risky | Production, deploy/rollback, CI/CD, infrastructure, database/data movement, auth, payments, permissions, security, secrets, privacy, destructive operations, or hard-to-reverse work | Use the full Triple Crown flow with checkpoints |
-
-Raw file count, keyword matching, and user-provided size labels are not binding
-signals. If a Small task reveals a decision point or higher risk, stop and
-escalate.
-
-## Triple Crown Phase Flow
-
-Before new Medium or larger work, check existing `.planning/` with
-`gsd-progress` or `gsd-manager`. Continue active, paused, or checkpointed GSD
-work before opening unrelated work unless the user redirects.
-
-| Phase | Intent |
-| --- | --- |
-| Phase 1: Strategy | GStack `cso` as the default non-trivial security gate; other decision gates and Superpowers brainstorming when needed |
-| Phase 2: Project and plan | GSD codebase mapping, milestone setup, discussion, and phase planning |
-| Phase 3: Execution | GSD phase execution plus Superpowers TDD, debugging, plan execution, or parallel-agent discipline |
-| Phase 4: Review and verification | GSD code review and verification plus GStack review, QA, design/DX/performance gates as needed |
-| Phase 5: Ship and completion | GStack `ship` release gate plus GSD milestone audit, summary, and completion; use GSD `gsd-ship` first only when PR prep should come from GSD state |
-
-Do not run every framework by default. Use only the phases and gates that match
-the current risk. The detailed routing source of truth is
-`.harness/policies/scenario-phase-routing.md`.
+Framework ownership, the P1-P5 phase map, size criteria, scenario defaults, and
+the phase handoff contract live in `.harness/policies/scenario-phase-routing.md`
+and `.harness/policies/agent-routing.md`. Use those files as the source of truth.
 
 ## Codex Boundary
 

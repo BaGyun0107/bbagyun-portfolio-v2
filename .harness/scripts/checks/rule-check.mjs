@@ -24,12 +24,14 @@ function listFiles(dir, suffix) {
   if (!existsSync(fullDir)) return [];
 
   return readdirSync(fullDir)
-    .filter((name) => {
-      const fullPath = join(fullDir, name);
-      return statSync(fullPath).isFile() && name.endsWith(suffix);
-    })
     .sort()
-    .map((name) => `${dir}/${name}`);
+    .flatMap((name) => {
+      const fullPath = join(fullDir, name);
+      if (statSync(fullPath).isDirectory()) {
+        return listFiles(`${dir}/${name}`, suffix);
+      }
+      return name.endsWith(suffix) ? [`${dir}/${name}`] : [];
+    });
 }
 
 function policyCorpus() {
@@ -62,14 +64,31 @@ function requireDoctor(path, doctor) {
   }
 }
 
+function requireResolvableRuleRefs(path) {
+  const body = read(path);
+  for (const match of body.match(/\.claude\/rules\/[\w./-]+/g) ?? []) {
+    const target = match.replace(/[.,:;]+$/, "");
+    if (!existsSync(join(root, target))) {
+      fail(`${path} reference ${target} must resolve to an existing path`);
+    }
+  }
+}
+
 const claudeRules = listFiles(".claude/rules", ".md");
+const claudeTopLevelRules = claudeRules.filter(
+  (path) => !path.slice(".claude/rules/".length).includes("/"),
+);
 const codexRules = listFiles(".codex/rules", ".rules");
 const docs = policyCorpus();
 const doctor = read(".harness/scripts/checks/doctor.sh");
 
-for (const path of claudeRules) {
+for (const path of claudeTopLevelRules) {
   requireReferenced(path, docs);
   requireDoctor(path, doctor);
+}
+
+for (const path of claudeRules) {
+  requireResolvableRuleRefs(path);
 }
 
 for (const path of codexRules) {
@@ -85,7 +104,9 @@ for (const path of codexRules) {
   }
 }
 
-const claudeBases = new Set(claudeRules.map((path) => baseName(path, ".md")));
+const claudeBases = new Set(
+  claudeTopLevelRules.map((path) => baseName(path, ".md")),
+);
 for (const path of codexRules) {
   const base = baseName(path, ".rules");
   if (!claudeBases.has(base)) {

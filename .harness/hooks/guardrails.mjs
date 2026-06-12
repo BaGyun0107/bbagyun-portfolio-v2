@@ -947,6 +947,113 @@ if (
   process.exit(0);
 }
 
+// 명령줄에 위험 문구가 "검색 인자"나 "방출 텍스트"로만 들어간 경우를
+// 실제 위험 실행과 구분한다. 위험 검사 테이블은 평면 정규식이라 위치를
+// 모르므로, 텍스트 전용 도구(grep/echo/git log/gh pr create 등)에 한해
+// 따옴표 안 리터럴을 비운 뒤 검사한다. 실행기(psql/sh/docker 등)는
+// 절대 면제하지 않아 미탐(FN)이 생기지 않는다.
+
+// 따옴표(작은/큰) 안 내용만 공백으로 비운다. $(...) 등 따옴표 밖
+// substitution 은 그대로 남겨 위험 검사가 계속 보게 한다.
+function blankQuotedLiterals(simpleCommand) {
+  let out = "";
+  let i = 0;
+  let quote = null;
+  while (i < simpleCommand.length) {
+    const c = simpleCommand[i];
+    const next = simpleCommand[i + 1];
+    if (quote) {
+      if (c === "\\" && next && quote === '"') {
+        out += "  ";
+        i += 2;
+        continue;
+      }
+      if (c === quote) {
+        out += c;
+        quote = null;
+        i += 1;
+        continue;
+      }
+      // 따옴표 안 한 글자를 공백으로 치환해 위험 substring 을 지운다.
+      out += " ";
+      i += 1;
+      continue;
+    }
+    if (c === "'" || c === '"') {
+      quote = c;
+      out += c;
+      i += 1;
+      continue;
+    }
+    out += c;
+    i += 1;
+  }
+  return out;
+}
+
+// 따옴표 안 텍스트를 위험 검사에서 면제해도 안전한 "텍스트 전용" 도구인지.
+// grep 계열·검색·방출 도구와, 부작용 없는 git/gh 읽기 서브커맨드만 해당.
+const TEXT_ONLY_TOOLS = new Set([
+  "grep",
+  "egrep",
+  "fgrep",
+  "rg",
+  "ag",
+  "ack",
+  "echo",
+  "printf",
+  "cat",
+  "head",
+  "tail",
+  "less",
+  "more",
+]);
+
+const GIT_READONLY_SUBCMDS = new Set([
+  "log",
+  "show",
+  "diff",
+  "blame",
+  "grep",
+  "shortlog",
+]);
+
+// gh pr 의 부작용 없는 서브커맨드. merge 는 절대 포함하지 않는다.
+const GH_PR_SAFE_SUBCMDS = new Set([
+  "create",
+  "edit",
+  "view",
+  "list",
+  "diff",
+  "checkout",
+  "comment",
+  "ready",
+  "status",
+]);
+
+function isTextOnlySimpleCommand(simpleCommand) {
+  const tool = firstToken(simpleCommand);
+  if (!tool) return false;
+  if (TEXT_ONLY_TOOLS.has(tool)) return true;
+  const words = commandWords(simpleCommand);
+  if (tool === "git" && GIT_READONLY_SUBCMDS.has(words[1])) return true;
+  // gh pr <safe-subcmd> 는 본문/제목 텍스트만 다루므로 면제. merge 는 제외.
+  if (tool === "gh" && words[1] === "pr" && GH_PR_SAFE_SUBCMDS.has(words[2])) {
+    return true;
+  }
+  return false;
+}
+
+// 위험 검사 대상 명령에서, 텍스트 전용 simple command 의 따옴표 리터럴만
+// 비워 위험 검사용 문자열을 만든다. 그 외 simple command 는 원문 유지.
+function dangerScanTarget(command) {
+  const simples = splitSimpleCommands(command);
+  if (simples.length === 0) return command;
+  return simples
+    .map((s) => (isTextOnlySimpleCommand(s) ? blankQuotedLiterals(s) : s))
+    .join(" ; ");
+}
+
 const checks = [
   {
     pattern: /\brm\s+-[^\n;|&]*r[^\n;|&]*f\b|\brm\s+-[^\n;|&]*f[^\n;|&]*r\b/,
@@ -1010,7 +1117,16 @@ const checks = [
   },
 ];
 
-const hit = checks.find((check) => check.pattern.test(command));
+// 위치 인식 대상: 텍스트 전용 명령의 따옴표 리터럴은 비운다.
+const positionAwareTarget = dangerScanTarget(command);
+// 따옴표 안에 숨은 substitution($(...)·`...`)은 비워질 수 있으므로,
+// 모든 substitution body 를 원문 그대로 따로 검사해 미탐을 막는다.
+const substitutionBodies = extractSubstitutionBodies(command);
+const dangerTargets = [positionAwareTarget, ...substitutionBodies];
+
+const hit = checks.find((check) =>
+  dangerTargets.some((target) => check.pattern.test(target)),
+);
 if (hit) {
   block(
     `Guardrails blocked ${hit.label}. Ask the user for explicit approval before running this command. Do not bypass this guard.`,

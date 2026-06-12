@@ -62,42 +62,34 @@ Use Superpowers for execution discipline:
 TDD can be exempted for documentation-only, comments-only, mechanical
 formatting, or pure configuration scaffold work.
 
-## Phase Defaults
+## Phase and Size Defaults
 
-Use `.harness/policies/scenario-phase-routing.md` as the detailed source of
-truth. In short:
+Check existing `.planning/` with `gsd-progress` or `gsd-manager` before new
+Medium or larger work. Map the External Tools above onto the phase flow (P1
+Strategy, P2 Project and plan, P3 Execution, P4 Review and verification, P5 Ship
+and completion) and onto the size flow (Small, Medium, Large, Extra large or
+risky), using the smallest useful set for the actual risk.
 
-- Check existing `.planning/` with `gsd-progress` or `gsd-manager` before new
-  Medium or larger work.
-- P1 Strategy: GStack `cso` as the default security gate for non-trivial work,
-  with other decision gates and Superpowers brainstorming when needed.
-- P2 Project and plan: GSD mapping, milestone, discussion, and phase planning.
-- P3 Execution: GSD execution plus Superpowers TDD/debugging/plan execution.
-- P4 Review and verification: GSD review/verification plus GStack review and QA;
-  use `gsd-validate-phase` only for retroactive validation gaps.
-- P5 Ship and completion: GStack `ship` is the release-readiness gate; use GSD
-  `gsd-ship` first only when PR prep should come from GSD phase state.
+The full P1-P5 phase map, scenario defaults, size criteria, and decision rules
+live only in `.harness/policies/scenario-phase-routing.md`. Use it as the
+source of truth. Raw file count, keyword matching, and user-provided size
+labels are not binding signals; escalate immediately when new information
+raises risk.
 
-## Size Defaults
+## Handoff Contract
 
-| Size | Route |
-| --- | --- |
-| Small | Direct handling |
-| Medium | Matching phase with the smallest useful external tool set |
-| Large | GSD phases plus needed GStack gates plus Superpowers execution |
-| Extra large or risky | Full Triple Crown flow |
+Every substantial phase handoff should include:
 
-Small requires fixed direction, an obvious target, localized edits, low blast
-radius, easy rollback, and direct verification. Medium begins as soon as the
-agent must decide what to inspect, what to change, or how to verify it. Large
-adds multiple ownership boundaries, phases, role gates, handoff, or user/API
-impact. Extra large or risky covers production, deploy/rollback, CI/CD,
-infrastructure, database/data movement, auth, permissions, payments, security,
-secrets, privacy, destructive operations, or hard-to-reverse work.
-
-Raw file count, keyword matching, and user-provided size labels are not binding
-signals. Escalate immediately when new information raises risk. Use
-`.harness/policies/scenario-phase-routing.md` for the full decision rules.
+```text
+Phase:
+Status:
+.planning state updated:
+Files changed:
+Commands run:
+Decisions made:
+Next phase recommendation:
+Residual risk:
+```
 
 ## Team Skills
 

@@ -87,6 +87,37 @@ can be Small if it is generated, reversible, and directly verifiable. If a
 Small task exposes a decision point, stop, declare Medium, and route
 accordingly.
 
+### Boundary rules for inferred risk
+
+The explicit keyword surfaces in the Extra-large row (production, deploy, auth,
+payments, database schema, secrets, security) are unambiguous: when the scenario
+names them, route Extra large or risky. The rules below resolve the cases where
+risk must be *inferred* rather than read from the scenario text.
+
+- External infrastructure or storage integration (object storage, S3, a managed
+  queue, a CDN, a third-party API): Extra large or risky **only when** it
+  introduces a new secret/credential or a new production deployment path.
+  Reusing an already-provisioned credential and an existing deployment path
+  makes a multi-subsystem feature Large, not Extra large. Worked example: a file
+  upload that stores to an existing, already-credentialed bucket and touches
+  front and back is Large; the same feature that provisions a brand-new bucket
+  and its access keys is Extra large or risky.
+- Untrusted external input that the feature must accept and process (file or
+  image uploads, multipart bodies, webhooks from outside): this is a security
+  surface in itself, so the work is at least Large. It becomes Extra large or
+  risky when combined with auth, payments, or persistence of the untrusted data
+  into production storage.
+- Blast radius is measured by contract change, not by the number of consuming
+  files. Changing a value in a shared package (design tokens, a shared util)
+  stays Medium when only the rendered/produced value changes and rollback is a
+  one-line revert; it becomes Large when the change alters a contract or
+  behavioral meaning (a component API, a token's semantic role, an exported
+  signature) that consumers depend on.
+- "Need to inspect before deciding makes it at least Medium" has one carved-out
+  exception: a dependency bump that is lockfile-only, already green on CI, and
+  reverts by restoring the lockfile may stay Small. Major-version bumps, runtime
+  or engine changes, and security patches are at least Medium regardless.
+
 ## Automation Boundary
 
 - Claude Code: `.claude/settings.json` runs the skill injector hook on every

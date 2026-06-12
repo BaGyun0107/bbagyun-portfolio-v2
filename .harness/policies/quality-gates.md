@@ -7,6 +7,11 @@ Before execution:
 - Main risks are recorded.
 - GStack gate has been used when product, architecture, UX, security, or release risk is non-trivial.
 
+During execution:
+
+- After 2+ redo rounds on the same task, stop and re-confirm scope with the
+  user before attempting again.
+
 Before review:
 
 - Tests or checks have been run locally where possible.

@@ -20,26 +20,14 @@ Before opening new Medium or larger work, inspect existing `.planning/` with
 GSD progress/manager workflows. Continue active, paused, or checkpointed work
 before starting unrelated work unless the user explicitly redirects.
 
-| Phase | Tool flow |
-| --- | --- |
-| Phase 1: Strategy | GStack decision gates: `cso` as the default non-trivial security gate, optional `office-hours`, `autoplan`, and plan review skills as needed; Superpowers `brainstorming` for creative or ambiguous work |
-| Phase 2: Project and plan | GSD: `gsd-map-codebase`, `gsd-new-project`, `gsd-new-milestone`, `gsd-discuss-phase`, `gsd-plan-phase`; Superpowers `writing-plans` only when a separate implementation plan is useful |
-| Phase 3: Execution | GSD: `gsd-execute-phase`, `gsd-progress --next`, `gsd-resume-work`; Superpowers: `test-driven-development`, `systematic-debugging`, `executing-plans`, and parallel-agent skills as needed |
-| Phase 4: Review and verification | GSD: `gsd-code-review`, `gsd-verify-work`, and `gsd-validate-phase` only for retroactive validation gaps; GStack: `review`, `qa`, `qa-only`, plus design/DX/perf gates as needed; Superpowers review and verification skills |
-| Phase 5: Ship and completion | GStack: `ship` as the release gate; GSD: `gsd-ship` only when PR prep should come from GSD phase state, then `gsd-audit-milestone`, `gsd-complete-milestone`, `gsd-milestone-summary`; Superpowers `finishing-a-development-branch` |
+The full P1-P5 phase map and the Small/Medium/Large/Extra-large size criteria
+live only in `.harness/policies/scenario-phase-routing.md`. Use it as the
+source of truth.
 
 ## Routing Rules
 
 - Use the smallest phase/tool set that controls the actual risk.
 - Treat size as a routing decision, not a time estimate or file-count estimate.
-- Small requires fixed direction, an obvious target, localized edits, easy
-  rollback, low blast radius, and direct verification.
-- Medium begins when the agent must decide what to inspect, change, or verify.
-- Large adds multiple ownership boundaries, phases, role gates, handoff, or
-  user/API impact.
-- Extra large or risky covers production, deploy/rollback, CI/CD,
-  infrastructure, database/data movement, auth, permissions, payments, security,
-  secrets, privacy, destructive operations, or hard-to-reverse work.
 - Do not call every framework by default.
 - Use GStack for strategy, architecture, security, QA, and release gates.
 - Use GSD for milestones, phase plans, execution state, validation, and `.planning/`.

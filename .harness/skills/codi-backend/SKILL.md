@@ -7,46 +7,11 @@ description: TypeScript backend specialist for project-detected Node.js runtimes
 
 ## Scheduling
 
-### Goal
-Implement or review TypeScript backend APIs, authentication, database integration, server-side business logic, and migrations using the target project's Node.js runtime, Express or NestJS, and existing architecture boundaries.
-
-### Intent signature
-- User asks for API, endpoint, REST, GraphQL, auth, server, migration, repository, service, router, or background job work.
-- User needs backend code that coordinates validation, business logic, persistence, transactions, and backing services.
-
-### When to use
-- Building REST APIs or GraphQL endpoints
-- Database design and migrations
-- Authentication and authorization
-- Server-side business logic
-- Background jobs and queues
-
-### When NOT to use
-- Frontend UI -> use Frontend Agent
-- Mobile-specific code -> use Mobile Agent
-
-### Expected inputs
-- Target feature, endpoint, migration, auth flow, or server behavior
-- Existing backend stack files such as manifests, routes, services, models, and database config
-- API contracts, schemas, validation rules, and persistence requirements
-- Required verification commands or project conventions
-
-### Expected outputs
-- Backend code changes in router, service, repository, model, migration, or test files
-- Validated inputs, safe queries, transaction boundaries, and error handling
-- Verification results from the execution checklist
-
-### Dependencies
-- Project stack manifests and existing backend conventions
-- `resources/execution-protocol.md`, `resources/checklist.md`, and `resources/orm-reference.md`
-- Optional `stack/stack.yaml`, `stack/tech-stack.md`, snippets, and API templates
-- Database, queue, cache, mail, auth, or external API resources configured through environment or secret managers
-
-### Control-flow features
-- Branches by detected stack, ORM/query pattern, auth requirement, migration impact, and transaction scope
-- Reads and writes codebase files
-- May touch local database migrations or generated code
-- Must not hardcode secrets or share unsafe ORM lifecycle objects across concurrent work
+- **When to use**: REST/GraphQL APIs, database design and migrations, auth, server-side business logic, background jobs/queues.
+- **When NOT to use**: frontend UI -> Frontend Agent; mobile-specific code -> Mobile Agent.
+- **Inputs**: target feature/endpoint/migration/auth flow, existing backend stack files (manifests, routes, services, models, db config), API contracts/schemas/validation rules, verification commands.
+- **Outputs**: backend code changes (router/service/repository/model/migration/test), validated inputs, safe queries, transaction boundaries, error handling, verification results.
+- **Branches by**: detected stack, ORM/query pattern, auth requirement, migration impact, transaction scope. Must not hardcode secrets or share unsafe ORM lifecycle objects across concurrent work.
 
 ## Structural Flow
 
@@ -57,13 +22,6 @@ Implement or review TypeScript backend APIs, authentication, database integratio
 4. If NestJS is detected through `@nestjs/core`, `nest-cli.json`, or `*.module.ts`, load `nestjs-expert/SKILL.md` before changing module, provider, controller, guard, pipe, interceptor, testing, auth, or config code.
 5. Identify affected router/controller, service, repository, model, migration, and test boundaries.
 6. Load stack-specific references only when needed.
-
-### Scenes
-1. **PREPARE**: Determine stack, architecture boundaries, and acceptance criteria.
-2. **ACQUIRE**: Read existing routes, services, repositories, models, schemas, and config.
-3. **ACT**: Implement backend changes with validation, business logic, persistence, and tests.
-4. **VERIFY**: Run relevant lint, type, test, migration, and checklist commands.
-5. **FINALIZE**: Report changed behavior, verification, and unresolved risks.
 
 ### Transitions
 - If stack files exist, follow them before generic guidance.
@@ -77,29 +35,7 @@ Implement or review TypeScript backend APIs, authentication, database integratio
 - If verification fails, fix root cause before handoff.
 - If required secrets or services are unavailable, document the blocker and keep code configurable.
 
-### Exit
-- Success: backend change is implemented, tested, and aligned with local architecture.
-- Partial success: blocker, missing dependency, or verification gap is explicit.
-
 ## Logical Operations
-
-### Actions
-| Action | SSL primitive | Evidence |
-|--------|---------------|----------|
-| Detect stack and conventions | `READ` | Manifests, stack files, existing code |
-| Select implementation boundary | `SELECT` | Router/service/repository pattern |
-| Validate inputs and schemas | `VALIDATE` | Stack validation library |
-| Implement business logic | `WRITE` | Service layer code |
-| Implement persistence | `WRITE` | Repository/model/migration code |
-| Call external/backing services | `CALL_TOOL` | DB, queue, cache, auth, or API clients |
-| Run verification | `CALL_TOOL` | Tests, typecheck, lint, migrations |
-| Report result | `NOTIFY` | Final summary |
-
-### Tools and instruments
-- Project language/framework toolchain
-- ORM or database client
-- Test, lint, typecheck, and migration commands
-- Stack-specific templates and snippets when present
 
 ### Canonical workflow path
 ```bash
@@ -108,25 +44,6 @@ rg "route|router|service|repository|model|schema|migration" .
 ```
 
 Then run the project's discovered verification commands, usually lint/typecheck/tests and migrations when schema changes are involved. Prefer `stack/stack.yaml` `verify:` commands when present.
-
-### Resource scope
-| Scope | Resource target |
-|-------|-----------------|
-| `CODEBASE` | Backend source, tests, schemas, migrations |
-| `LOCAL_FS` | Stack references and generated artifacts |
-| `PROCESS` | Test, lint, typecheck, migration commands |
-| `CREDENTIALS` | Environment-managed DB URLs, API keys, secrets |
-| `NETWORK` | External APIs or backing services when required |
-
-### Preconditions
-- Target behavior and affected backend boundary are identifiable.
-- Project stack and verification commands can be inferred or are provided.
-- Required credentials remain outside source code.
-
-### Effects and side effects
-- Mutates backend source files, tests, and possibly migrations.
-- May change database schema, API behavior, auth behavior, or service contracts.
-- May require generated clients or migration artifacts.
 
 ### Guardrails
 
@@ -167,7 +84,7 @@ Router or Controller (HTTP) → Service (Business Logic) → Repository (Data Ac
 8. **Explicit ORM loading strategy**: do not rely on default relation loading when query shape matters
 9. **Explicit transaction boundaries**: group one business operation into one request/service-scoped unit of work
 10. **Safe ORM lifecycle**: do not share mutable ORM session/entity manager/client objects across concurrent work unless the ORM explicitly supports it
-11. **Config from environment**: DB URLs, API keys, secrets, and feature flags come from env vars or secret managers — never hardcode in source
+11. **Config from environment, with graceful fallback**: DB URLs, API keys, secrets, and feature flags come from env vars or secret managers — never hardcode in source. When integrating a third-party API (OpenAI, Anthropic, Stripe, etc.), write BOTH paths: (a) real call when `process.env.<KEY>` is present, (b) deterministic local fallback when absent. Mark the deferred branch with `// TODO(codi-deferred): integrate <vendor> when key is provisioned`. Shipping only the fallback (no env-conditional branch) leaves the spec unmet; shipping only the real call without fallback breaks demos when the key is missing.
 12. **Stateless services**: no in-memory session or user state between requests — use external stores (DB, Redis, cache) for shared state
 13. **Backing services as resources**: DB, queue, cache, mail are swappable attached resources connected via config — Repository layer must not assume a specific instance
 
@@ -199,11 +116,12 @@ Follow `resources/execution-protocol.md` step by step.
 See `resources/examples.md` for input/output examples.
 Use `resources/orm-reference.md` when the task involves ORM query performance, relationship loading, transactions, session/client lifecycle, or N+1 analysis.
 Before submitting, run `resources/checklist.md`.
-Source files live under `../_shared/runtime/execution-protocols/{vendor}.md`.
+Source files live under `../_shared/runtime/execution-protocols/` (claude.md, codex.md).
 - Execution steps: `resources/execution-protocol.md`
 - Code examples: `resources/examples.md`
 - Checklist: `resources/checklist.md`
 - ORM reference: `resources/orm-reference.md`
+- API contracts (front/back parallel-work template): `resources/api-contracts/`
 - Error recovery: `resources/error-playbook.md`
 - Context loading: `../_shared/core/context-loading.md`
 - Reasoning templates: `../_shared/core/reasoning-templates.md`

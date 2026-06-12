@@ -2,7 +2,7 @@
 
 ## Step 0: Prepare
 1. **Assess difficulty** — see `../../_shared/core/difficulty-guide.md`
-   - **Simple**: Skip to Step 3 | **Medium**: All 4 steps | **Complex**: All steps + checkpoints
+   - **Small**: Skip to Step 3 | **Medium**: All 4 steps | **Large**: All steps + sprint gates | **Extra large or risky**: All steps + explicit user checkpoints
 2. **Check lessons** — read your domain section in `../../_shared/core/lessons-learned.md`
 3. **Clarify requirements** — follow `../../_shared/core/clarification-protocol.md`
    - Check **Uncertainty Triggers**: business logic, security/auth, existing code conflicts?

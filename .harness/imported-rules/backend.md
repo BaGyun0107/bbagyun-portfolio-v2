@@ -8,19 +8,8 @@ alwaysApply: false
 
 ## Core Rules
 
-1. **Clean architecture**: router/controller -> service -> repository -> models
-2. **No business logic in route handlers or controllers**
-3. **All inputs validated** with your stack's validation library
-4. **Parameterized queries only** (never string interpolation)
-5. **JWT + bcrypt for auth**; rate limit auth endpoints
-6. **Async where supported**; type annotations on all signatures
-7. **Custom exceptions** via centralized error module (not raw HTTP exceptions)
-8. **Explicit ORM loading strategy**: do not rely on default relation loading when query shape matters
-9. **Explicit transaction boundaries**: group one business operation into one request/service-scoped unit of work
-10. **Safe ORM lifecycle**: do not share mutable ORM session/entity manager across concurrent work unless ORM explicitly supports it
-11. **Config from environment, with graceful fallback**: DB URLs, API keys, secrets from env vars or secret managers, never hardcode. When integrating a third-party API (OpenAI, Anthropic, Stripe, etc.), write BOTH paths: (a) real call when `process.env.<KEY>` is present, (b) deterministic local fallback when absent. Mark the deferred branch with `// TODO(codi-deferred): integrate <vendor> when key is provisioned`. Shipping only the fallback (no env-conditional branch) leaves the spec unmet; shipping only the real call without fallback breaks demos when the key is missing.
-12. **Stateless services**: no in-memory session or user state between requests — use external stores
-13. **Backing services as resources**: DB, queue, cache are swappable resources connected via config
+The canonical backend Core Rules (1-13, including the codi-deferred third-party
+fallback contract in rule 11) live in `../skills/codi-backend/SKILL.md`.
 
 ## Data, Auth, and External Side Effects
 
@@ -51,13 +40,8 @@ alwaysApply: false
 - For new Codi-scaffolded backend apps, prefer Node.js 24 with Express 5+ or NestJS 11+ when compatible with project constraints
 - For NestJS work, load `nestjs-expert`
 
-```
-Router or Controller (HTTP) → Service (Business Logic) → Repository (Data Access) → Models
-```
-
 ## Principles
 
-- **DRY**: Business logic in Service, data access in Repository
-- **Single Responsibility**: Classes and functions should have one responsibility
-- **Dependency Inversion**: Use your framework's DI mechanism
-- **KISS**: Keep it simple and clear
+The clean-architecture layer diagram and the DRY / SOLID / KISS principles are
+canonical in `../skills/codi-backend/SKILL.md` (Architecture Pattern and
+Guardrails sections).
