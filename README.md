@@ -1,3 +1,38 @@
+# 박윤신 포트폴리오 (bbagyun.com)
+
+예약·결제·정산·인증처럼 데이터 정합성과 운영 안정성이 중요한 기능을 주로 설계해 온 백엔드 중심 풀스택 개발자의 포트폴리오 사이트입니다. Node.js·NestJS·PHP 기반 서버 설계부터 React 화면까지 다루며, 강점은 시스템 전체 흐름을 이해하고 안정적으로 운영되는 구조를 만드는 데 있습니다.
+
+- **라이브:** https://bbagyun.com · [Vercel 미러](https://bbagyun-portfolio-v2.vercel.app)
+- **GitHub:** https://github.com/BaGyun0107
+- **연락:** pus1789@gmail.com
+
+## 대표 작업
+
+| 프로젝트 | 한 줄 요약 |
+| --- | --- |
+| 통합 회원 관리 인증 서버 (SSO) | NestJS 기반 중앙 SSO. JWT Payload + Soft FK로 물리 분리 DB 환경의 유저 식별·장애 격리 설계 |
+| 호텔 예약·결제 통합 플랫폼 | 낙관적 락 + 단일 트랜잭션으로 예약·재고·결제 동시성 제어, Core Product 다형성 모델링 |
+| 화훼 도소매 B2B 플랫폼 | 간이 Outbox(JSON Fallback) 정산 파이프라인으로 금융 데이터 무결성 관리 |
+| 리조트 예약 시스템 | 결제 보상 트랜잭션 + 백엔드 프록시. 운영 중 결제 장애를 원인별로 추적·보강 |
+| 법문 검색 엔진 | MySQL FULLTEXT + 동적 LIKE 하이브리드 검색으로 응답 시간 1500ms→400ms |
+| 사내 DX 하네스 | Jenkins→GitHub Actions 전환, Infisical 시크릿 중앙화, Cloudflare Tunnel Zero Trust 배포 |
+
+## 기술 스택
+
+- **Backend:** Node.js · Express · NestJS · PHP
+- **Frontend:** TypeScript · JavaScript · React · Next.js
+- **Database:** MySQL · Prisma · Sequelize
+- **Infra / DevOps:** AWS · NHN Cloud · Rocky Linux · Jenkins · GitHub Actions · Infisical · PM2 · Docker · Vercel
+
+> 이 사이트는 Next.js로 만들어졌으며, 프로젝트·인사이트 콘텐츠는 [`apps/front/src/data/portfolio`](apps/front/src/data/portfolio)에서 관리합니다.
+
+---
+
+<details>
+<summary><b>개발/배포 안내 (Codi Harness v2 기반)</b> — 이 저장소를 클론해 실행·배포하는 팀원용 가이드입니다. 펼쳐 보세요.</summary>
+
+<br>
+
 # Codi Harness v2
 
 > **이 파일은 project-owned입니다.** 다운스트림 프로젝트는 자신의 README를 자유롭게 수정할 수 있습니다. `./harness update --apply-harness`는 이 파일을 덮어쓰지 않습니다. 분류 기준은 [.harness/policies/update-policy.md](./.harness/policies/update-policy.md) 참고.
@@ -387,3 +422,5 @@ $gsd-verify-work
 - 공유 스킬은 `.harness/skills`에서 관리하고, 프로젝트별 스킬은 `.harness/skills-local`에 둡니다. 다운스트림은 공유 스킬을 수정하지 않지만 읽기 전용 비교와 감사는 할 수 있습니다.
 - 시크릿은 Infisical을 원본으로 삼고 GitHub Secrets를 최소화합니다.
 - 개인 선호는 repo에 커밋하지 않습니다(`AGENTS.local.md`, `CLAUDE.local.md`, `.claude/settings.local.json`, `.codex/config.toml`은 로컬 전용).
+
+</details>

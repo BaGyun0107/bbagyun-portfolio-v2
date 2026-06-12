@@ -110,9 +110,9 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="space-y-3">
-                <h3 className="font-medium text-sm text-muted-foreground border-b pb-1">AI-Assisted Dev</h3>
+                <h3 className="font-medium text-sm text-muted-foreground border-b pb-1">AI Tools</h3>
                 <div className="flex flex-wrap gap-2">
-                  {["Figma", "Claude Code", "ChatGPT", "GitHub Copilot", "Antigravity", "Cursor"].map(skill => (
+                  {["Claude Code", "Cursor"].map(skill => (
                     <Badge key={skill} variant="secondary" className="px-2.5 py-0.5 text-xs font-normal">{skill}</Badge>
                   ))}
                 </div>
