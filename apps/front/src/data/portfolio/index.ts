@@ -20,7 +20,6 @@ const featureToDto = (f: SeedFeature): FeatureDto => ({
   category: f.category as FeatureCategory,
   techStack: f.techStack,
   status: f.status as FeatureStatus,
-  apiCount: f.apiCount,
   overview: f.overview,
   period: f.period ?? undefined,
   team: f.team ?? undefined,

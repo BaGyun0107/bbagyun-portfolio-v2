@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Server, Cloud, Globe, Cpu, Terminal } from "lucide-react";
-import { 
-  SiNodedotjs, SiExpress, SiNestjs, SiPhp, 
-  SiJavascript, SiTypescript, SiReact, 
+import { ArrowRight, ArrowUpRight, Server, Cloud, Globe, Terminal } from "lucide-react";
+import {
+  SiNodedotjs, SiExpress, SiNestjs, SiPhp,
+  SiJavascript, SiTypescript, SiReact,
   SiMysql, SiPrisma, SiSequelize,
   SiAmazonwebservices, SiRockylinux, SiJenkins, SiGithubactions,
-  SiPm2, SiSocketdotio, SiFigma,
-  SiAnthropic, SiOpenai, SiGithubcopilot
+  SiPm2, SiSocketdotio
 } from "react-icons/si";
 import { Badge } from "@/components/ui/badge";
 import { InlineMarkdown } from "@/components/ui/InlineMarkdown";
@@ -42,13 +41,9 @@ export default function HomePage() {
     { icon: SiGithubactions, name: "GitHub Actions", color: "text-[#2088FF]" },
     { icon: SiPm2, name: "PM2", color: "text-[#2B037A]" },
     { icon: SiSocketdotio, name: "Socket.io", color: "text-black dark:text-white" },
-    // AI-Assisted Dev
-    { icon: SiFigma, name: "Figma", color: "text-[#F24E1E]" },
-    { icon: Terminal, name: "Claude Code", color: "text-[#D97757]" }, 
-    { icon: SiOpenai, name: "ChatGPT", color: "text-[#412991] dark:text-white" },
-    { icon: SiGithubcopilot, name: "GitHub Copilot", color: "text-black dark:text-white" },
-    { icon: Cpu, name: "Antigravity", color: "text-primary" }, 
-    { icon: Terminal, name: "Cursor", color: "text-black dark:text-white" }, 
+    // AI Tools
+    { icon: Terminal, name: "Claude Code", color: "text-[#D97757]" },
+    { icon: Terminal, name: "Cursor", color: "text-black dark:text-white" },
   ];
 
   return (

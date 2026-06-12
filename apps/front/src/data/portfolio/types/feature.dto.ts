@@ -24,7 +24,6 @@ export interface FeatureDto {
    */
   techStack: string[];
   status: FeatureStatus;
-  apiCount: number;
   overview: string;
   diagramUrl?: string;
   period?: string;
