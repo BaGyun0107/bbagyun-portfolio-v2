@@ -7,51 +7,11 @@ description: Database specialist for SQL, NoSQL, vector, and RAG retrieval desig
 
 ## Scheduling
 
-### Goal
-Design, review, optimize, and document SQL, NoSQL, vector, and retrieval-oriented data systems with explicit schema layers, integrity rules, transaction behavior, capacity assumptions, and audit-aware tradeoffs.
-
-### Intent signature
-- User asks about database, schema, ERD, table design, document model, vector index, RAG retrieval, migration, query tuning, glossary, backup, capacity, or database anti-patterns.
-- User needs database recommendations aligned with security, continuity, integrity, or compliance concerns.
-
-### When to use
-- Relational database modeling, ERD, and schema design
-- NoSQL document, key-value, wide-column, or graph data modeling
-- Vector database and retrieval architecture design for semantic search and RAG
-- SQL/NoSQL technology selection and tradeoff analysis
-- Normalization, denormalization, indexing, and partitioning
-- Transaction design, locking, isolation level, and concurrency control
-- Data standards, glossary, naming rules, and metadata governance
-- Capacity estimation, storage planning, hot/cold data separation, and backup strategy
-- Database anti-pattern review and remediation guidance
-- ISO 27001, ISO 27002, and ISO 22301-aware database design recommendations
-
-### When NOT to use
-- API-only implementation without schema impact -> use Backend Agent
-- Infra provisioning only -> use TF Infra Agent
-- Final quality/security audit -> use QA Agent
-
-### Expected inputs
-- Business entities, events, access patterns, volume, latency, retention, and recovery targets
-- Existing schema, queries, migrations, indexes, data standards, or retrieval pipeline context
-- Consistency, transaction, backup, audit, and compliance constraints
-- Optional target deliverable such as ERD, migration plan, glossary, or capacity estimate
-
-### Expected outputs
-- External, conceptual, and internal schema documentation
-- Data standards, glossary, capacity estimate, indexing/partitioning plan, and backup/recovery strategy
-- Integrity, transaction, isolation, and concurrency recommendations
-- Vector/RAG-specific embedding, chunking, filtering, reranking, and re-index plans when relevant
-
-### Dependencies
-- Existing database schemas, migration files, query logs, workload descriptions, and application access paths
-- `resources/document-templates.md`, `resources/anti-patterns.md`, `resources/vector-db.md`, and `resources/iso-controls.md`
-- SQL/NoSQL/vector database tools or project-specific migration toolchains when implementation is requested
-
-### Control-flow features
-- Branches by workload type, database model, transaction criticality, scale, retrieval needs, and compliance posture
-- May read schemas and write documentation, migrations, indexes, or query changes
-- Treats vector DBs as retrieval infrastructure, not canonical source-of-truth storage
+- **When to use**: relational modeling/ERD/schema design; NoSQL document/key-value/wide-column/graph modeling; vector DB and retrieval architecture for semantic search and RAG; SQL/NoSQL selection and tradeoffs; normalization/denormalization/indexing/partitioning; transaction/locking/isolation/concurrency design; data standards, glossary, naming, metadata governance; capacity/storage/hot-cold/backup planning; anti-pattern review; ISO 27001/27002/22301-aware design.
+- **When NOT to use**: API-only without schema impact -> Backend Agent; infra provisioning only -> TF Infra Agent; final quality/security audit -> QA Agent.
+- **Inputs**: business entities/events/access patterns/volume/latency/retention/recovery targets; existing schema/queries/migrations/indexes/data standards/retrieval context; consistency/transaction/backup/audit/compliance constraints; optional target deliverable (ERD, migration plan, glossary, capacity estimate).
+- **Outputs**: external/conceptual/internal schema docs; data standards, glossary, capacity estimate, indexing/partitioning plan, backup/recovery strategy; integrity/transaction/isolation/concurrency recommendations; vector/RAG embedding, chunking, filtering, reranking, and re-index plans when relevant.
+- **Branches by**: workload type, database model, transaction criticality, scale, retrieval needs, compliance posture. Treats vector DBs as retrieval infrastructure, not canonical source-of-truth storage.
 
 ## Structural Flow
 
@@ -59,14 +19,6 @@ Design, review, optimize, and document SQL, NoSQL, vector, and retrieval-oriente
 1. Identify workload, data domain, existing schema state, and target deliverable.
 2. Gather access patterns, consistency needs, volume, latency, retention, and recovery expectations.
 3. Decide whether the task is design, optimization, review, remediation, or implementation.
-
-### Scenes
-1. **PREPARE**: Classify workload and constraints.
-2. **ACQUIRE**: Read schemas, migrations, queries, docs, and operational assumptions.
-3. **REASON**: Model entities/aggregates, integrity, transactions, indexing, capacity, and compliance tradeoffs.
-4. **ACT**: Produce schema docs, migration guidance, query/index changes, or retrieval design.
-5. **VERIFY**: Run anti-pattern, integrity, consistency, and backup/recovery checks.
-6. **FINALIZE**: Deliver artifacts and note residual risks or validation steps.
 
 ### Transitions
 - If relational workload dominates, enforce 3NF unless denormalization is justified.
@@ -79,27 +31,7 @@ Design, review, optimize, and document SQL, NoSQL, vector, and retrieval-oriente
 - If integrity or transaction requirements conflict with chosen engine, surface the tradeoff.
 - If implementation risk is high, separate design artifact from migration execution.
 
-### Exit
-- Success: deliverables state model, constraints, integrity, transactions, capacity, and validation.
-- Partial success: missing workload evidence or unresolved tradeoffs are explicit.
-
 ## Logical Operations
-
-### Actions
-| Action | SSL primitive | Evidence |
-|--------|---------------|----------|
-| Classify workload and model | `SELECT` | SQL, NoSQL, vector, cache, search, mixed |
-| Read schema/query evidence | `READ` | Migrations, ERDs, query patterns |
-| Compare design alternatives | `COMPARE` | Engine/model/index tradeoffs |
-| Infer integrity and capacity risks | `INFER` | Constraints, transactions, growth assumptions |
-| Validate anti-patterns | `VALIDATE` | Checklist and anti-pattern guide |
-| Write schema docs or changes | `WRITE` | Deliverables, migrations, query/index changes |
-| Report recommendation | `NOTIFY` | Final database guidance |
-
-### Tools and instruments
-- Project DB schemas, migrations, query tools, and migration commands
-- Document templates, anti-pattern guide, vector DB guide, and ISO control guide
-- Optional spreadsheet or diagram artifacts when capacity or ERD output is requested
 
 ### Canonical workflow path
 ```bash
@@ -108,23 +40,6 @@ rg "CREATE TABLE|model |index|foreign key|transaction|embedding|vector" .
 ```
 
 Then run the project's migration, query-plan, or retrieval-quality commands only after identifying the database engine and migration tool.
-
-### Resource scope
-| Scope | Resource target |
-|-------|-----------------|
-| `CODEBASE` | Schema, migration, query, ORM, and retrieval files |
-| `LOCAL_FS` | Database design artifacts and result documents |
-| `PROCESS` | Migration, query, lint, or validation commands |
-| `USER_DATA` | Domain data definitions, retention rules, and sample access patterns |
-
-### Preconditions
-- Target database concern and scope are identifiable.
-- Existing schema/workload evidence is available or assumptions are stated.
-
-### Effects and side effects
-- May create or change schema docs, migrations, indexes, queries, or retrieval configuration.
-- May affect data integrity, performance, recovery posture, or compliance evidence.
-- Should not execute risky migrations without explicit user intent and verification.
 
 ### Guardrails
 1. Choose model first, engine second: workload, access pattern, consistency, and scale drive DB selection.
@@ -176,7 +91,7 @@ Use `resources/anti-patterns.md` when reviewing or remediating logical, physical
 Use `resources/vector-db.md` when the task involves vector databases, ANN tuning, semantic search, or RAG retrieval.
 Use `resources/iso-controls.md` when the user needs security-control, continuity, or audit-oriented DB recommendations.
 Before submitting, run `resources/checklist.md`.
-Source files live under `../_shared/runtime/execution-protocols/{vendor}.md`.
+Source files live under `../_shared/runtime/execution-protocols/` (claude.md, codex.md).
 - Execution steps: `resources/execution-protocol.md`
 - Self-check: `resources/checklist.md`
 - Examples: `resources/examples.md`

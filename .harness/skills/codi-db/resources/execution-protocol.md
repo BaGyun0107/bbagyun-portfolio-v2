@@ -2,9 +2,9 @@
 
 ## Step 0: Prepare
 1. **Assess difficulty** — see `../../_shared/core/difficulty-guide.md`
-   - **Simple**: small schema adjustment or index review
+   - **Small**: small schema adjustment or index review
    - **Medium**: new bounded context, migration, or backup/capacity update
-   - **Complex**: engine selection, major redesign, multi-tenant or high-scale workload
+   - **Large**: engine selection, major redesign, multi-tenant or high-scale workload
 2. **Clarify workload**
    - Functional flows, critical queries, write/read ratio, peak TPS, retention, RPO, RTO
    - Compliance or audit constraints, PII, multi-region, reporting needs

@@ -212,6 +212,3 @@ Therefore:
 1. **Level 1**: Apply defaults + record assumptions → Proceed
 2. **Level 2**: Narrow and interpret scope + specify → Proceed
 3. **Level 3**: `Status: blocked` + question list → Do not proceed
-
-When Orchestrator receives Level 3 result, it relays questions to user
-and re-runs that agent after receiving answers.

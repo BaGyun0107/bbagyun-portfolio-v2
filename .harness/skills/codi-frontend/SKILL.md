@@ -7,47 +7,11 @@ description: TypeScript frontend specialist for project-detected Node.js runtime
 
 ## Scheduling
 
-### Goal
-Build, modify, and verify React/Next.js/TypeScript user interfaces that follow the target project's Node.js runtime, architecture, design-system constraints, accessibility expectations, and existing frontend conventions.
-
-### Intent signature
-- User asks for UI, component, page, layout, CSS, Tailwind, shadcn, form, interaction, client state, or frontend API integration work.
-- User needs browser-facing implementation in a React TypeScript codebase, including React-only SPA apps and Next.js apps.
-
-### When to use
-- Building user interfaces and components
-- Client-side logic and state management
-- Styling and responsive design
-- Form validation and user interactions
-- Integrating with backend APIs
-
-### When NOT to use
-- Backend API implementation → use Backend Agent
-- Database access, migrations, or ORM setup → use Backend Agent
-- Auth server setup (better-auth server library, DB adapters) → use Backend Agent
-- Native mobile development → use Mobile Agent
-
-### Expected inputs
-- Target page, component, flow, or UI behavior
-- Existing app structure, design tokens, component library, i18n files, and API contracts
-- Acceptance criteria and target responsive states
-
-### Expected outputs
-- Frontend code changes in pages, components, hooks, styles, tests, or wrappers
-- UI that respects project tokens, i18n, server/client boundaries, and accessibility expectations
-- Verification results from relevant lint, typecheck, tests, or browser checks
-
-### Dependencies
-- Target project runtime from `mise.toml`, `.node-version`, `.nvmrc`, `package.json#engines`, CI config, or lockfile metadata
-- React, TypeScript, TailwindCSS, and `shadcn/ui` versions already used by the project
-- Next.js App Router only when the target project actually uses Next.js
-- Project sources of truth such as `packages/design-tokens`, `packages/i18n`, and shared utilities
-- `resources/execution-protocol.md`, `resources/checklist.md`, examples, snippets, and Tailwind rules
-
-### Control-flow features
-- Branches by server/client component boundary, responsive state, component library availability, and i18n/token requirements
-- Reads and writes frontend codebase files
-- May call shadcn registry tools or local verification commands
+- **When to use**: UI/components, client-side logic and state, styling and responsive design, form validation/interactions, backend API integration.
+- **When NOT to use**: backend API/DB/ORM and auth server setup (better-auth server library, DB adapters) → Backend Agent; native mobile → Mobile Agent.
+- **Inputs**: target page/component/flow/UI behavior, existing app structure, design tokens, component library, i18n files, API contracts, acceptance criteria, responsive states.
+- **Outputs**: frontend code changes (pages/components/hooks/styles/tests/wrappers) respecting project tokens, i18n, server/client boundaries, accessibility; verification results.
+- **Branches by**: server/client component boundary, responsive state, component-library availability, i18n/token requirements. May call shadcn registry tools or local verification commands.
 
 ## Structural Flow
 
@@ -62,13 +26,6 @@ Build, modify, and verify React/Next.js/TypeScript user interfaces that follow t
    - `vite`, `react-router`, `@tanstack/react-router`, or SPA entry files: React-only profile
 5. Determine whether work belongs in framework routes, components, wrappers, hooks, or styles.
 
-### Scenes
-1. **PREPARE**: Load relevant project conventions, UI requirements, and acceptance criteria.
-2. **ACQUIRE**: Inspect existing components, tokens, i18n keys, APIs, and shadcn availability.
-3. **ACT**: Implement UI, state, styles, validation, and integration.
-4. **VERIFY**: Run checklist, automated checks, and browser/responsive validation when applicable.
-5. **FINALIZE**: Summarize changed UI behavior and verification.
-
 ### Transitions
 - If a strict shadcn primitive exists, use or wrap it before creating generic markup.
 - If UI text is user-facing and i18n exists, add strings through the i18n source of truth.
@@ -81,28 +38,7 @@ Build, modify, and verify React/Next.js/TypeScript user interfaces that follow t
 - If verification fails, fix before handoff or report the blocker.
 - If required shadcn registry access fails, use existing local components or document fallback.
 
-### Exit
-- Success: UI works across target responsive states and passes relevant checks.
-- Partial success: missing assets, backend contracts, or verification gaps are explicit.
-
 ## Logical Operations
-
-### Actions
-| Action | SSL primitive | Evidence |
-|--------|---------------|----------|
-| Inspect existing frontend patterns | `READ` | Components, routes, hooks, styles |
-| Select component and state approach | `SELECT` | Server/client and shadcn workflow |
-| Implement UI code | `WRITE` | TSX, CSS, hooks, wrappers |
-| Validate form/data contracts | `VALIDATE` | Zod/forms/API schemas |
-| Call shadcn or verification tools | `CALL_TOOL` | Registry, lint, typecheck, tests |
-| Compare responsive states | `COMPARE` | Desktop/mobile behavior |
-| Report result | `NOTIFY` | Final summary |
-
-### Tools and instruments
-- React, TypeScript, TailwindCSS v4, shadcn/ui
-- Next.js only when present in the target project
-- `ahooks`, `es-toolkit`, `nuqs`, TanStack Query, Jotai, TanStack React Form, `zod`
-- Lint, typecheck, tests, and browser inspection when applicable
 
 ### Canonical workflow path
 ```bash
@@ -111,23 +47,6 @@ rg "components/ui|shadcn|use client|generateMetadata|useQuery|i18n|design-tokens
 ```
 
 Then run the project's frontend verification commands, typically lint, typecheck, tests, and browser/responsive checks when the UI changes.
-
-### Resource scope
-| Scope | Resource target |
-|-------|-----------------|
-| `CODEBASE` | Frontend routes, components, styles, hooks, tests |
-| `LOCAL_FS` | Design tokens, i18n files, resource references |
-| `PROCESS` | Build, lint, typecheck, test, browser commands |
-| `NETWORK` | Backend APIs or registry tools when required |
-
-### Preconditions
-- Target UI behavior and affected frontend area are identifiable.
-- Required design tokens, i18n, and API contracts are available or assumptions are stated.
-
-### Effects and side effects
-- Mutates frontend source, styles, tests, and possibly i18n keys.
-- May add dependencies or shadcn components only when justified by project conventions.
-- Does not edit `components/ui/*` directly.
 
 ### Guardrails
 1. Follow the existing React, TypeScript, routing, bundler, and FSD-lite architecture in the target project.
@@ -175,13 +94,6 @@ Then run the project's frontend verification commands, typically lint, typecheck
 - Use `proxy.ts` instead of `middleware.ts` for request proxy/auth-gate behavior.
 - Keep Server Component and Client Component boundaries explicit.
 
-### Server vs Client Components
-
-- **Server Components**: Layouts, marketing pages, SEO metadata (`generateMetadata`, `sitemap`)
-- **Client Components**: Interactive features and `useQuery` hooks
-
-This section applies only to Next.js projects. In React-only apps, components are client-rendered by default unless the project has its own SSR framework.
-
 ### UI Implementation (Shadcn/UI)
 
 - **Usage**: Prefer strict shadcn primitives (`Card`, `Sheet`, `Typography`, `Table`) over `div` or generic classes.
@@ -216,7 +128,7 @@ To extend: add `resources/<name>.md` and append a row above.
 
 1. Follow `resources/execution-protocol.md` step by step.
 2. Before submitting, run `resources/checklist.md`.
-Source files live under `../_shared/runtime/execution-protocols/{vendor}.md`.
+Source files live under `../_shared/runtime/execution-protocols/` (claude.md, codex.md).
 
 - Project frontend rules (MUST load before review/implementation): `../../imported-rules/frontend.md`
 - Execution steps: `resources/execution-protocol.md`

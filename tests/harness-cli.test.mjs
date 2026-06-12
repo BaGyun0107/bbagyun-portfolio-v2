@@ -86,7 +86,10 @@ test('harness wire-infisical surfaces in help and dispatches', () => {
 
   const dryRun = runCommand('./harness', ['wire-infisical']);
   assert.notEqual(dryRun.status, 0);
-  assert.match(dryRun.stderr + dryRun.stdout, /project-name|INFISICAL_PROJECT_ID/);
+  assert.match(
+    dryRun.stderr + dryRun.stdout,
+    /project-name|INFISICAL_PROJECT_ID/,
+  );
 });
 
 test('external phase routing replaces local wrapper skills and spec artifacts', () => {
@@ -101,17 +104,29 @@ test('external phase routing replaces local wrapper skills and spec artifacts', 
     '.harness/skills/gstack',
     '.harness/skills/superpowers',
   ]) {
-    assert.equal(existsSync(join(root, removed)), false, `${removed} must be removed`);
+    assert.equal(
+      existsSync(join(root, removed)),
+      false,
+      `${removed} must be removed`,
+    );
   }
 
   for (const skillPath of [
     '.harness/skills/codi-phase-routing/SKILL.md',
     '.harness/skills/team-mode-operator/SKILL.md',
   ]) {
-    assert.equal(existsSync(join(root, skillPath)), true, `${skillPath} must exist`);
+    assert.equal(
+      existsSync(join(root, skillPath)),
+      true,
+      `${skillPath} must exist`,
+    );
   }
 
-  for (const activeSkill of ['codi-phase-routing', 'karpathy-style', 'team-mode-operator']) {
+  for (const activeSkill of [
+    'codi-phase-routing',
+    'karpathy-style',
+    'team-mode-operator',
+  ]) {
     const skillBody = readFileSync(
       join(root, '.harness', 'skills', activeSkill, 'SKILL.md'),
       'utf8',
@@ -188,7 +203,10 @@ test('init-project normalize_app_start_scripts wraps dev only, migrates start', 
   // 과거에는 ['dev', 'start'] 양쪽을 감쌌고, 그 결과 배포 환경에서 .harness 경로가
   // 없어 production start 가 깨졌다. 회귀를 막기 위해 ['dev'] 한정과
   // start migration 코드가 모두 존재하는지 정적으로 검증한다.
-  assert.doesNotMatch(initScript, /for\s*\(\s*const\s+name\s+of\s+\[\s*'dev'\s*,\s*'start'\s*\]\s*\)/);
+  assert.doesNotMatch(
+    initScript,
+    /for\s*\(\s*const\s+name\s+of\s+\[\s*'dev'\s*,\s*'start'\s*\]\s*\)/,
+  );
   assert.match(initScript, /const\s+devCommand\s*=\s*scripts\.dev/);
   assert.match(initScript, /runnerPrefixPattern/);
   assert.match(initScript, /name\s*===\s*'dev'/);
@@ -317,7 +335,10 @@ test('guard and permission hooks block representative unsafe inputs', () => {
     },
   );
   assert.equal(productionDatabaseMcp.status, 0);
-  assert.match(productionDatabaseMcp.stdout, /production database\/data access/);
+  assert.match(
+    productionDatabaseMcp.stdout,
+    /production database\/data access/,
+  );
 
   const sideEffectMcp = runNode(
     '.harness/hooks/tool-permission-guard.mjs',
@@ -339,7 +360,8 @@ test('guardrails block protected branch edits and sensitive commands', () => {
   writeFileSync(join(project, 'README.md'), '# Demo\n');
   commitAll(project, '초기 커밋');
   assert.equal(
-    runCommand('git', ['checkout', '-q', '-b', 'main'], { cwd: project }).status,
+    runCommand('git', ['checkout', '-q', '-b', 'main'], { cwd: project })
+      .status,
     0,
   );
 
@@ -534,7 +556,12 @@ test('profile check rejects deterministic project profile drift', () => {
   });
   assert.equal(valid.status, 0, valid.stderr);
 
-  const profilePath = join(project, '.harness', 'config', 'project-profile.yaml');
+  const profilePath = join(
+    project,
+    '.harness',
+    'config',
+    'project-profile.yaml',
+  );
   const brokenProfile = readFileSync(profilePath, 'utf8').replace(
     'enabled: false',
     'enabled: true',
@@ -732,7 +759,6 @@ test('Vercel frontend deploy targets the dev custom environment', () => {
     join(root, '.github', 'workflows', 'deploy-frontend-vercel.yml'),
     'utf8',
   );
-  const envExample = readFileSync(join(root, 'apps', 'front', '.env.example'), 'utf8');
   const docs = readFileSync(
     join(root, '.harness', 'docs', 'vercel-infisical-secret-sync.md'),
     'utf8',
@@ -744,9 +770,18 @@ test('Vercel frontend deploy targets the dev custom environment', () => {
     workflow,
     /vercel pull --yes\s+\\\s+--environment=\$\{\{ steps\.env\.outputs\.vercel_env \}\}/,
   );
-  assert.match(workflow, /vercel build \$\{\{ steps\.env\.outputs\.target_flag \}\}/);
-  assert.match(workflow, /vercel deploy --prebuilt \$\{\{ steps\.env\.outputs\.target_flag \}\}/);
-  assert.match(workflow, /environment-url: \$\{\{ steps\.public-url\.outputs\.url \}\}/);
+  assert.match(
+    workflow,
+    /vercel build \$\{\{ steps\.env\.outputs\.target_flag \}\}/,
+  );
+  assert.match(
+    workflow,
+    /vercel deploy --prebuilt \$\{\{ steps\.env\.outputs\.target_flag \}\}/,
+  );
+  assert.match(
+    workflow,
+    /environment-url: \$\{\{ steps\.public-url\.outputs\.url \}\}/,
+  );
   assert.doesNotMatch(workflow, /vercel alias set/);
 
   assert.match(docs, /custom environment `dev`/);
@@ -828,7 +863,10 @@ test('root agent entrypoints delegate project-specific rules to project profile 
 
 test('workflow validation is wired through actionlint', () => {
   const ci = readFileSync(join(root, '.github/workflows/ci-node.yml'), 'utf8');
-  const doctor = readFileSync(join(root, '.harness/scripts/checks/doctor.sh'), 'utf8');
+  const doctor = readFileSync(
+    join(root, '.harness/scripts/checks/doctor.sh'),
+    'utf8',
+  );
   const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 
   assert.match(ci, /rhysd\/actionlint/, 'ci-node workflow must run actionlint');
@@ -841,7 +879,10 @@ test('workflow validation is wired through actionlint', () => {
 });
 
 test('dependency security workflows avoid non-dependency PR and push runs', () => {
-  const pipeline = readFileSync(join(root, '.github/workflows/pipeline.yml'), 'utf8');
+  const pipeline = readFileSync(
+    join(root, '.github/workflows/pipeline.yml'),
+    'utf8',
+  );
   const dependencyPr = readFileSync(
     join(root, '.github/workflows/dependency-security-pr.yml'),
     'utf8',
@@ -978,7 +1019,10 @@ test('harness update apply imports common harness files and preserves project-ow
     join(root, '.harness', 'scripts', 'setup', 'update.sh'),
     join(project, '.harness', 'scripts', 'setup', 'update.sh'),
   );
-  writeFileSync(join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'), 'old profile\n');
+  writeFileSync(
+    join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'),
+    'old profile\n',
+  );
   writeFileSync(
     join(project, '.harness', 'config', 'project-profile.yaml'),
     'mode: project\n',
@@ -1036,7 +1080,10 @@ test('harness update apply imports common harness files and preserves project-ow
     'applied shared files should be summarized by default',
   );
   assert.equal(
-    readFileSync(join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'), 'utf8'),
+    readFileSync(
+      join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'),
+      'utf8',
+    ),
     'source profile\n',
   );
   assert.equal(
@@ -1159,7 +1206,10 @@ test('harness auto apply warns without overwriting dirty shared paths', () => {
     join(root, '.harness', 'scripts', 'setup', 'update.sh'),
     join(project, '.harness', 'scripts', 'setup', 'update.sh'),
   );
-  writeFileSync(join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'), 'old profile\n');
+  writeFileSync(
+    join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'),
+    'old profile\n',
+  );
   commitAll(project, 'project');
   writeFileSync(
     join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'),
@@ -1182,7 +1232,10 @@ test('harness auto apply warns without overwriting dirty shared paths', () => {
   assert.equal(applied.status, 0, applied.stderr);
   assert.match(applied.stderr, /로컬 변경/);
   assert.equal(
-    readFileSync(join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'), 'utf8'),
+    readFileSync(
+      join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'),
+      'utf8',
+    ),
     'local dirty profile\n',
   );
 });
@@ -1210,7 +1263,10 @@ test('harness auto apply does not delete files removed upstream', () => {
     join(root, '.harness', 'scripts', 'setup', 'update.sh'),
     join(project, '.harness', 'scripts', 'setup', 'update.sh'),
   );
-  writeFileSync(join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'), 'old profile\n');
+  writeFileSync(
+    join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'),
+    'old profile\n',
+  );
   writeFileSync(
     join(project, '.harness', 'scripts', 'obsolete.mjs'),
     'keep me\n',
@@ -1233,7 +1289,10 @@ test('harness auto apply does not delete files removed upstream', () => {
   assert.equal(applied.status, 0, applied.stderr);
   assert.match(applied.stderr, /upstream에서 삭제된 파일/);
   assert.equal(
-    readFileSync(join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'), 'utf8'),
+    readFileSync(
+      join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'),
+      'utf8',
+    ),
     'source profile\n',
   );
   assert.equal(
@@ -1279,7 +1338,14 @@ test('team-session dry-run prints a role plan without requiring cmux or tmux', (
   assert.match(dryRun.stdout, /세션: demo-team/);
   assert.match(dryRun.stdout, /agent: claude/);
   assert.match(dryRun.stdout, /우선 backend: cmux -> tmux/);
-  for (const role of ['orchestrator', 'planner', 'implementer', 'reviewer', 'qa', 'shell']) {
+  for (const role of [
+    'orchestrator',
+    'planner',
+    'implementer',
+    'reviewer',
+    'qa',
+    'shell',
+  ]) {
     assert.match(dryRun.stdout, new RegExp(`CODI_TEAM_ROLE=${role}`));
   }
 });
@@ -1322,7 +1388,10 @@ test('team-session exposes cmux status hooks and tmux pane titles', () => {
   );
 
   assert.match(script, /CMUX_BIN=.*find_cmux/);
-  assert.match(script, /Applications\/cmux\.app\/Contents\/Resources\/bin\/cmux/);
+  assert.match(
+    script,
+    /Applications\/cmux\.app\/Contents\/Resources\/bin\/cmux/,
+  );
   assert.match(script, /"\$CMUX_BIN" set-status/);
   assert.match(script, /"\$CMUX_BIN" log/);
   assert.match(script, /"\$CMUX_BIN" notify/);
@@ -1358,7 +1427,10 @@ test('team-mode-operator skill documents cmux and tmux operating rules', () => {
     '.planning',
     'worktree',
   ]) {
-    assert.match(skill, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    assert.match(
+      skill,
+      new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+    );
   }
 });
 
@@ -1416,11 +1488,22 @@ test('board.html is no longer a required generated artifact', () => {
     'utf8',
   );
   const requiredGitignore = JSON.parse(
-    readFileSync(join(root, '.harness', 'config', 'required-gitignore.json'), 'utf8'),
+    readFileSync(
+      join(root, '.harness', 'config', 'required-gitignore.json'),
+      'utf8',
+    ),
   );
 
-  assert.doesNotMatch(updateScript, /board\.html/, 'update.sh must not special-case board.html');
-  assert.doesNotMatch(policy, /board\.html/, 'update-policy.md must not document board.html');
+  assert.doesNotMatch(
+    updateScript,
+    /board\.html/,
+    'update.sh must not special-case board.html',
+  );
+  assert.doesNotMatch(
+    policy,
+    /board\.html/,
+    'update-policy.md must not document board.html',
+  );
   assert.deepEqual(requiredGitignore.entries, []);
 });
 
@@ -1468,7 +1551,11 @@ test('ensure-gitignore appends missing required entries idempotently', () => {
   assert.equal(secondRun.status, 0, secondRun.stderr);
   assert.equal(secondRun.stdout, '', 'second run must produce no additions');
   const afterSecond = readFileSync(gitignorePath, 'utf8');
-  assert.equal(afterSecond, afterFirst, '.gitignore content must be unchanged on idempotent run');
+  assert.equal(
+    afterSecond,
+    afterFirst,
+    '.gitignore content must be unchanged on idempotent run',
+  );
 
   // 기존 항목도 보존만 하고 중복 추가하지 않는다.
   writeFileSync(gitignorePath, 'board.html\n');
@@ -1477,7 +1564,11 @@ test('ensure-gitignore appends missing required entries idempotently', () => {
     env: { ...process.env, ROOT_DIR: projectDir },
   });
   assert.equal(slashRun.status, 0, slashRun.stderr);
-  assert.equal(slashRun.stdout, '', 'slash-normalized existing pattern must be respected');
+  assert.equal(
+    slashRun.stdout,
+    '',
+    'slash-normalized existing pattern must be respected',
+  );
   assert.equal(readFileSync(gitignorePath, 'utf8'), 'board.html\n');
 });
 
@@ -1494,7 +1585,13 @@ test('restore-missing-shared lists shared manifest files absent from the worktre
   );
   cpSync(
     join(root, '.harness', 'scripts', 'setup', 'restore-missing-shared.mjs'),
-    join(projectDir, '.harness', 'scripts', 'setup', 'restore-missing-shared.mjs'),
+    join(
+      projectDir,
+      '.harness',
+      'scripts',
+      'setup',
+      'restore-missing-shared.mjs',
+    ),
   );
 
   // pre-commit은 있고 post-commit은 없음. project-owned 경로(.gitignore)는 manifest에
@@ -1504,11 +1601,7 @@ test('restore-missing-shared lists shared manifest files absent from the worktre
   writeFileSync(
     manifestPath,
     JSON.stringify({
-      files: [
-        '.husky/post-commit',
-        '.husky/pre-commit',
-        '.gitignore',
-      ],
+      files: ['.husky/post-commit', '.husky/pre-commit', '.gitignore'],
     }),
   );
 
@@ -1591,7 +1684,10 @@ test('harness update can recover missing shared files after a self-update rerun'
   mkdirSync(join(project, '.harness', 'scripts'), { recursive: true });
   mkdirSync(join(project, 'tests'), { recursive: true });
   writeFileSync(join(project, 'AGENTS.md'), 'old agents\n');
-  writeFileSync(join(project, '.harness', 'scripts', 'update.sh'), 'old flat updater\n');
+  writeFileSync(
+    join(project, '.harness', 'scripts', 'update.sh'),
+    'old flat updater\n',
+  );
   writeFileSync(join(project, 'tests', 'harness-cli.test.mjs'), 'old test\n');
   writeFileSync(
     join(project, '.harness', 'shared-manifest.json'),
@@ -1650,7 +1746,10 @@ test('board-refresh hook is no longer registered as a PostToolUse hook', () => {
   const settings = JSON.parse(
     readFileSync(join(root, '.claude', 'settings.json'), 'utf8'),
   );
-  assert.doesNotMatch(JSON.stringify(settings.hooks.PostToolUse ?? []), /board-refresh/);
+  assert.doesNotMatch(
+    JSON.stringify(settings.hooks.PostToolUse ?? []),
+    /board-refresh/,
+  );
 });
 
 test('guardrails hook is registered for Bash and file mutation tools', () => {
@@ -1675,7 +1774,11 @@ test('.husky remains shared without the legacy board post-commit hook', () => {
     join(root, '.harness', 'policies', 'update-policy.md'),
     'utf8',
   );
-  assert.match(policy, /\.husky/, 'update-policy.md documents .husky as shared');
+  assert.match(
+    policy,
+    /\.husky/,
+    'update-policy.md documents .husky as shared',
+  );
   assert.equal(existsSync(join(root, '.husky', 'post-commit')), false);
 });
 function makeUpdatePair(extraSource, extraProject) {
@@ -1686,7 +1789,10 @@ function makeUpdatePair(extraSource, extraProject) {
   for (const _d of ['checks', 'tooling', 'setup', 'deploy', 'agent', 'audit']) {
     mkdirSync(join(source, '.harness', 'scripts', _d), { recursive: true });
   }
-  writeFileSync(join(source, '.harness', 'scripts', 'tooling', 'profile.mjs'), 'source profile\n');
+  writeFileSync(
+    join(source, '.harness', 'scripts', 'tooling', 'profile.mjs'),
+    'source profile\n',
+  );
   if (extraSource) extraSource(source);
   commitAll(source, 'source');
   assert.equal(runCommand('git', ['branch', 'v2'], { cwd: source }).status, 0);
@@ -1699,7 +1805,10 @@ function makeUpdatePair(extraSource, extraProject) {
     join(root, '.harness', 'scripts', 'setup', 'update.sh'),
     join(project, '.harness', 'scripts', 'setup', 'update.sh'),
   );
-  writeFileSync(join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'), 'old profile\n');
+  writeFileSync(
+    join(project, '.harness', 'scripts', 'tooling', 'profile.mjs'),
+    'old profile\n',
+  );
   if (extraProject) extraProject(project);
   commitAll(project, 'project');
 
@@ -1755,17 +1864,11 @@ test('blocklist apply preserves downstream .planning work state', () => {
   const { source, project } = makeUpdatePair(
     (src) => {
       mkdirSync(join(src, '.planning'), { recursive: true });
-      writeFileSync(
-        join(src, '.planning', 'STATE.md'),
-        'source planning\n',
-      );
+      writeFileSync(join(src, '.planning', 'STATE.md'), 'source planning\n');
     },
     (proj) => {
       mkdirSync(join(proj, '.planning'), { recursive: true });
-      writeFileSync(
-        join(proj, '.planning', 'STATE.md'),
-        'project planning\n',
-      );
+      writeFileSync(join(proj, '.planning', 'STATE.md'), 'project planning\n');
     },
   );
 
@@ -1824,9 +1927,7 @@ test('blocklist apply preserves .gitignore and renovate.json', () => {
 test('is_project_owned_path is identical in update.sh and update-check.sh', () => {
   const extract = (file) => {
     const text = readFileSync(join(root, '.harness', 'scripts', file), 'utf8');
-    const match = text.match(
-      /is_project_owned_path\(\)\s*\{[\s\S]*?\n\}/,
-    );
+    const match = text.match(/is_project_owned_path\(\)\s*\{[\s\S]*?\n\}/);
     assert.ok(match, `${file} must define is_project_owned_path`);
     return match[0];
   };
@@ -1930,21 +2031,32 @@ test('package policy check catches static monorepo package drift', () => {
   );
   writeFileSync(join(project, 'apps', 'front', 'pnpm-lock.yaml'), 'lockfile\n');
 
-  const valid = runNode('.harness/scripts/checks/package-policy-check.mjs', [], {
-    cwd: project,
-  });
+  const valid = runNode(
+    '.harness/scripts/checks/package-policy-check.mjs',
+    [],
+    {
+      cwd: project,
+    },
+  );
   assert.equal(valid.status, 0, valid.stderr);
 
   writeFileSync(
     join(project, 'package.json'),
     JSON.stringify({ name: 'root', workspaces: ['apps/*'] }),
   );
-  writeFileSync(join(project, 'pnpm-workspace.yaml'), 'packages:\n  - apps/*\n');
+  writeFileSync(
+    join(project, 'pnpm-workspace.yaml'),
+    'packages:\n  - apps/*\n',
+  );
   writeFileSync(join(project, 'apps', 'front', 'package-lock.json'), '{}\n');
 
-  const invalid = runNode('.harness/scripts/checks/package-policy-check.mjs', [], {
-    cwd: project,
-  });
+  const invalid = runNode(
+    '.harness/scripts/checks/package-policy-check.mjs',
+    [],
+    {
+      cwd: project,
+    },
+  );
   assert.notEqual(invalid.status, 0);
   assert.match(invalid.stderr, /workspace|lockfile/i);
 });
@@ -1993,7 +2105,11 @@ test('work safety rules are mirrored across policy, Claude, Codex, and hook wiri
   );
 
   for (const doc of [policy, claudeRule]) {
-    assert.match(doc, /main.*dev|dev.*main/s, 'must mention protected branches');
+    assert.match(
+      doc,
+      /main.*dev|dev.*main/s,
+      'must mention protected branches',
+    );
     assert.match(doc, /secret/i, 'must mention secret safety');
     assert.match(doc, /production/i, 'must mention production safety');
     assert.match(
@@ -2001,7 +2117,11 @@ test('work safety rules are mirrored across policy, Claude, Codex, and hook wiri
       /data[- ]?mutat|데이터 변동|mutate persisted data/i,
       'must require approval before any data mutation',
     );
-    assert.match(doc, /production data/i, 'must mention production data safety');
+    assert.match(
+      doc,
+      /production data/i,
+      'must mention production data safety',
+    );
     assert.match(doc, /PII|payment/i, 'must mention sensitive record safety');
     assert.match(
       doc,
@@ -2026,9 +2146,17 @@ test('work safety rules are mirrored across policy, Claude, Codex, and hook wiri
     /data[- ]?mutat|mutate persisted data/i,
     'Codex work-safety rules must mention data mutation approval',
   );
-  assert.match(codexRules, /infisical.*prod/s, 'must prompt production env wrappers');
+  assert.match(
+    codexRules,
+    /infisical.*prod/s,
+    'must prompt production env wrappers',
+  );
   assert.match(codexRules, /stripe/, 'must prompt payment side-effect CLIs');
-  assert.match(codexRules, /twilio|sendgrid|resend/, 'must prompt message side-effect CLIs');
+  assert.match(
+    codexRules,
+    /twilio|sendgrid|resend/,
+    'must prompt message side-effect CLIs',
+  );
   assert.match(codexRules, /printenv/, 'must prompt secret-like printing');
   assert.match(codexRules, /server-deploy/, 'must prompt deploy commands');
 });
@@ -2054,9 +2182,13 @@ test('secret surface check allows only Infisical bootstrap GitHub secrets', () =
     'NEXT_PUBLIC_APP_URL=http://localhost:3000\nJWT_ACCESS_SECRET=change-me-access-secret\n',
   );
 
-  const valid = runNode('.harness/scripts/checks/secret-surface-check.mjs', [], {
-    cwd: project,
-  });
+  const valid = runNode(
+    '.harness/scripts/checks/secret-surface-check.mjs',
+    [],
+    {
+      cwd: project,
+    },
+  );
   assert.equal(valid.status, 0, valid.stderr);
 
   writeFileSync(
@@ -2068,9 +2200,13 @@ test('secret surface check allows only Infisical bootstrap GitHub secrets', () =
     'SSH_PRIVATE_KEY=-----BEGIN OPENSSH PRIVATE KEY-----\n',
   );
 
-  const invalid = runNode('.harness/scripts/checks/secret-surface-check.mjs', [], {
-    cwd: project,
-  });
+  const invalid = runNode(
+    '.harness/scripts/checks/secret-surface-check.mjs',
+    [],
+    {
+      cwd: project,
+    },
+  );
   assert.notEqual(invalid.status, 0);
   assert.match(invalid.stderr, /DATABASE_URL/);
   assert.match(invalid.stderr, /private key/i);
@@ -2117,7 +2253,11 @@ test('rule-check validates mirrored rule lifecycle wiring', () => {
   assert.match(script, /doctor\.sh/, 'must validate doctor wiring');
 
   const launcher = readFileSync(join(root, 'harness'), 'utf8');
-  assert.match(launcher, /rule-check\)/, 'harness launcher must expose rule-check');
+  assert.match(
+    launcher,
+    /rule-check\)/,
+    'harness launcher must expose rule-check',
+  );
 });
 
 test('rule-check rejects orphan and undocumented rule files', () => {
@@ -2132,17 +2272,23 @@ test('rule-check rejects orphan and undocumented rule files', () => {
     join(root, '.harness', 'scripts', 'checks', 'rule-check.mjs'),
     join(project, '.harness', 'scripts', 'checks', 'rule-check.mjs'),
   );
-  writeFileSync(
-    join(project, '.claude', 'rules', 'orphan.md'),
-    '# Orphan\n',
-  );
+  writeFileSync(join(project, '.claude', 'rules', 'orphan.md'), '# Orphan\n');
   writeFileSync(
     join(project, '.codex', 'rules', 'orphan.rules'),
     'prefix_rule(pattern = ["demo"], decision = "prompt", justification = "demo")\n',
   );
-  writeFileSync(join(project, '.harness', 'policies', 'guardrails.md'), '# Guardrails\n');
-  writeFileSync(join(project, '.harness', 'policies', 'tool-permissions.md'), '# Permissions\n');
-  writeFileSync(join(project, '.harness', 'scripts', 'checks', 'doctor.sh'), '#!/usr/bin/env sh\n');
+  writeFileSync(
+    join(project, '.harness', 'policies', 'guardrails.md'),
+    '# Guardrails\n',
+  );
+  writeFileSync(
+    join(project, '.harness', 'policies', 'tool-permissions.md'),
+    '# Permissions\n',
+  );
+  writeFileSync(
+    join(project, '.harness', 'scripts', 'checks', 'doctor.sh'),
+    '#!/usr/bin/env sh\n',
+  );
 
   const result = runNode('.harness/scripts/checks/rule-check.mjs', [], {
     cwd: project,
@@ -2194,7 +2340,10 @@ test('generate-manifest.mjs writes a deterministic shared-manifest.json', () => 
     join(root, '.harness', 'scripts', 'setup', 'generate-manifest.mjs'),
     join(project, '.harness', 'scripts', 'setup', 'generate-manifest.mjs'),
   );
-  writeFileSync(join(project, '.harness', 'policies', 'guardrails.md'), 'shared\n');
+  writeFileSync(
+    join(project, '.harness', 'policies', 'guardrails.md'),
+    'shared\n',
+  );
   writeFileSync(join(project, '.planning', 'STATE.md'), 'project owned\n');
   writeFileSync(join(project, 'apps', 'front', 'AGENTS.md'), 'project owned\n');
   writeFileSync(
@@ -2205,11 +2354,9 @@ test('generate-manifest.mjs writes a deterministic shared-manifest.json', () => 
   writeFileSync(join(project, 'AGENTS.md'), 'shared agents\n');
   commitAll(project, 'init');
 
-  const first = runNode(
-    '.harness/scripts/setup/generate-manifest.mjs',
-    [],
-    { cwd: project },
-  );
+  const first = runNode('.harness/scripts/setup/generate-manifest.mjs', [], {
+    cwd: project,
+  });
   assert.equal(first.status, 0, first.stderr);
 
   const manifestPath = join(project, '.harness', 'shared-manifest.json');
@@ -2246,11 +2393,9 @@ test('generate-manifest.mjs writes a deterministic shared-manifest.json', () => 
   assert.deepEqual(manifest.files, sorted, 'manifest.files must be sorted');
 
   const firstSerialized = readFileSync(manifestPath, 'utf8');
-  const second = runNode(
-    '.harness/scripts/setup/generate-manifest.mjs',
-    [],
-    { cwd: project },
-  );
+  const second = runNode('.harness/scripts/setup/generate-manifest.mjs', [], {
+    cwd: project,
+  });
   assert.equal(second.status, 0, second.stderr);
   assert.match(second.stdout, /up to date/);
   assert.equal(readFileSync(manifestPath, 'utf8'), firstSerialized);
@@ -2258,7 +2403,9 @@ test('generate-manifest.mjs writes a deterministic shared-manifest.json', () => 
 
 test('prune-stale.mjs identifies shared files missing from the manifest', () => {
   const project = mkdtempSync(join(tmpdir(), 'codi-harness-prune-'));
-  mkdirSync(join(project, '.harness', 'scripts', 'checks'), { recursive: true });
+  mkdirSync(join(project, '.harness', 'scripts', 'checks'), {
+    recursive: true,
+  });
   mkdirSync(join(project, '.harness', 'scripts', 'setup'), { recursive: true });
   mkdirSync(join(project, '.harness', 'policies'), { recursive: true });
   mkdirSync(join(project, '.planning'), { recursive: true });
@@ -2275,7 +2422,10 @@ test('prune-stale.mjs identifies shared files missing from the manifest', () => 
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 
   writeFileSync(join(project, '.harness', 'policies', 'guardrails.md'), 'ok');
-  writeFileSync(join(project, '.harness', 'scripts', 'checks', 'doctor.sh'), 'ok');
+  writeFileSync(
+    join(project, '.harness', 'scripts', 'checks', 'doctor.sh'),
+    'ok',
+  );
   writeFileSync(
     join(project, '.harness', 'scripts', 'checks', 'old-check.sh'),
     'stale',
@@ -2284,20 +2434,13 @@ test('prune-stale.mjs identifies shared files missing from the manifest', () => 
     join(project, '.harness', 'scripts', 'setup', 'old-helper.mjs'),
     'stale',
   );
-  writeFileSync(
-    join(project, '.planning', 'STATE.md'),
-    'project work',
-  );
+  writeFileSync(join(project, '.planning', 'STATE.md'), 'project work');
   writeFileSync(join(project, 'apps', 'front', 'AGENTS.md'), 'project work');
 
-  const result = runNode(
-    '.harness/scripts/setup/prune-stale.mjs',
-    [],
-    {
-      cwd: project,
-      env: { MANIFEST_FILE: manifestPath, ROOT_DIR: project },
-    },
-  );
+  const result = runNode('.harness/scripts/setup/prune-stale.mjs', [], {
+    cwd: project,
+    env: { MANIFEST_FILE: manifestPath, ROOT_DIR: project },
+  });
   assert.equal(result.status, 0, result.stderr);
 
   const staleLines = result.stdout.split('\n').filter((l) => l.length > 0);
@@ -2376,14 +2519,19 @@ test('harness update --apply-harness prunes stale shared files using the upstrea
     { cwd: project },
   );
   assert.equal(applied.status, 0, applied.stderr);
-  assert.match(applied.stdout, /upstream에 더 이상 없는 stale shared 파일 정리: [1-9][0-9]*/);
+  assert.match(
+    applied.stdout,
+    /upstream에 더 이상 없는 stale shared 파일 정리: [1-9][0-9]*/,
+  );
   assert.doesNotMatch(
     applied.stdout,
     /stale-doctor\.sh/,
     'default update output should summarize pruned files instead of listing each path',
   );
   assert.equal(
-    existsSync(join(project, '.harness', 'scripts', 'checks', 'stale-doctor.sh')),
+    existsSync(
+      join(project, '.harness', 'scripts', 'checks', 'stale-doctor.sh'),
+    ),
     false,
     'stale shared file must be pruned',
   );
@@ -2401,8 +2549,12 @@ test('harness update --apply-harness prunes stale shared files using the upstrea
 });
 
 test('harness update --apply-harness prunes stale shared skill directories', () => {
-  const source = mkdtempSync(join(tmpdir(), 'codi-harness-skill-prune-source-'));
-  const project = mkdtempSync(join(tmpdir(), 'codi-harness-skill-prune-project-'));
+  const source = mkdtempSync(
+    join(tmpdir(), 'codi-harness-skill-prune-source-'),
+  );
+  const project = mkdtempSync(
+    join(tmpdir(), 'codi-harness-skill-prune-project-'),
+  );
 
   initGitRepo(source);
   for (const _d of ['checks', 'tooling', 'setup', 'deploy', 'agent', 'audit']) {
@@ -2411,7 +2563,11 @@ test('harness update --apply-harness prunes stale shared skill directories', () 
   mkdirSync(join(source, '.harness', 'skills', 'current-skill'), {
     recursive: true,
   });
-  for (const f of ['generate-manifest.mjs', 'prune-stale.mjs', 'project-owned.mjs']) {
+  for (const f of [
+    'generate-manifest.mjs',
+    'prune-stale.mjs',
+    'project-owned.mjs',
+  ]) {
     cpSync(
       join(root, '.harness', 'scripts', 'setup', f),
       join(source, '.harness', 'scripts', 'setup', f),
@@ -2465,7 +2621,9 @@ test('harness update --apply-harness prunes stale shared skill directories', () 
     'stale shared skill directory must be pruned',
   );
   assert.equal(
-    existsSync(join(project, '.harness', 'skills', 'current-skill', 'SKILL.md')),
+    existsSync(
+      join(project, '.harness', 'skills', 'current-skill', 'SKILL.md'),
+    ),
     true,
     'current upstream skill must be restored',
   );
@@ -2476,7 +2634,9 @@ test('update.sh prune step never touches project-owned paths', () => {
     join(root, '.harness', 'scripts', 'setup', 'prune-stale.mjs'),
     'utf8',
   );
-  const scanRootsMatch = pruneSource.match(/const SCAN_ROOTS = \[([\s\S]*?)\];/);
+  const scanRootsMatch = pruneSource.match(
+    /const SCAN_ROOTS = \[([\s\S]*?)\];/,
+  );
   assert.ok(scanRootsMatch, 'SCAN_ROOTS array must be present');
   const scanRoots = scanRootsMatch[1];
   for (const forbidden of ['"apps"', '"."', '".github"', '".planning"']) {
@@ -2496,7 +2656,9 @@ test('update.sh prune step never touches project-owned paths', () => {
 
 test('skills-link builds a merged tree from .harness/skills and .harness/skills-local', () => {
   const project = mkdtempSync(join(tmpdir(), 'codi-harness-skills-link-'));
-  mkdirSync(join(project, '.harness', 'skills', 'shared-skill'), { recursive: true });
+  mkdirSync(join(project, '.harness', 'skills', 'shared-skill'), {
+    recursive: true,
+  });
   mkdirSync(join(project, '.harness', 'skills-local', 'project-skill'), {
     recursive: true,
   });
@@ -2549,9 +2711,13 @@ function lstatSyncIsSymlink(path) {
 }
 
 test('skills-link does not delete tracked legacy skill symlinks by default', () => {
-  const project = mkdtempSync(join(tmpdir(), 'codi-harness-skills-link-legacy-'));
+  const project = mkdtempSync(
+    join(tmpdir(), 'codi-harness-skills-link-legacy-'),
+  );
   initGitRepo(project);
-  mkdirSync(join(project, '.harness', 'skills', 'shared-skill'), { recursive: true });
+  mkdirSync(join(project, '.harness', 'skills', 'shared-skill'), {
+    recursive: true,
+  });
   mkdirSync(join(project, '.harness', 'skills-local'), { recursive: true });
   mkdirSync(join(project, '.harness', 'scripts', 'setup'), { recursive: true });
   mkdirSync(join(project, '.claude'), { recursive: true });
@@ -2578,7 +2744,11 @@ test('skills-link does not delete tracked legacy skill symlinks by default', () 
   assert.match(result.stderr, /추적 중인 구버전 symlink/);
   const status = runCommand('git', ['status', '--porcelain'], { cwd: project });
   assert.equal(status.status, 0, status.stderr);
-  assert.equal(status.stdout, '', 'preflight-safe run must not dirty tracked symlinks');
+  assert.equal(
+    status.stdout,
+    '',
+    'preflight-safe run must not dirty tracked symlinks',
+  );
 });
 
 test('skills-link fails on a name collision between shared and local', () => {
@@ -2635,13 +2805,7 @@ test('update --apply-harness preserves .harness/skills-local', () => {
     recursive: true,
   });
   writeFileSync(
-    join(
-      project,
-      '.harness',
-      'skills-local',
-      'project-only-skill',
-      'SKILL.md',
-    ),
+    join(project, '.harness', 'skills-local', 'project-only-skill', 'SKILL.md'),
     'local only — never overwrite me\n',
   );
   commitAll(project, 'project');
@@ -2668,8 +2832,12 @@ test('update --apply-harness preserves .harness/skills-local', () => {
 });
 
 test('update --apply-harness preserves an empty .harness/skills-local directory', () => {
-  const source = mkdtempSync(join(tmpdir(), 'codi-harness-source-empty-local-'));
-  const project = mkdtempSync(join(tmpdir(), 'codi-harness-project-empty-local-'));
+  const source = mkdtempSync(
+    join(tmpdir(), 'codi-harness-source-empty-local-'),
+  );
+  const project = mkdtempSync(
+    join(tmpdir(), 'codi-harness-project-empty-local-'),
+  );
 
   initGitRepo(source);
   for (const _d of ['checks', 'tooling', 'setup', 'deploy', 'agent', 'audit']) {
@@ -2761,18 +2929,11 @@ test('skills-local protection lives in the single classifier and shell fallbacks
 test('skill-injector picks up a new skill in .harness/skills-local', () => {
   const project = mkdtempSync(join(tmpdir(), 'codi-harness-injector-'));
   mkdirSync(join(project, '.harness', 'config'), { recursive: true });
-  mkdirSync(
-    join(project, '.harness', 'skills-local', 'my-domain-skill'),
-    { recursive: true },
-  );
+  mkdirSync(join(project, '.harness', 'skills-local', 'my-domain-skill'), {
+    recursive: true,
+  });
   writeFileSync(
-    join(
-      project,
-      '.harness',
-      'skills-local',
-      'my-domain-skill',
-      'SKILL.md',
-    ),
+    join(project, '.harness', 'skills-local', 'my-domain-skill', 'SKILL.md'),
     '---\nname: my-domain-skill\ndescription: project-only skill\n---\n',
   );
   writeFileSync(
@@ -2850,12 +3011,17 @@ test('project-owned classifier --filter drops project-owned paths from stdin', (
     { input, encoding: 'utf8' },
   );
   assert.equal(r.status, 0, r.stderr);
-  const out = r.stdout.split('\n').filter((line) => line.length > 0).sort();
+  const out = r.stdout
+    .split('\n')
+    .filter((line) => line.length > 0)
+    .sort();
   assert.deepEqual(out, ['.harness/skills/codi-backend/SKILL.md', 'AGENTS.md']);
 });
 
 test('doctor self-heals a missing .harness/skills-local without failing', () => {
-  const project = mkdtempSync(join(tmpdir(), 'codi-harness-doctor-skills-local-'));
+  const project = mkdtempSync(
+    join(tmpdir(), 'codi-harness-doctor-skills-local-'),
+  );
   cpSync(join(root, '.harness'), join(project, '.harness'), {
     recursive: true,
   });
@@ -2884,11 +3050,19 @@ test('doctor self-heals a missing .harness/skills-local without failing', () => 
   if (existsSync(skillsLocal)) {
     spawnSync('rm', ['-rf', skillsLocal]);
   }
-  assert.equal(existsSync(skillsLocal), false, 'precondition: skills-local removed');
-  const r = spawnSync('bash', [join(project, '.harness', 'scripts', 'checks', 'doctor.sh')], {
-    cwd: project,
-    encoding: 'utf8',
-  });
+  assert.equal(
+    existsSync(skillsLocal),
+    false,
+    'precondition: skills-local removed',
+  );
+  const r = spawnSync(
+    'bash',
+    [join(project, '.harness', 'scripts', 'checks', 'doctor.sh')],
+    {
+      cwd: project,
+      encoding: 'utf8',
+    },
+  );
   assert.match(
     r.stdout,
     /skills-local 이 없어 빈 디렉터리를 생성했습니다/,
@@ -2941,7 +3115,11 @@ test('skills-link fails fast on a non-symlink child in the merged tree', () => {
     [],
     { cwd: project },
   );
-  assert.notEqual(r.status, 0, 'skills-link must fail when a non-symlink child is present');
+  assert.notEqual(
+    r.status,
+    0,
+    'skills-link must fail when a non-symlink child is present',
+  );
   assert.match(r.stderr, /symlink가 아니므로/);
 });
 
@@ -2977,7 +3155,9 @@ test('guardrails block relative Write/Edit paths when cwd is under .harness', ()
     JSON.stringify({ name: 'my-downstream-app' }),
   );
   mkdirSync(join(project, '.harness', 'skills', 'foo'), { recursive: true });
-  mkdirSync(join(project, '.harness', 'skills-local', 'foo'), { recursive: true });
+  mkdirSync(join(project, '.harness', 'skills-local', 'foo'), {
+    recursive: true,
+  });
   for (const [cwd, filePath, expect] of [
     [project, '.harness/skills/foo/SKILL.md', 'block'],
     [join(project, '.harness'), 'skills/foo/SKILL.md', 'block'],
@@ -3010,16 +3190,27 @@ test('guardrails block relative Write/Edit paths when cwd is under .harness', ()
 });
 
 test('guardrails allow .harness/skills writes in the harness repo itself', () => {
-  const project = mkdtempSync(join(tmpdir(), 'codi-harness-guard-harnessrepo-'));
+  const project = mkdtempSync(
+    join(tmpdir(), 'codi-harness-guard-harnessrepo-'),
+  );
   writeFileSync(
     join(project, 'package.json'),
     JSON.stringify({ name: 'codi-harness-v2' }),
   );
   assert.equal(spawnSync('git', ['init', '-q'], { cwd: project }).status, 0);
   assert.equal(
-    spawnSync('git', ['remote', 'add', 'origin', 'https://github.com/CODIWORKS-Engineer/codi-harness.git'], {
-      cwd: project,
-    }).status,
+    spawnSync(
+      'git',
+      [
+        'remote',
+        'add',
+        'origin',
+        'https://github.com/CODIWORKS-Engineer/codi-harness.git',
+      ],
+      {
+        cwd: project,
+      },
+    ).status,
     0,
   );
   const input = JSON.stringify({
@@ -3061,13 +3252,18 @@ test('guardrails do not allow HARNESS_REPO env to bypass downstream skill protec
     },
   );
   assert.equal(r.status, 0, r.stderr);
-  assert.ok(r.stdout.length > 0, 'env var alone must not bypass downstream guard');
+  assert.ok(
+    r.stdout.length > 0,
+    'env var alone must not bypass downstream guard',
+  );
   const decision = JSON.parse(r.stdout);
   assert.equal(decision.decision, 'block');
 });
 
 test('guardrails allow .harness/skills-local writes everywhere', () => {
-  const project = mkdtempSync(join(tmpdir(), 'codi-harness-guard-skills-local-'));
+  const project = mkdtempSync(
+    join(tmpdir(), 'codi-harness-guard-skills-local-'),
+  );
   writeFileSync(
     join(project, 'package.json'),
     JSON.stringify({ name: 'my-downstream-app' }),
@@ -3075,7 +3271,13 @@ test('guardrails allow .harness/skills-local writes everywhere', () => {
   const input = JSON.stringify({
     tool_name: 'Write',
     tool_input: {
-      file_path: join(project, '.harness', 'skills-local', 'my-skill', 'SKILL.md'),
+      file_path: join(
+        project,
+        '.harness',
+        'skills-local',
+        'my-skill',
+        'SKILL.md',
+      ),
     },
     cwd: project,
   });
@@ -3125,10 +3327,10 @@ test('guardrails block every Bash write path into .harness/skills/', () => {
     "mv /tmp/x '.harness/skills/foo/SKILL.md'",
     "rsync /tmp/x '.harness/skills/foo/SKILL.md'",
     'echo x > .harness/skills-local/../skills/foo/SKILL.md',
-    'python -c "open(\'.harness/skills/foo/SKILL.md\',\'w\').write(\'x\')"',
-    'node -e "require(\'fs\').writeFileSync(\'.harness/skills/foo/SKILL.md\',\'x\')"',
+    "python -c \"open('.harness/skills/foo/SKILL.md','w').write('x')\"",
+    "node -e \"require('fs').writeFileSync('.harness/skills/foo/SKILL.md','x')\"",
     'sudo cp /tmp/x .harness/skills/foo/SKILL.md',
-    'mise exec -- node -e "require(\'fs\').writeFileSync(\'.harness/skills/foo/SKILL.md\',\'x\')"',
+    "mise exec -- node -e \"require('fs').writeFileSync('.harness/skills/foo/SKILL.md','x')\"",
     'cat .harness/skills/foo/SKILL.md; cp /tmp/x .harness/skills/bar/SKILL.md',
     'ls .harness/skills && touch .harness/skills/foo/SKILL.md',
     'ls .harness/skills || echo > .harness/skills/foo/SKILL.md',
@@ -3168,10 +3370,7 @@ test('guardrails block every Bash write path into .harness/skills/', () => {
       { input, encoding: 'utf8' },
     );
     assert.equal(r.status, 0, r.stderr);
-    assert.ok(
-      r.stdout.length > 0,
-      `Bash bypass should be blocked: ${command}`,
-    );
+    assert.ok(r.stdout.length > 0, `Bash bypass should be blocked: ${command}`);
     const decision = JSON.parse(r.stdout);
     assert.equal(decision.decision, 'block', `must block: ${command}`);
   }
@@ -3255,15 +3454,31 @@ test('guardrails block cwd-relative writes when cwd is inside the shared tree', 
     [join(project, '.harness', 'skills'), 'echo x > foo/SKILL.md', 'block'],
     [join(project, '.harness', 'skills'), 'cp /tmp/x foo/SKILL.md', 'block'],
     [join(project, '.harness', 'skills'), 'git checkout -- SKILL.md', 'block'],
-    [join(project, '.harness', 'skills'), 'git diff --output=SKILL.md', 'block'],
+    [
+      join(project, '.harness', 'skills'),
+      'git diff --output=SKILL.md',
+      'block',
+    ],
     [join(project, '.harness', 'skills'), 'git log --output=SKILL.md', 'block'],
-    [join(project, '.harness', 'skills'), 'git show --output=SKILL.md', 'block'],
-    [join(project, '.harness', 'skills'), 'git grep foo --output=SKILL.md', 'block'],
+    [
+      join(project, '.harness', 'skills'),
+      'git show --output=SKILL.md',
+      'block',
+    ],
+    [
+      join(project, '.harness', 'skills'),
+      'git grep foo --output=SKILL.md',
+      'block',
+    ],
     [join(project, '.harness', 'skills'), 'git diff --ext-diff', 'block'],
     [join(project, '.harness', 'skills'), 'cat foo/SKILL.md', 'allow'],
     [join(project, '.harness', 'skills'), 'ls', 'allow'],
     [join(project, '.harness', 'skills'), 'git status', 'allow'],
-    [join(project, '.harness', 'skills'), 'git rev-parse --show-toplevel', 'allow'],
+    [
+      join(project, '.harness', 'skills'),
+      'git rev-parse --show-toplevel',
+      'allow',
+    ],
     [join(project, '.harness', 'skills'), 'pwd', 'allow'],
     [join(project, '.harness', 'skills'), 'which node', 'allow'],
     [join(project, '.harness', 'skills'), 'node --version', 'allow'],
@@ -3278,7 +3493,11 @@ test('guardrails block cwd-relative writes when cwd is inside the shared tree', 
     const r = spawnSync(
       process.execPath,
       [join(root, '.harness', 'hooks', 'guardrails.mjs')],
-      { input, encoding: 'utf8', env: { ...process.env, CLAUDE_PROJECT_DIR: project } },
+      {
+        input,
+        encoding: 'utf8',
+        env: { ...process.env, CLAUDE_PROJECT_DIR: project },
+      },
     );
     assert.equal(r.status, 0, r.stderr);
     if (expect === 'block') {
@@ -3358,7 +3577,11 @@ test('guardrails skills-local carve-out is per simple command', () => {
     const r = spawnSync(
       process.execPath,
       [join(root, '.harness', 'hooks', 'guardrails.mjs')],
-      { input, encoding: 'utf8', env: { ...process.env, CLAUDE_PROJECT_DIR: project } },
+      {
+        input,
+        encoding: 'utf8',
+        env: { ...process.env, CLAUDE_PROJECT_DIR: project },
+      },
     );
     assert.equal(r.status, 0, r.stderr);
     assert.ok(r.stdout.length > 0, `must block compound: ${command}`);
@@ -3379,7 +3602,7 @@ test('guardrails ambient-safe list refuses mutating subcommands', () => {
     'git rm SKILL.md',
     'git apply /tmp/patch.diff',
     'git -C skills rm foo/SKILL.md',
-    'node -e "require(\'fs\').writeFileSync(\'foo\',\'x\')"',
+    "node -e \"require('fs').writeFileSync('foo','x')\"",
     'npm --prefix skills install left-pad',
     'pnpm install',
     'mise run build',
@@ -3393,10 +3616,17 @@ test('guardrails ambient-safe list refuses mutating subcommands', () => {
     const r = spawnSync(
       process.execPath,
       [join(root, '.harness', 'hooks', 'guardrails.mjs')],
-      { input, encoding: 'utf8', env: { ...process.env, CLAUDE_PROJECT_DIR: project } },
+      {
+        input,
+        encoding: 'utf8',
+        env: { ...process.env, CLAUDE_PROJECT_DIR: project },
+      },
     );
     assert.equal(r.status, 0, r.stderr);
-    assert.ok(r.stdout.length > 0, `must block mutating subcommand: ${command}`);
+    assert.ok(
+      r.stdout.length > 0,
+      `must block mutating subcommand: ${command}`,
+    );
   }
 });
 
@@ -3426,7 +3656,11 @@ test('guardrails block absolute redirects back into the project shared tree', ()
     const r = spawnSync(
       process.execPath,
       [join(root, '.harness', 'hooks', 'guardrails.mjs')],
-      { input, encoding: 'utf8', env: { ...process.env, CLAUDE_PROJECT_DIR: project } },
+      {
+        input,
+        encoding: 'utf8',
+        env: { ...process.env, CLAUDE_PROJECT_DIR: project },
+      },
     );
     assert.equal(r.status, 0, r.stderr);
     if (expect === 'block') {
@@ -3461,13 +3695,24 @@ test('guardrails detect symlinked .harness via raw cwd inspection', () => {
     const r = spawnSync(
       process.execPath,
       [join(root, '.harness', 'hooks', 'guardrails.mjs')],
-      { input, encoding: 'utf8', env: { ...process.env, CLAUDE_PROJECT_DIR: project } },
+      {
+        input,
+        encoding: 'utf8',
+        env: { ...process.env, CLAUDE_PROJECT_DIR: project },
+      },
     );
     assert.equal(r.status, 0, r.stderr);
     if (expect === 'block') {
-      assert.ok(r.stdout.length > 0, `must block cwd=${bashCwd} cmd=${command}`);
+      assert.ok(
+        r.stdout.length > 0,
+        `must block cwd=${bashCwd} cmd=${command}`,
+      );
     } else {
-      assert.equal(r.stdout, '', `must allow cwd=${bashCwd} cmd=${command}: ${r.stdout}`);
+      assert.equal(
+        r.stdout,
+        '',
+        `must allow cwd=${bashCwd} cmd=${command}: ${r.stdout}`,
+      );
     }
   }
 });
@@ -3498,7 +3743,10 @@ test('guardrails cap substitution recursion depth (fail closed)', () => {
   const elapsed = Date.now() - start;
   assert.equal(r.status, 0, r.stderr);
   assert.ok(r.stdout.length > 0, 'deep nesting must block');
-  assert.ok(elapsed < 4000, `must complete fast even for depth=${depth} (got ${elapsed}ms)`);
+  assert.ok(
+    elapsed < 4000,
+    `must complete fast even for depth=${depth} (got ${elapsed}ms)`,
+  );
 });
 
 test('guardrails accept the canonical harness origin (HTTPS and SSH)', () => {
@@ -3514,7 +3762,8 @@ test('guardrails accept the canonical harness origin (HTTPS and SSH)', () => {
     );
     assert.equal(spawnSync('git', ['init', '-q'], { cwd: project }).status, 0);
     assert.equal(
-      spawnSync('git', ['remote', 'add', 'origin', remote], { cwd: project }).status,
+      spawnSync('git', ['remote', 'add', 'origin', remote], { cwd: project })
+        .status,
       0,
     );
     const input = JSON.stringify({
@@ -3544,7 +3793,13 @@ test('update.sh manual apply fails nonzero when skills-link fails; --auto warns'
   for (const _d of ['checks', 'tooling', 'setup', 'deploy', 'agent', 'audit']) {
     mkdirSync(join(source, '.harness', 'scripts', _d), { recursive: true });
   }
-  for (const f of ['update.sh', 'generate-manifest.mjs', 'prune-stale.mjs', 'project-owned.mjs', 'skills-link.sh']) {
+  for (const f of [
+    'update.sh',
+    'generate-manifest.mjs',
+    'prune-stale.mjs',
+    'project-owned.mjs',
+    'skills-link.sh',
+  ]) {
     cpSync(
       join(root, '.harness', 'scripts', 'setup', f),
       join(source, '.harness', 'scripts', 'setup', f),
@@ -3556,11 +3811,9 @@ test('update.sh manual apply fails nonzero when skills-link fails; --auto warns'
     'upstream skill\n',
   );
   commitAll(source, 'initial');
-  const r1 = runNode(
-    '.harness/scripts/setup/generate-manifest.mjs',
-    [],
-    { cwd: source },
-  );
+  const r1 = runNode('.harness/scripts/setup/generate-manifest.mjs', [], {
+    cwd: source,
+  });
   assert.equal(r1.status, 0, r1.stderr);
   runCommand('git', ['add', '.harness/shared-manifest.json'], { cwd: source });
   runCommand('git', ['commit', '-q', '-m', 'manifest'], { cwd: source });
@@ -3568,10 +3821,22 @@ test('update.sh manual apply fails nonzero when skills-link fails; --auto warns'
   function makeProject() {
     const project = mkdtempSync(join(tmpdir(), 'codi-harness-fail-proj-'));
     initGitRepo(project);
-    for (const _d of ['checks', 'tooling', 'setup', 'deploy', 'agent', 'audit']) {
+    for (const _d of [
+      'checks',
+      'tooling',
+      'setup',
+      'deploy',
+      'agent',
+      'audit',
+    ]) {
       mkdirSync(join(project, '.harness', 'scripts', _d), { recursive: true });
     }
-    for (const f of ['update.sh', 'prune-stale.mjs', 'project-owned.mjs', 'skills-link.sh']) {
+    for (const f of [
+      'update.sh',
+      'prune-stale.mjs',
+      'project-owned.mjs',
+      'skills-link.sh',
+    ]) {
       cpSync(
         join(root, '.harness', 'scripts', 'setup', f),
         join(project, '.harness', 'scripts', 'setup', f),
@@ -3592,7 +3857,11 @@ test('update.sh manual apply fails nonzero when skills-link fails; --auto warns'
     ['--apply-harness', '--source-repo', source, '--source-ref', 'v2'],
     { cwd: manualProject },
   );
-  assert.notEqual(manualResult.status, 0, 'manual apply must fail nonzero when skills-link fails');
+  assert.notEqual(
+    manualResult.status,
+    0,
+    'manual apply must fail nonzero when skills-link fails',
+  );
   assert.match(
     manualResult.stderr,
     /skills-link\.sh 실행에 실패/,
@@ -3602,10 +3871,21 @@ test('update.sh manual apply fails nonzero when skills-link fails; --auto warns'
   const autoProject = makeProject();
   const autoResult = runCommand(
     join(autoProject, '.harness', 'scripts', 'setup', 'update.sh'),
-    ['--apply-harness', '--auto', '--source-repo', source, '--source-ref', 'v2'],
+    [
+      '--apply-harness',
+      '--auto',
+      '--source-repo',
+      source,
+      '--source-ref',
+      'v2',
+    ],
     { cwd: autoProject },
   );
-  assert.equal(autoResult.status, 0, '--auto must keep going after skills-link failure');
+  assert.equal(
+    autoResult.status,
+    0,
+    '--auto must keep going after skills-link failure',
+  );
   assert.match(
     autoResult.stderr,
     /skills-link\.sh 실행 실패/,
@@ -3656,7 +3936,11 @@ test('project-profile-guard still allows apps/front under next-fullstack via abs
     { input, encoding: 'utf8' },
   );
   assert.equal(r.status, 0, r.stderr);
-  assert.equal(r.stdout, '', 'apps/front must not be blocked under next-fullstack');
+  assert.equal(
+    r.stdout,
+    '',
+    'apps/front must not be blocked under next-fullstack',
+  );
 });
 
 test('guardrails reject spoofed harness origins (owner and host)', () => {
@@ -3708,7 +3992,12 @@ test('update.sh manual mode exits nonzero on stale dirty files; --auto warns', (
   for (const _d of ['checks', 'tooling', 'setup', 'deploy', 'agent', 'audit']) {
     mkdirSync(join(source, '.harness', 'scripts', _d), { recursive: true });
   }
-  for (const f of ['update.sh', 'prune-stale.mjs', 'project-owned.mjs', 'skills-link.sh']) {
+  for (const f of [
+    'update.sh',
+    'prune-stale.mjs',
+    'project-owned.mjs',
+    'skills-link.sh',
+  ]) {
     cpSync(
       join(root, '.harness', 'scripts', 'setup', f),
       join(source, '.harness', 'scripts', 'setup', f),
@@ -3731,12 +4020,26 @@ test('update.sh manual mode exits nonzero on stale dirty files; --auto warns', (
   assert.equal(runCommand('git', ['branch', 'v2'], { cwd: source }).status, 0);
 
   function makeProjectWithDirtyStale() {
-    const project = mkdtempSync(join(tmpdir(), 'codi-harness-stale-dirty-proj-'));
+    const project = mkdtempSync(
+      join(tmpdir(), 'codi-harness-stale-dirty-proj-'),
+    );
     initGitRepo(project);
-    for (const _d of ['checks', 'tooling', 'setup', 'deploy', 'agent', 'audit']) {
+    for (const _d of [
+      'checks',
+      'tooling',
+      'setup',
+      'deploy',
+      'agent',
+      'audit',
+    ]) {
       mkdirSync(join(project, '.harness', 'scripts', _d), { recursive: true });
     }
-    for (const f of ['update.sh', 'prune-stale.mjs', 'project-owned.mjs', 'skills-link.sh']) {
+    for (const f of [
+      'update.sh',
+      'prune-stale.mjs',
+      'project-owned.mjs',
+      'skills-link.sh',
+    ]) {
       cpSync(
         join(root, '.harness', 'scripts', 'setup', f),
         join(project, '.harness', 'scripts', 'setup', f),
@@ -3774,7 +4077,14 @@ test('update.sh manual mode exits nonzero on stale dirty files; --auto warns', (
   const autoProject = makeProjectWithDirtyStale();
   const autoResult = runCommand(
     join(autoProject, '.harness', 'scripts', 'setup', 'update.sh'),
-    ['--apply-harness', '--auto', '--source-repo', source, '--source-ref', 'v2'],
+    [
+      '--apply-harness',
+      '--auto',
+      '--source-repo',
+      source,
+      '--source-ref',
+      'v2',
+    ],
     { cwd: autoProject },
   );
   assert.equal(
@@ -3850,27 +4160,40 @@ test('update.sh fails nonzero when prune-stale.mjs cannot run in manual mode', (
   for (const _d of ['checks', 'tooling', 'setup', 'deploy', 'agent', 'audit']) {
     mkdirSync(join(source, '.harness', 'scripts', _d), { recursive: true });
   }
-  for (const f of ['update.sh', 'generate-manifest.mjs', 'prune-stale.mjs', 'project-owned.mjs', 'skills-link.sh']) {
+  for (const f of [
+    'update.sh',
+    'generate-manifest.mjs',
+    'prune-stale.mjs',
+    'project-owned.mjs',
+    'skills-link.sh',
+  ]) {
     cpSync(
       join(root, '.harness', 'scripts', 'setup', f),
       join(source, '.harness', 'scripts', 'setup', f),
     );
   }
   commitAll(source, 'initial');
-  const r1 = runNode(
-    '.harness/scripts/setup/generate-manifest.mjs',
-    [],
-    { cwd: source },
-  );
+  const r1 = runNode('.harness/scripts/setup/generate-manifest.mjs', [], {
+    cwd: source,
+  });
   assert.equal(r1.status, 0, r1.stderr);
   runCommand('git', ['add', '.harness/shared-manifest.json'], { cwd: source });
   runCommand('git', ['commit', '-q', '-m', 'manifest'], { cwd: source });
   assert.equal(runCommand('git', ['branch', 'v2'], { cwd: source }).status, 0);
 
   function makeProjectWithBrokenPrune() {
-    const project = mkdtempSync(join(tmpdir(), 'codi-harness-prune-fail-proj-'));
+    const project = mkdtempSync(
+      join(tmpdir(), 'codi-harness-prune-fail-proj-'),
+    );
     initGitRepo(project);
-    for (const _d of ['checks', 'tooling', 'setup', 'deploy', 'agent', 'audit']) {
+    for (const _d of [
+      'checks',
+      'tooling',
+      'setup',
+      'deploy',
+      'agent',
+      'audit',
+    ]) {
       mkdirSync(join(project, '.harness', 'scripts', _d), { recursive: true });
     }
     for (const f of ['update.sh', 'project-owned.mjs', 'skills-link.sh']) {
@@ -3903,7 +4226,14 @@ test('update.sh fails nonzero when prune-stale.mjs cannot run in manual mode', (
   const autoProject = makeProjectWithBrokenPrune();
   const autoResult = runCommand(
     join(autoProject, '.harness', 'scripts', 'setup', 'update.sh'),
-    ['--apply-harness', '--auto', '--source-repo', source, '--source-ref', 'v2'],
+    [
+      '--apply-harness',
+      '--auto',
+      '--source-repo',
+      source,
+      '--source-ref',
+      'v2',
+    ],
     { cwd: autoProject },
   );
   assert.equal(
@@ -3937,8 +4267,7 @@ test('init-project is_harness_clone gates v1/v2 fallback on no remotes', () => {
     setup(project);
     const script = `set -eu
 PROJECT_ROOT="$1"
-${body
-  .match(/^origin_matches_harness\(\)[\s\S]*?^}/m)[0]}
+${body.match(/^origin_matches_harness\(\)[\s\S]*?^}/m)[0]}
 ${body.match(/^is_harness_clone\(\)[\s\S]*?^}/m)[0]}
 if is_harness_clone; then echo HARNESS; else echo NOT_HARNESS; fi`;
     const r = spawnSync('bash', ['-c', script, '_', project], {
@@ -3951,7 +4280,12 @@ if is_harness_clone; then echo HARNESS; else echo NOT_HARNESS; fi`;
     classify((p) => {
       spawnSync(
         'git',
-        ['remote', 'add', 'harness', 'https://github.com/foo/codi-harness-evil.git'],
+        [
+          'remote',
+          'add',
+          'harness',
+          'https://github.com/foo/codi-harness-evil.git',
+        ],
         { cwd: p },
       );
       writeFileSync(join(p, 'foo'), 'x');
@@ -3966,7 +4300,12 @@ if is_harness_clone; then echo HARNESS; else echo NOT_HARNESS; fi`;
     classify((p) => {
       spawnSync(
         'git',
-        ['remote', 'add', 'origin', 'https://github.com/foo/codi-harness-evil.git'],
+        [
+          'remote',
+          'add',
+          'origin',
+          'https://github.com/foo/codi-harness-evil.git',
+        ],
         { cwd: p },
       );
       writeFileSync(join(p, 'foo'), 'x');
@@ -3981,7 +4320,12 @@ if is_harness_clone; then echo HARNESS; else echo NOT_HARNESS; fi`;
     classify((p) => {
       spawnSync(
         'git',
-        ['remote', 'add', 'origin', 'https://github.com/CODIWORKS-Engineer/codi-harness.git'],
+        [
+          'remote',
+          'add',
+          'origin',
+          'https://github.com/CODIWORKS-Engineer/codi-harness.git',
+        ],
         { cwd: p },
       );
     }),
@@ -4010,7 +4354,12 @@ test('guardrails reject http:// canonical origin (https-only)', () => {
   assert.equal(
     spawnSync(
       'git',
-      ['remote', 'add', 'origin', 'http://github.com/CODIWORKS-Engineer/codi-harness-v2.git'],
+      [
+        'remote',
+        'add',
+        'origin',
+        'http://github.com/CODIWORKS-Engineer/codi-harness-v2.git',
+      ],
       { cwd: project },
     ).status,
     0,
@@ -4029,7 +4378,11 @@ test('guardrails reject http:// canonical origin (https-only)', () => {
   );
   assert.equal(r.status, 0, r.stderr);
   const decision = JSON.parse(r.stdout || '{}');
-  assert.equal(decision.decision, 'block', 'http:// must not pass as canonical');
+  assert.equal(
+    decision.decision,
+    'block',
+    'http:// must not pass as canonical',
+  );
 });
 
 test('tool-permission-guard segment terminator catches redirect-adjacent paths', () => {
@@ -4037,7 +4390,7 @@ test('tool-permission-guard segment terminator catches redirect-adjacent paths',
     join(root, '.harness', 'hooks', 'tool-permission-guard.mjs'),
     'utf8',
   );
-  const SEGMENT_TERMINATOR = "[\\s\"';|&<>]|$";
+  const SEGMENT_TERMINATOR = '[\\s"\';|&<>]|$';
   const pattern = new RegExp(
     `--prefix\\s+(?:\\.\\/)?apps\\/front(?:\\/|(?=${SEGMENT_TERMINATOR}))`,
   );

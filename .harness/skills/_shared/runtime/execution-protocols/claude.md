@@ -4,9 +4,7 @@ When running as a CLI subagent, follow this protocol for shared state coordinati
 
 ## State Management
 
-Use file-based I/O for coordination. Write results to `.agents/results/`.
-
-If Serena MCP is available, you may also use `read_memory`/`write_memory`/`edit_memory`.
+Record durable state in GSD `.planning/` — the single source of truth. For transient team-mode pane coordination, follow `.harness/skills/team-mode-operator/resources/memory-protocol.md`.
 
 ### Path Resolution (CRITICAL)
 
@@ -20,8 +18,8 @@ All result, progress, and state files MUST be written to the **project root** `.
 
 ## On Start
 
-1. Read `.agents/results/task-board.md` (or `read_memory("task-board.md")`) to confirm your assigned task
-2. Create `.agents/results/progress-{agent-id}[-{sessionId}].md` with initial status
+1. Read the transient task board per the team-mode file exchange protocol (`.harness/skills/team-mode-operator/resources/memory-protocol.md`) to confirm your assigned task; check GSD `.planning/` for durable phase state
+2. Create the transient `progress-{agent-id}[-{sessionId}].md` per the team-mode file exchange protocol with initial status
 
 ## During Execution
 
@@ -30,7 +28,7 @@ All result, progress, and state files MUST be written to the **project root** `.
 
 ## On Completion
 
-- Create `.agents/results/result-{agent-id}[-{sessionId}].md` with final result including:
+- Create the transient `result-{agent-id}[-{sessionId}].md` per the team-mode file exchange protocol, and record durable outcomes in GSD `.planning/`, with final result including:
   - Status: `completed` or `failed`
   - Summary of work done
   - Files created/modified

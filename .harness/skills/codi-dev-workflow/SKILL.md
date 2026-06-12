@@ -130,30 +130,20 @@ mise run //{path}:{task}
 
 ### Guardrails
 
-1. Always use `mise run` tasks instead of direct package manager commands when a mise task exists
-2. Run `mise install` after pulling changes that might update runtime versions
-3. Use parallel tasks (`mise run lint`, `mise run test`) for independent operations
-4. Run lint/test only on apps with changed files (`lint:changed`, `test:changed`)
-5. Validate commit messages with commitlint before committing
-6. Run pre-commit validation pipeline for staged files only
-7. Configure CI to skip unchanged apps for faster builds
-8. Check `mise tasks --all` to discover available tasks before running
-9. Verify task output and exit codes for CI/CD integration
-10. Document task dependencies in mise.toml comments
-11. Use consistent task naming conventions across apps
-12. Enable mise in CI/CD pipelines for reproducible builds
-13. Pin runtime versions in mise.toml for consistency
-14. Test tasks locally before committing CI/CD changes
-15. Never use direct package manager commands when mise tasks exist
-16. Never modify mise.toml without understanding task dependencies
-17. Never skip `mise install` after toolchain version updates
-18. Never run dev servers without checking port availability first
-19. Never commit without running validation on affected apps
-20. Never ignore task failures - always investigate root cause
-21. Never hardcode secrets in mise.toml files
-22. Never assume task availability - always verify with `mise tasks`
-23. Never run destructive tasks (clean, reset) without confirmation
-24. Never skip reading task definitions before running unfamiliar tasks
+mise/패키지 매니저/CI 공통 규칙은 `../../imported-rules/dev-workflow.md`의 12 Core Rules를 따른다. 아래는 그 규칙에 없는 SKILL 전용 운영 규칙이다.
+
+1. Run pre-commit validation pipeline for staged files only
+2. Verify task output and exit codes for CI/CD integration
+3. Document task dependencies in mise.toml comments
+4. Use consistent task naming conventions across apps
+5. Enable mise in CI/CD pipelines for reproducible builds
+6. Test tasks locally before committing CI/CD changes
+7. Never skip `mise install` after toolchain version updates
+8. Never run dev servers without checking port availability first
+9. Never commit without running validation on affected apps
+10. Never ignore task failures - always investigate root cause
+11. Never assume task availability - always verify with `mise tasks`
+12. Never run destructive tasks (clean, reset) without confirmation
 
 ### Technical Guidelines
 
@@ -181,37 +171,7 @@ Only use direct package manager commands when no mise task exists. React-only an
 
 ### Prerequisites
 
-```bash
-# Install mise
-curl https://mise.run | sh
-
-# Activate in shell
-echo 'eval "$(~/.local/bin/mise activate)"' >> ~/.zshrc
-
-# Install all runtimes defined in mise.toml
-mise install
-
-# Verify installation
-mise list
-```
-
-### Project Structure (Monorepo)
-
-```
-project-root/
-├── mise.toml            # Root task definitions
-├── apps/
-│   ├── api/            # Backend application
-│   │   └── mise.toml   # App-specific tasks
-│   ├── web/            # Frontend application
-│   │   └── mise.toml
-│   └── mobile/         # Mobile application
-│       └── mise.toml
-├── packages/
-│   ├── shared/         # Shared libraries
-│   └── config/         # Shared configuration
-└── scripts/            # Utility scripts
-```
+mise 설치 절차와 모노레포 디렉터리 구조 예시는 `resources/setup-examples.md` 참고.
 
 ### Task Syntax
 
@@ -269,43 +229,7 @@ depends = ["//apps/api:dev", "//apps/web:dev"]
 
 ### Parallel vs Sequential Execution
 
-**Parallel (independent tasks):**
-```bash
-# Runs all lint tasks simultaneously
-mise run lint
-```
-
-**Sequential (dependent tasks):**
-```bash
-# Runs in order: lint → test → build
-mise run lint && mise run test && mise run build
-```
-
-**Mixed approach:**
-```bash
-# Start dev servers in background
-mise run //apps/api:dev &
-mise run //apps/web:dev &
-wait
-```
-
-### Environment Variables
-
-Common patterns for monorepo env vars:
-
-```bash
-# Database
-DATABASE_URL=postgresql://user:pass@localhost:5432/db
-
-# Cache
-REDIS_URL=redis://localhost:6379/0
-
-# API
-API_URL=http://localhost:8000
-
-# Frontend
-PUBLIC_API_URL=http://localhost:8000
-```
+병렬/순차 실행 bash 예시와 모노레포 환경 변수 예시는 `resources/setup-examples.md` 참고.
 
 ### Output Templates
 
@@ -352,13 +276,9 @@ Follow the core workflow step by step:
 
 ### Execution Protocol (CLI Mode)
 
-Source files live under `../_shared/runtime/execution-protocols/{vendor}.md`.
+Source files live under `../_shared/runtime/execution-protocols/` (claude.md, codex.md).
 
 ## References
 
 - Clarification: `../_shared/core/clarification-protocol.md`
 - Difficulty assessment: `../_shared/core/difficulty-guide.md`
-
-### Knowledge Reference
-
-mise, task runner, monorepo, dev server, lint, format, test, typecheck, build, deployment, ci/cd, parallel execution, workflow, automation, tooling

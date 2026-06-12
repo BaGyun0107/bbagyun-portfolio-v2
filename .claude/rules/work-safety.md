@@ -46,43 +46,24 @@ an environment variable.
 
 ## Database safety
 
-Follow `.harness/imported-rules/database.md` for SQL authoring. In short:
-prefer ORM/query builder APIs, use bind parameters for raw SQL, never
-interpolate user input into SQL strings, and allowlist dynamic identifiers.
+Use ORM/bind parameters (never interpolate input into SQL); require bounded
+`WHERE`, tenant scope, and reviewed row counts on writes; require dry-run,
+backup, rollback plan, and explicit approval for bulk or destructive ops and
+migrations.
 
-Before database writes, check that `UPDATE` and `DELETE` have bounded `WHERE`
-clauses, multi-tenant predicates include tenant/account/user scope, expected and
-actual affected row counts are reviewed, and multi-step writes have transaction
-boundaries. Bulk update/delete requires dry-run `SELECT`, backup or restore
-point, rollback or roll-forward plan, and explicit approval when destructive.
-
-Before migrations, review the generated diff, data impact, lock impact, index
-build method, downtime expectation, rollback or roll-forward strategy, and
-verification command. Do not run `DROP`, `TRUNCATE`, destructive `ALTER TABLE`,
-database reset, or database drop commands without explicit approval for the
-exact target.
+Full SQL-authoring and migration rules: `.harness/imported-rules/database.md`
+and the database/migration sections of `.harness/policies/guardrails.md`.
 
 ## Sensitive data and external side effects
 
-Production data reads require explicit approval even when read-only. Prefer
-schemas, counts, aggregates, query plans, redacted logs, and synthetic samples
-over raw production rows. Do not paste production data, PII, payment data,
-tokens, session IDs, customer records, or support transcripts into code, tests,
-fixtures, docs, issues, PRs, chat, or verification notes.
+Production data reads need explicit approval; prefer schemas/counts/aggregates
+and never paste or log secrets, PII, tokens, or customer records. Live external
+side effects (payments, sends, webhook replay, high-cost APIs) default to
+sandbox/dry-run and need approval plus idempotency. Derive auth/permission
+identity from server context, not client input.
 
-Never log or return secrets, `Authorization`, `Cookie`, `Set-Cookie`, DB URLs,
-OAuth codes/tokens, session IDs, CSRF tokens, reset tokens, stack traces, SQL
-text, internal paths, provider raw errors, or config values to clients.
-
-Payment capture/refund, SMS/email/push send, production webhook replay, live
-customer sync, and high-cost API calls require sandbox/dry-run/mock paths by
-default and explicit approval for live targets. Retried side effects need
-idempotency keys or equivalent deduplication.
-
-Auth and permission work must derive user/account/tenant/role identity from
-server-verified context, not client input. Admin, role, permission, ownership,
-billing, and credential changes need audit logs and tests for both
-authentication and authorization failure paths.
+Full rules: the sensitive-data, external-side-effect, and auth sections of
+`.harness/policies/guardrails.md`.
 
 ## Enforcement
 

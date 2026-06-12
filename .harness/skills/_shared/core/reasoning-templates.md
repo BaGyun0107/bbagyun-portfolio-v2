@@ -5,7 +5,7 @@ Complete **each step before moving to the next** to avoid losing direction.
 
 ---
 
-## 1. Debugging Reasoning (Debug Agent, Backend/Frontend/Mobile Agent)
+## 1. Debugging Reasoning
 
 Repeat the loop below when finding the cause of a bug. After 3 iterations without resolution, record `Status: blocked`.
 
@@ -34,7 +34,7 @@ Verdict: Correct → Set default value of todos to []
 
 ---
 
-## 2. Architecture Decision (PM Agent, Backend Agent)
+## 2. Architecture Decision
 
 Fill in this matrix when technology selection or design decisions are needed.
 
@@ -84,7 +84,7 @@ Trade-off: Giving up Zustand's simplicity for consistency
 
 ---
 
-## 3. Cause-Effect Chain (Debug Agent)
+## 3. Cause-Effect Chain
 
 Use this to trace execution flow step-by-step in complex bugs.
 
@@ -115,7 +115,7 @@ Use this to trace execution flow step-by-step in complex bugs.
 
 ---
 
-## 4. Refactoring Judgment (All Implementation Agents)
+## 4. Refactoring Judgment
 
 Use this to decide "fix it or leave it as-is" when modifying code.
 
@@ -132,7 +132,7 @@ Unrelated → Record in result only (never fix)
 
 ---
 
-## 5. Performance Bottleneck Analysis (Debug Agent, QA Agent)
+## 5. Performance Bottleneck Analysis
 
 Systematically find bottlenecks for "it's slow" reports.
 
@@ -153,58 +153,9 @@ Expected improvement: {X}ms → {Y}ms
 
 ---
 
-## 6. Exploration Decision (Orchestrator, All Agents)
-
-Use this when the same issue causes repeated failures and alternative approaches should be explored.
-See `exploration-loop.md` for the full protocol.
-
-```
-=== Exploration Decision ===
-
-Problem: {what needs to be solved}
-Current Score: {composite quality score, or N/A if unmeasured}
-Attempts So Far: {count and outcomes}
-
-Hypothesis A: {approach description}
-  Predicted Impact: {which score dimensions improve/regress}
-  Confidence: HIGH / MEDIUM / LOW
-  Scope: {files to modify, max 3}
-
-Hypothesis B: {approach description}
-  Predicted Impact: {which score dimensions improve/regress}
-  Confidence: HIGH / MEDIUM / LOW
-  Scope: {files to modify, max 3}
-
-Selection: Highest composite score with confidence >= MEDIUM
-Fallback: If all LOW confidence, escalate to user
-```
-
-**Example:**
-```
-=== Exploration Decision ===
-
-Problem: Input validation keeps failing security review
-Current Score: 68
-Attempts So Far: 2 (both rejected by QA for bypass vulnerability)
-
-Hypothesis A: Zod schema validation at router level
-  Predicted Impact: Security +15, Correctness +5
-  Confidence: HIGH
-  Scope: routes/todo.ts, schemas/todo.ts
-
-Hypothesis B: Custom middleware with sanitization
-  Predicted Impact: Security +10, Performance -5
-  Confidence: MEDIUM
-  Scope: middleware/validate.ts, routes/todo.ts, middleware/index.ts
-
-Selection: Hypothesis A (higher confidence, better predicted impact)
-```
-
----
-
 ## Usage Rules
 
 1. **When to use**: Required for Complex difficulty tasks, recommended for Medium
 2. **Where to record**: Record reasoning process in `progress-{agent-id}.md`
-3. **If blanks cannot be filled**: Gather that information first (Serena, code reading, log checking)
+3. **If blanks cannot be filled**: Gather that information first (code reading, log checking)
 4. **Unresolved after 3 iterations**: `Status: blocked` + include reasoning so far in result
