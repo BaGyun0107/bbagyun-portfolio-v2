@@ -7,15 +7,43 @@
 //   - LEGIT 군: read-only 검색·텍스트 방출 명령은 통과(allow)해야 한다 (FP 제거).
 //   - 우회 경로(substitution / compound 뒤 숨은 위험)는 여전히 block.
 
-import { test } from "node:test";
+import { tmp } from './helpers/fixture-base.mjs';
+import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = join(HERE, "..");
 const HOOK = join(REPO, ".harness/hooks/guardrails.mjs");
+
+// guardrails 의 보호 브랜치 가드는 cwd 에서 `git branch --show-current` 를
+// 직접 읽는다. 따라서 write-like 명령(예: touch)의 통과(allow) 여부는 테스트가
+// 실행되는 브랜치에 의존한다 — feature 브랜치면 통과, main/dev 면 차단.
+// CI 가 main/dev 에서 checkout 후 돌면 깨지는 환경 의존 버그를 막기 위해,
+// write-like FP 케이스는 항상 "비보호 브랜치 상태의 임시 git 레포" 를 cwd 로
+// 넘겨 결정적으로 검증한다.
+let UNPROTECTED_REPO = null;
+
+before(() => {
+  UNPROTECTED_REPO = tmp("codi-fp-guard-");
+  const git = (args) =>
+    spawnSync("git", args, { cwd: UNPROTECTED_REPO, encoding: "utf8" });
+  git(["init", "-q"]);
+  git(["config", "user.email", "test@codi.local"]);
+  git(["config", "user.name", "codi-fp-test"]);
+  // 비보호 브랜치 이름으로 고정 (main/dev 가 아니어야 한다).
+  git(["checkout", "-q", "-b", "work"]);
+});
+
+after(() => {
+  if (UNPROTECTED_REPO) {
+    rmSync(UNPROTECTED_REPO, { recursive: true, force: true });
+    UNPROTECTED_REPO = null;
+  }
+});
 
 // 위험 토큰은 셸 명령줄이 아니라 이 파일 안 문자열로만 존재하므로
 // 테스트 러너의 Bash 가드를 건드리지 않는다.
@@ -52,7 +80,10 @@ const LEGIT_ALLOW = [
   // 대조군: 위험 단어 없는 평범한 read-only / 안전 쓰기 (원래도 통과)
   ["git log --oneline -20", "git log: 일반"],
   ["cat .harness/policies/guardrails.md", "cat: 일반"],
-  ["touch /tmp/codi-fp-test.txt", "touch: 안전 쓰기"],
+  // touch 는 write-like 라 보호 브랜치(main/dev)에선 차단이 정상 동작이다.
+  // 비보호 브랜치에서 "안전 쓰기로 통과" 하는지를 검증하려는 의도이므로,
+  // 환경(현재 브랜치)에 의존하지 않도록 임시 비보호 레포를 cwd 로 강제한다.
+  ["touch /tmp/codi-fp-test.txt", "touch: 안전 쓰기 (비보호 브랜치)", { unprotected: true }],
   ["ls -la .harness/skills", "ls: 공유 트리 읽기"],
 ];
 
@@ -77,8 +108,9 @@ const DANGEROUS_BLOCK = [
 
 test("LEGIT 군: read-only 검색/텍스트 방출은 통과(allow)", () => {
   const fps = [];
-  for (const [cmd, desc] of LEGIT_ALLOW) {
-    const { blocked } = runGuard(cmd);
+  for (const [cmd, desc, opts] of LEGIT_ALLOW) {
+    const cwd = opts?.unprotected ? UNPROTECTED_REPO : REPO;
+    const { blocked } = runGuard(cmd, cwd);
     if (blocked) fps.push(`  FP: ${desc} :: ${cmd}`);
   }
   assert.equal(fps.length, 0, `오탐 ${fps.length}건:\n${fps.join("\n")}`);

@@ -1,11 +1,14 @@
 {
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  },
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"$CLAUDE_PROJECT_DIR\" && ./harness update-check",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && ./harness update-check --background",
             "timeout": 10
           }
         ]
@@ -14,11 +17,6 @@
     "UserPromptSubmit": [
       {
         "hooks": [
-          {
-            "type": "command",
-            "command": "cd \"$CLAUDE_PROJECT_DIR\" && ./harness update-check",
-            "timeout": 10
-          },
           {
             "type": "command",
             "command": "cd \"$CLAUDE_PROJECT_DIR\" && mise exec -- node .harness/hooks/skill-injector.mjs",
@@ -110,6 +108,11 @@
             "type": "command",
             "command": "cd \"$CLAUDE_PROJECT_DIR\" && mise exec -- node .harness/hooks/decision-notifier.mjs",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && mise exec -- node .harness/hooks/docs-build-on-stop.mjs",
+            "timeout": 30
           }
         ]
       }

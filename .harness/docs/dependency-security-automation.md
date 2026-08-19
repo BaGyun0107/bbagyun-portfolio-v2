@@ -8,10 +8,10 @@ GitHub UI에서 직접 해야 하는 작업은
 ## 구성 요소
 
 - `renovate.json`: 업데이트 PR 생성, 자동 병합 후보, 수동 리뷰 패키지 정책.
-- `.github/workflows/pipeline.yml`: 일반 PR 검증, schedule/manual full scan, 배포를 단일 실행 흐름으로 제어.
+- `.github/workflows/pipeline.yml`: `dev`/`main` push 검증, schedule/manual full scan, 배포를 단일 실행 흐름으로 제어. PR 트리거는 두지 않는다 (머지 후 push 검증이 배포 게이트).
 - `.github/workflows/dependency-security-pr.yml`: dependency 파일 변경 PR에서만 dependency 보안 검사를 호출.
 - `.github/workflows/dependency-security.yml`: `pipeline.yml` 또는 `dependency-security-pr.yml`에서 호출되는 OSV Scanner CLI와 Renovate 영향도 리포트 workflow.
-- `.github/workflows/ci-node.yml`: `pipeline.yml`에서 호출되는 npm/pnpm install, typecheck 재사용 workflow. test는 opt-in이며 lint와 build는 실행하지 않는다.
+- `.github/workflows/ci-node.yml`: `pipeline.yml`에서 호출되는 npm/pnpm install, typecheck/test 재사용 workflow. 검증 범위 기본값은 `apps`(`CI_NODE_VERIFY_SCOPE` var로 재정의), test는 기본 실행(`CI_NODE_VERIFY_RUN_TESTS=false`로 끔)이며 lint와 build는 실행하지 않는다.
 - `.harness/scripts/checks/ci-node-verify.sh`: 프로젝트 구조를 탐색해 package manager와 스크립트를 실행.
 - `.harness/scripts/deploy/node-package-manager.sh`: 배포 workflow에서 앱별 npm/pnpm을 판별.
 - `.harness/scripts/audit/dependency-impact-report.js`: Renovate/dependencies PR에서 변경 dependency, lockfile, OSV 결과를 PR 코멘트로 요약.
@@ -19,12 +19,13 @@ GitHub UI에서 직접 해야 하는 작업은
 ## 운영 흐름
 
 취약점이 공개되면 Renovate가 예약 실행 또는 수동 실행으로 업데이트 PR을 만든다.
-일반 코드 변경 PR에서는 `Pipeline` 안의 `CI Node`만 실행된다.
+일반 코드 변경 PR에서는 CI가 실행되지 않는다 — 머지 후 `dev`/`main` push 검증이
+배포 게이트이고, push 검증(`CI Node`)이 실패하면 Slack 알림이 가며 배포는 스킵된다.
 dependency 파일이 바뀐 PR에서는 별도 `Dependency Security PR` workflow가 떠서
 `OSV PR scan`을 실행한다.
 Renovate 또는 `dependencies` label PR에는 영향도 리포트 코멘트를 남긴다.
 dependency 보안 check가 실패하면 같은 Slack 채널에 알림을 보낸다.
-필수 체크가 통과하면 사람이 PR 내용을 확인하고 병합한다. `dev`/`main` push,
+사람이 PR 내용을 확인하고 병합한다. `dev`/`main` push,
 schedule, 수동 실행에서는 `OSV full scan`이 전체 dependency 상태를 확인한다.
 full scan은 KST 날짜와 dependency 파일 fingerprint 기준의 성공 cache를 사용한다.
 같은 날 같은 dependency 상태를 이미 성공적으로 스캔했다면 full scan을 건너뛰고,
@@ -56,13 +57,11 @@ GitHub Code Security/Advanced Security가 있는 repository에서만 Code scanni
 GitHub Dependency Review는 private/free repository 기본 flow에서 사용하지 않는다.
 GitHub Code Security/Advanced Security로 전환하는 시점에 별도 변경으로 다시 추가한다.
 
-필수 체크는 최소 아래 항목으로 둔다.
-
-- `Pipeline`
-
+`Pipeline`은 PR에서 실행되지 않으므로 전역 required check를 두지 않는다.
 `Dependency Security PR`은 dependency 파일 변경 PR에서만 workflow 자체가 생성된다.
-일반 required check로 전역 지정하면 dependency 파일을 바꾸지 않은 PR에서 check가 없어서
-대기 상태가 될 수 있으므로, 전역 required check는 `Pipeline`만 둔다. dependency 변경
+전역 required check로 지정하면 dependency 파일을 바꾸지 않은 PR에서 check가 없어서
+대기 상태가 될 수 있으므로 전역 지정하지 않는다 — Renovate automerge는 이 체크가
+있는 PR에서 통과를 조건으로 동작한다. dependency 변경
 PR은 `Dependency Security PR` 상태와 Renovate 영향도 코멘트를 함께 보고 병합한다.
 `OSV full scan`은 dependency 파일 변경 `dev`/`main` push, schedule, 수동 실행에서 전체 lockfile 상태를 확인한다.
 KST 날짜와 dependency 파일 fingerprint가 동일한 성공 이력이 있으면 같은 날의 반복
@@ -114,8 +113,8 @@ renovate.json
 ```
 
 그 후 `package.json`에 가능한 경우 `typecheck` 스크립트를 정리한다.
-존재하지 않는 스크립트는 CI에서 자동으로 건너뛴다. `test`는
-`CI_NODE_VERIFY_RUN_TESTS=true`를 설정한 프로젝트에서만 실행한다.
+존재하지 않는 스크립트는 CI에서 자동으로 건너뛴다. `test`는 기본 실행되며
+`CI_NODE_VERIFY_RUN_TESTS=false` repository variable로 끌 수 있다.
 `lint`와 `build`는 CI Node에서 실행하지 않는다. lint는 `husky + lint-staged`
 pre-commit으로 변경 파일만 검증하고, build는 deploy workflow에서 환경 변수를 주입한 뒤
 실행한다.

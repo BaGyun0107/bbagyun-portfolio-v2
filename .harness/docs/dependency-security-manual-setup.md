@@ -1,12 +1,12 @@
 # 의존성 보안 자동화 수동 설정 체크리스트
 
 이 문서는 하네스가 파일로 자동 제공하지 못하는 GitHub/외부 서비스 설정만
-정리한다. 새 프로젝트 이름은 `codi-{project}` 형식을 사용한다.
+정리한다. 새 프로젝트 이름은 입력한 `<repo-name>`을 그대로 사용한다.
 
 ## 1. Renovate GitHub App
 
 1. Renovate GitHub App을 설치한다.
-2. 대상 repository `codi-{project}`를 활성화한다.
+2. 대상 repository `<repo-name>`을 활성화한다.
 3. repository 루트의 `renovate.json`이 적용되는지 확인한다.
 4. GitHub `Issues` 또는 Renovate Dependency Dashboard가 생성되는지 확인한다.
 
@@ -29,14 +29,10 @@ GitHub Code Security/Advanced Security로 전환하는 시점에 별도 변경�
 
 ## 3. Branch Protection 또는 Ruleset
 
-`dev`, `main` 브랜치에 대해 PR merge 전에 필요한 체크를 설정한다.
-
-가능하면 필수 체크는 아래 하나로 둔다.
-
-- `Pipeline`
-
-GitHub Free/private repository 등으로 required check를 세세하게 강제하기 어렵다면
-이 단계는 생략할 수 있다. `Dependency Security PR`은 dependency 파일 변경 PR에서만
+`Pipeline`은 PR에서 실행되지 않으므로(머지 후 push 검증이 배포 게이트) 전역
+required check를 둘 대상이 없다. GitHub Free/private repository는 branch
+protection 자체가 제한적이므로 이 단계는 생략할 수 있다.
+`Dependency Security PR`은 dependency 파일 변경 PR에서만
 생성되므로 전역 required check로 두면 일반 PR이 대기 상태가 될 수 있다. dependency
 변경 PR은 `Dependency Security PR` 상태와 영향도 코멘트를 확인한 뒤 병합한다.
 `dev`/`main` push에서 dependency 파일이 바뀐 경우에는 `pipeline.yml`이 `CI Node`와
@@ -88,7 +84,7 @@ Docker 배포는 Dockerfile 내부 install/build 단계가 같은 정책을 따�
 
 배포 방식에 따라 필요한 외부 설정을 완료한다.
 
-- Vercel: `codi-{project}` repository import, Root Directory는 빈 값으로 둔다.
+- Vercel: `<repo-name>` repository import, Root Directory는 빈 값으로 둔다.
   Git integration은 끄고 GitHub Actions가 `apps/front`에서 Vercel CLI를 실행한다.
 - PM2/Docker: Infisical `/frontend/github-actions`, `/backend/github-actions` 경로에 SSH/배포 시크릿 등록.
 - 배포 방식은 workflow 파일의 `push` 블록을 수정하지 않고 GitHub Actions Variables의
@@ -108,8 +104,8 @@ Docker 배포는 Dockerfile 내부 install/build 단계가 같은 정책을 따�
 4. PR 체크를 확인한다.
 5. `manual-review`, `major`, framework/auth/db/payment 업데이트는 changelog와 breaking change를 확인한다.
 6. Renovate/dependencies PR에 생성된 `Dependency Update Impact Report` 코멘트를 확인한다.
-7. Codex 또는 Claude Code로 리포트를 읽게 한 뒤 `gstack`의 `cso` -> `review` -> `qa`와
-   `superpowers`의 `systematic-debugging` 또는 `test-driven-development`를 사용해 영향도와 실패 원인을 검증한다.
+7. Codex 또는 Claude Code로 리포트를 읽게 한 뒤 `superpowers`의
+   `systematic-debugging` 또는 `test-driven-development`를 사용해 영향도와 실패 원인을 검증한다.
 8. merge 후 배포하고 smoke check를 수행한다.
 
 ## 9. 알림 운영

@@ -1,6 +1,15 @@
+---
+paths:
+  - ".harness/skills/**"
+  - ".harness/skills-local/**"
+  - ".harness/hooks/guardrails.mjs"
+  - ".harness/scripts/setup/**"
+---
+
 # Skill Ownership — Enforcement Internals
 
-이 문서는 `.claude/rules/skill-ownership.md`의 "## Enforcement" 절을 옮겨 온 on-demand 레퍼런스다. 필요할 때만 읽는다.
+This is the on-demand reference extracted from the "## Enforcement" section
+of `.claude/rules/skill-ownership.md`. Read it only when needed.
 
 ## Enforcement
 

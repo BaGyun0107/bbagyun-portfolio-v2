@@ -13,7 +13,8 @@
       ".harness/policies",
       ".harness/imported-rules",
       ".harness/skills",
-      ".planning"
+      "specs",
+      "docs/audits"
     ]
   },
   "workflow": [
@@ -28,29 +29,29 @@
     "policy": ".harness/policies/orchestration-loop.md",
     "profile_command": "./harness profile <list|show|set>",
     "workflow_check_command": "./harness workflow-check",
-    "harness_apply_command": "./harness update --apply-harness",
+    "harness_apply_command": "./harness update",
     "headless": {
       "claude": "claude -p",
       "codex": "./harness codex exec -C ."
     }
   },
   "integrations": {
-    "gsd": {
-      "responsibility": "milestones, phase state, task boundaries, context continuity, verification",
-      "package": "@opengsd/get-shit-done-redux",
-      "bin": "get-shit-done-redux",
-      "repo": "https://github.com/open-gsd/get-shit-done-redux",
-      "install_mode": "npm-global + runtime skill deploy (--claude --codex)",
-      "profile": "standard",
-      "update_cadence": "weekly",
-      "update_mode": "check-only"
+    "speckit": {
+      "responsibility": "feature specs, plan of record, session continuity (specs/NNN-feature + .specify)",
+      "package": "git+https://github.com/github/spec-kit.git",
+      "bin": "specify",
+      "repo": "https://github.com/github/spec-kit",
+      "install_mode": "vendored assets placed by ./harness install",
+      "vendor_path": ".harness/vendor/speckit",
+      "update_cadence": "manual with daily release drift notice",
+      "update_mode": "./harness speckit-vendor <tag>"
     },
-    "gstack": {
-      "responsibility": "decision roles and review gates",
-      "repo": "https://github.com/garrytan/gstack.git",
-      "install_mode": "team",
-      "update_cadence": "daily",
-      "update_mode": "managed-latest"
+    "playwright-mcp": {
+      "responsibility": "ad-hoc browser QA via MCP (both runtimes)",
+      "package": "@playwright/mcp",
+      "install_mode": "user-level MCP registration",
+      "update_cadence": "manual",
+      "update_mode": "pinned version in .harness/scripts/checks/mcp-registration-check.mjs"
     },
     "superpowers": {
       "responsibility": "execution discipline and test-driven development",
@@ -67,6 +68,7 @@
     "claude": ".claude/skills",
     "enabled": [
       "codi-phase-routing",
+      "codi-planning-retirement",
       "karpathy-style",
       "codi-backend",
       "codi-frontend",
@@ -76,14 +78,15 @@
       "init-project",
       "nestjs-expert",
       "skill-creator",
-      "team-mode-operator"
+      "codi-auto-loop",
+      "codi-design-system",
+      "codi-e2e",
+      "codi-feature-hub",
+      "codi-feature-definition-authoring",
+      "codi-feature-definition-normalizer",
+      "codi-rule-authoring"
     ],
-    "disabled_as_overlapping": [
-      "codi-architecture",
-      "codi-qa",
-      "codi-debug",
-      "codi-scm"
-    ]
+    "disabled_as_overlapping": []
   },
   "runtime": {
     "version_manager": "mise",
@@ -112,7 +115,8 @@
       "split-front-back",
       "next-fullstack",
       "frontend-only",
-      "backend-only"
+      "backend-only",
+      "planning-only"
     ]
   }
 }

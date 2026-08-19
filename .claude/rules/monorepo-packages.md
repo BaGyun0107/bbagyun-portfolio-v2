@@ -1,7 +1,21 @@
+---
+paths:
+  - "apps/**"
+  - "**/package.json"
+  - "**/package-lock.json"
+  - "**/pnpm-lock.yaml"
+  - "**/pnpm-workspace.yaml"
+---
+
 # Monorepo Package Management
 
-This rule applies to every session. It is loaded unconditionally because a
-dependency install can happen while working on any file.
+This rule is path-scoped (2026-07-06): it loads when Claude reads app files or
+package/lockfile manifests — the moments dependency decisions actually happen.
+Scoping is safe because the hard enforcement never depended on this text:
+`.harness/hooks/tool-permission-guard.mjs` blocks root-level installs
+deterministically regardless of context, and Codex (no path-scoping mechanism)
+keeps the always-on narrative via `AGENTS.md` and
+`.codex/rules/monorepo-packages.rules`.
 
 ## Each app owns its own packages
 

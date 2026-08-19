@@ -9,7 +9,8 @@ The harness keeps skills in two directories:
 
 - `.harness/skills/` — **shared, upstream-owned**. Every Codi project gets
   the same content here. `./harness update --apply-harness` overwrites this
-  directory with the upstream version on every run.
+  directory with the upstream version on every run (in lock mode the version
+  materialize has the same effect — local edits are lost either way).
 - `.harness/skills-local/` — **project-owned**. Each project's own skills
   live here. `./harness update --apply-harness` never touches this
   directory, and these skills never propagate to other projects.
@@ -18,6 +19,19 @@ Both sources are merged into `.claude/skills/` and `.agents/skills/` by
 `./harness skills-link` (also called automatically by `./harness install`,
 agent preflight, and the harness repo's pre-commit hook). Each entry in the
 merged tree is a symlink to one of the two sources.
+
+## Project-owned rules (rules-local)
+
+The same ownership split applies to always-loaded rules (specs/020):
+`.claude/rules/*.md` is upstream-owned and moves with updates, while
+`.harness/rules-local/*.md` is the project-owned home for committed
+project-wide team rules. Never create downstream rules directly under
+`.claude/rules/` — update's stale pruning treats non-distributed files
+there as migration candidates (preserved with a hint, but unmanaged).
+`./harness skills-link` mirrors `rules-local` into `.claude/rules/local/`
+(git-ignored link tree) so Claude auto-loads them; Codex sees them via the
+AGENTS.md loading clause and the preflight listing — execpolicy cannot
+carry narrative rules, so that is the accepted Codex mirror.
 
 ## Where to create a new skill
 
@@ -82,11 +96,12 @@ and used to author new skills. When invoking it:
 
 ## Enforcement
 
-전체 셸 가드 내부 동작(9단계 Bash 모델, redirect 차단, `COMMAND_MAX_LENGTH`,
-out-of-scope 우회 부류, 알려진 오탐)은
-`.claude/rules/references/skill-ownership-enforcement.md`에 정리해 두었다.
-필요할 때만 그 파일을 읽는다.
+The full shell-guard internals (the 9-step Bash model, redirect blocking,
+`COMMAND_MAX_LENGTH`, out-of-scope bypass classes, known false positives)
+are documented in
+`.claude/rules/references/skill-ownership-enforcement.md`. Read that file
+only when needed.
 
-훅은 "navigate-by-mistake" 방어일 뿐 셸 샌드박스가 아니다. 에이전트는 훅에
-기대면 안 되며(The hook is a "navigate-by-mistake" defense only — do NOT rely
-on it), 실제로 작동하는 규칙은 upstream/local 컨벤션이다.
+The hook is a "navigate-by-mistake" defense only, not a shell sandbox — do
+NOT rely on it. The load-bearing rule is the upstream/local convention
+itself.

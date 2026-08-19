@@ -153,11 +153,30 @@ read_script() {
   ' "$1/package.json" "$2"
 }
 
+# pnpm 설치가 frozen-lockfile 을 쓸 근거가 있는지 판단한다. 자기 lockfile,
+# 또는 pnpm workspace 멤버라면 workspace 루트의 lockfile 만 인정한다.
+# workspace 밖의 상위 lockfile(예: 리포 루트)은 앱 소유 경계 밖이므로
+# 근거로 쓰지 않는다 (monorepo-packages: 각 앱이 자체 lockfile 을 소유).
+pnpm_lockfile_exists() {
+  local dir="$1"
+  local workspace_file=""
+
+  if [ -f "$dir/pnpm-lock.yaml" ]; then
+    return 0
+  fi
+
+  workspace_file="$(find_up "$dir" "pnpm-workspace.yaml" || true)"
+  if [ -n "$workspace_file" ] && [ -f "$(dirname "$workspace_file")/pnpm-lock.yaml" ]; then
+    return 0
+  fi
+
+  return 1
+}
+
 install_package() {
   local dir="$1"
   local manager="$2"
   local pkg_file="$dir/package.json"
-  local lockfile=""
 
   if ! has_dependency_entries "$pkg_file" \
     && [ ! -f "$dir/package-lock.json" ] \
@@ -167,21 +186,27 @@ install_package() {
     return 0
   fi
 
+  # npm --prefix / pnpm --dir 는 패키지 해석 위치만 바꾸고 cwd는 옮기지
+  # 않는다. 루트 검증이 먼저 만든 루트 node_modules/lockfile 이 cwd(루트)
+  # 컨텍스트로 섞여 들어와 앱의 npm ci 가 루트 전이 의존성을 요구하며
+  # EUSAGE 로 실패했다 — 설치는 반드시 대상 디렉터리로 cd 해서 실행한다
+  # (maybe_prisma_generate 와 동일 규칙).
   if [ "$manager" = "pnpm" ]; then
-    lockfile="$(find_up "$dir" "pnpm-lock.yaml" || true)"
-    if [ -n "$lockfile" ]; then
-      pnpm --dir "$dir" install --frozen-lockfile --ignore-scripts
+    if pnpm_lockfile_exists "$dir"; then
+      (cd "$dir" && pnpm install --frozen-lockfile --ignore-scripts)
     else
-      pnpm --dir "$dir" install --ignore-scripts
+      (cd "$dir" && pnpm install --ignore-scripts)
     fi
     return 0
   fi
 
-  lockfile="$(find_up "$dir" "package-lock.json" || find_up "$dir" "npm-shrinkwrap.json" || true)"
-  if [ -n "$lockfile" ]; then
-    npm --prefix "$dir" ci --ignore-scripts
+  # npm 은 workspace 선언 없이 상위 lockfile 을 쓰지 않는다 — 대상
+  # 디렉터리 자신의 lockfile 만 npm ci 의 근거가 된다. 상위로 올라가는
+  # find_up 탐색은 루트 lockfile 을 앱 검증에 오인 적용하는 원인이었다.
+  if [ -f "$dir/package-lock.json" ] || [ -f "$dir/npm-shrinkwrap.json" ]; then
+    (cd "$dir" && npm ci --ignore-scripts)
   else
-    npm --prefix "$dir" install --ignore-scripts
+    (cd "$dir" && npm install --ignore-scripts)
   fi
 }
 
@@ -296,3 +321,15 @@ for dir in "${PACKAGE_DIRS[@]}"; do
     run_script_if_present "$dir" "$manager" "$script"
   done
 done
+
+# 로컬 hook이 실행되지 않는 직접 편집/다른 agent 경로도 merge 전에 같은
+# planning 계약으로 차단한다.
+if [ -f ".harness/scripts/docs/planning-check.mjs" ]; then
+  log "Planning Hub strict check 실행"
+  node .harness/scripts/docs/planning-check.mjs
+else
+  # lock 모드 다운스트림 checkout 에는 .harness/scripts/docs 가 없다(gitignore
+  # 링크 경로). 게이트가 소리 없이 사라지면 안 되므로 스킵을 로그에 남긴다 —
+  # 로컬 pre-commit 훅이 1차 방어선으로 남는다 (2026-07-31 감사 M-6).
+  log "Planning Hub strict check 스킵: planning-check.mjs 없음 (lock 모드 checkout)"
+fi

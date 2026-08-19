@@ -59,10 +59,10 @@
 # exclude:
 #   KEY/SECRET/TOKEN/PASSWORD 계열 env가 shell로 흘러가지 않게 막는다.
 #
-# 네 로컬 ~/.codex/config.toml에 이미 [features]와 [agents.gsd-*]가 있다면:
+# 네 로컬 ~/.codex/config.toml에 이미 [features]나 기존 [agents.*] 섹션이 있다면:
 # - [features]는 새로 만들지 말고 기존 [features] 블록에 값을 합친다.
-# - [agents]는 [agents.gsd-*] 섹션들보다 위에 한 번만 둔다.
-# - [projects.*], [plugins.*], [tui.*], [agents.gsd-*] 섹션은 유지한다.
+# - [agents]는 개별 [agents.*] 섹션들보다 위에 한 번만 둔다.
+# - [projects.*], [plugins.*], [tui.*], 기존 [agents.*] 섹션은 유지한다.
 
 # 하네스 기본 권장값: repo 안에서는 자율적으로 작업하되, 위험한 명령은 agent가
 # 명시적으로 승인을 요청할 수 있게 둔다. 더 자동화된 모드는 아래 profile 예시를 본다.
@@ -145,8 +145,8 @@ exclude = [
 # 공용 스킬은 .harness/skills에서 관리하고 .agents/skills를 통해 Codex에 노출한다.
 #
 # Phase routing은 안내용이며 Codex CLI가 강제하지 않는다. 새 Medium 이상 작업 전에는
-# 기존 .planning 상태를 먼저 확인한다.
-#   P1 strategy -> P2 GSD plan -> P3 execution discipline -> P4 review/QA -> P5 ship/complete
+# specs/*/tasks.md 미완료 항목(진행 중 기능)을 먼저 확인한다.
+#   P1 strategy -> P2 specify/plan -> P3 execution discipline -> P4 review/QA -> P5 ship/complete
 # 자세한 내용은 AGENTS.md와 .harness/policies/scenario-phase-routing.md를 본다.
 #
 # 명령 실행 규칙은 .codex/rules/*.rules에 둔다.

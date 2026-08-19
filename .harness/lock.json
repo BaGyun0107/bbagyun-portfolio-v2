@@ -1,27 +1,25 @@
 {
   "schema_version": 1,
-  "updated_at": null,
+  "updated_at": "2026-08-06T08:17:09.581Z",
   "policy": {
     "default_channel": "stable",
-    "gstack": "managed-latest",
-    "gsd": "external-tool-check-only",
+    "playwright-mcp": "pinned-version",
+    "speckit": "vendored-fixed-tag",
     "superpowers": "plugin-marketplace-manual"
   },
   "tools": {
-    "gstack": {
-      "repo": "https://github.com/garrytan/gstack.git",
-      "ref": "main",
-      "auto_update": true,
-      "notes": "GStack is intentionally managed-latest because team mode is designed to keep role behavior fresh."
-    },
-    "gsd": {
-      "package": "@opengsd/get-shit-done-redux",
-      "bin": "get-shit-done-redux",
-      "repo": "https://github.com/open-gsd/get-shit-done-redux",
-      "version": "latest",
-      "profile": "standard",
+    "playwright-mcp": {
+      "package": "@playwright/mcp",
       "auto_update": false,
-      "notes": "GSD is managed by the global harness update-check flow. install.sh installs `@opengsd/get-shit-done-redux` and runs `get-shit-done-redux --claude --global --standard` and `--codex --global --standard` to deploy runtime skills into the user's Claude Code and Codex config directories."
+      "notes": "사용자 레벨 MCP 등록(Claude ~/.claude.json, Codex ~/.codex/config.toml). 핀 버전의 단일 소스는 .harness/scripts/checks/mcp-registration-check.mjs 이며 install/preflight/doctor 가 이를 읽는다."
+    },
+    "speckit": {
+      "package": "git+https://github.com/github/spec-kit.git",
+      "bin": "specify",
+      "repo": "https://github.com/github/spec-kit",
+      "version": "v0.14.2",
+      "auto_update": false,
+      "notes": "Spec Kit shared assets are vendored in .harness/vendor/speckit and placed by ./harness install. Upgrade with ./harness speckit-vendor <tag>."
     },
     "superpowers": {
       "install_via": "plugin-marketplace",

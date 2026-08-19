@@ -274,7 +274,6 @@ const lines = [
   ),
   "",
   "### 권장 agent 검증",
-  "- `gstack`: `cso` -> `review` -> `qa` 순서로 보안, diff, smoke risk를 확인합니다.",
   "- `superpowers`: 실패가 있으면 `systematic-debugging`, 구현 수정이 필요하면 `test-driven-development`를 사용합니다.",
   "- 자동 병합 후보라도 manual-review 패키지나 OSV high 이상이 있으면 사람이 최종 확인합니다.",
 ];

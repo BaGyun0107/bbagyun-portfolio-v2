@@ -10,7 +10,7 @@
 
 스크립트가 끝났다면 아래는 이미 끝난 상태다. 수동 재확인 불필요.
 
-- GitHub 레포 `<org>/codi-<project>` 생성 또는 재사용
+- GitHub 레포 `<org>/<repo-name>` 생성 또는 재사용
 - `codi-engineers` 팀에 admin 권한 부여 시도
 - `origin` remote 설정
 - `--push` 옵션을 직접 준 경우에 한해 `main`/`dev` 초기 push
@@ -27,7 +27,7 @@ Infisical 배선과 `--push`를 안 준 경우는 아래 2.x / 3 단계에서 �
 
 **프로젝트 생성**
 
-- New Project → `codi-<project>`
+- New Project → `<repo-name>`
 - Project Settings → **Copy Project ID** (Step 2.3에서 사용)
 
 **환경(Environments) 생성**
@@ -49,7 +49,7 @@ Infisical 배선과 `--push`를 안 준 경우는 아래 2.x / 3 단계에서 �
 
 Cloudflare Tunnel을 쓰는 PM2/Docker 배포는 위에 더해 `BACK_SSH_TUNNEL_HOST`, `BACK_BASTION_USER`, `BACK_BASTION_PORT` (백엔드 측) / `FRONT_SSH_TUNNEL_HOST`, `FRONT_BASTION_USER`, `FRONT_BASTION_PORT` (프론트 측)를 같은 경로에 추가.
 
-**팀원 Join** (env.co-di.com → All Projects → `codi-<project>`)
+**팀원 Join** (env.co-di.com → All Projects → `<repo-name>`)
 
 - `ai@co-di.com` — admin
 - `dev@co-di.com`, `su@co-di.com`, `design@co-di.com` — member
@@ -70,7 +70,7 @@ GitHub Actions가 Infisical에서 값을 끌어올 때 사용할 인증 주체.
 2. 새 Machine Identity 생성
    - Auth Method: **Universal Auth**
    - TTL: **0** (만료 없음)
-3. 이 프로젝트 `codi-<project>`에 **Read** 권한 부여
+3. 이 프로젝트 `<repo-name>`에 **Read** 권한 부여
 4. Shared-Secrets 프로젝트(Slack/Vercel/Cloudflare 등)에도 **Read** 권한 부여
 5. Client ID / Client Secret을 복사해 둠 (Step 2.3에서 사용)
 
@@ -86,7 +86,7 @@ GitHub Actions가 Infisical에서 값을 끌어올 때 사용할 인증 주체.
 export INFISICAL_PROJECT_ID="<2.1에서 복사한 Project ID>"
 export INFISICAL_CLIENT_ID="<2.2에서 생성한 Client ID>"
 export INFISICAL_CLIENT_SECRET="<2.2에서 생성한 Client Secret>"
-./harness wire-infisical <project-name> --org CODIWORKS-Engineer
+./harness wire-infisical <repo-name> --org CODIWORKS-Engineer
 ```
 
 - `.infisical.json`의 `workspaceId`가 `INFISICAL_PROJECT_ID`로 치환됨
@@ -97,8 +97,8 @@ export INFISICAL_CLIENT_SECRET="<2.2에서 생성한 Client Secret>"
 
 ```sh
 # Secrets 등록
-gh secret set INFISICAL_CLIENT_ID     --repo <org>/codi-<project>
-gh secret set INFISICAL_CLIENT_SECRET --repo <org>/codi-<project>
+gh secret set INFISICAL_CLIENT_ID     --repo <org>/<repo-name>
+gh secret set INFISICAL_CLIENT_SECRET --repo <org>/<repo-name>
 ```
 
 `.infisical.json`은 직접 편집:
@@ -150,7 +150,7 @@ grep -rn '_PROJECT_ID_' .github/workflows/
 - **Dependabot alerts** 활성화
 - Branch protection 또는 ruleset이 가능하면 **`Pipeline` 체크를 필수로** 설정
 - Private repository + GitHub Free 플랜에서는 Code scanning 저장(SARIF upload)은 사용하지 않음. OSV 결과는 Actions 로그/아티팩트/Slack 알림으로만 본다.
-- **Renovate GitHub App** 설치 후 `<org>/codi-<project>` 레포 활성화 (셀프 호스팅 Renovate 워크플로우는 즉시 실행이 필요할 때만)
+- **Renovate GitHub App** 설치 후 `<org>/<repo-name>` 레포 활성화 (셀프 호스팅 Renovate 워크플로우는 즉시 실행이 필요할 때만)
 
 상세 체크리스트: `.harness/docs/dependency-security-manual-setup.md`.
 

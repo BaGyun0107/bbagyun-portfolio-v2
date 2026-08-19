@@ -63,3 +63,17 @@ CLAUDE.local.md
 # Legacy repo-local external integration cache
 vendor/
 .gstack/
+
+# >>> codi-harness managed (.planning) — do not edit between markers >>>
+# Legacy planning state is scheduled for removal
+# (docs/audits/2026-07-07-planning-retirement.md); until deleted, do not
+# ignore it — removal goes through git rm, not ignore.
+# <<< codi-harness managed (.planning) <<<
+
+# >>> codi-harness managed (lock scripts) — do not edit between markers >>>
+# .harness/scripts 는 통째로 무시하지 않는다: CI가 호출하는
+# KEEP_COMMITTED 스크립트(checks/deploy/audit)는 커밋되어야 하고,
+# 링크로 제공되는 하위만 lockModeEntries 가 개별 등재한다.
+# <<< codi-harness managed (lock scripts) <<<
+
+.claude/rules/local

@@ -134,12 +134,11 @@ codi-live-view-dev-deploy    → codi-live-view-dev 서버용
 #### 1단계 (키 생성) 예시
 
 ```bash
-# 로컬에서, 환경별로 따로 발급
-ssh-keygen -t ed25519 -f ~/keys/codi-live-view-dev-deploy  -C "codi-live-view-dev-deploy"  -N ""
+# 로컬에서
 ssh-keygen -t ed25519 -f ~/keys/<배포 서버>-deploy -C "<배포 서버>-deploy" -N ""
+ssh-keygen -y -f ~/keys/<배포 서버>-deploy   # 공개키 출력 (3,4단계용)
 
-# 공개키 추출 (bastion + 배포 서버 등록용)
-cat ~/keys/codi-live-view-dev-deploy.pub
+# 공개키 추출
 cat ~/keys/<배포 서버>-deploy.pub
 ```
 
@@ -148,30 +147,20 @@ cat ~/keys/<배포 서버>-deploy.pub
 ```bash
 # bastion에서 (각 키마다 주석 + 한 줄 추가)
 sudo -u deploy tee -a /home/deploy/.ssh/authorized_keys << 'EOF'
-
-# project: codi-live-view, target: dev (133.186.216.12) — added 2026-05-07
-ssh-ed25519 AAAA... codi-live-view-dev-deploy
-
-# project: codi-live-view, target: prod (133.186.216.13) — added 2026-05-07
-ssh-ed25519 AAAA... <배포 서버>-deploy
+# project: <프로젝트>, target: prod (<배포 서버 IP>) — added 2026-05-07
+ssh-ed25519 AAAA...
 EOF
 ```
 
 #### 3단계 (배포 서버 authorized_keys) 예시
 
-각 배포 서버에는 **그 서버를 가리키는 키 1개만** 등록:
+각 배포 서버에 등록:
 
 ```bash
 # dev 서버 (133.186.216.12)에서
-echo 'ssh-ed25519 AAAA... codi-live-view-dev-deploy' | sudo -u rocky tee -a /home/rocky/.ssh/authorized_keys
-sudo -u rocky chmod 600 /home/rocky/.ssh/authorized_keys
-
-# prod 서버 (133.186.216.13)에서
 echo 'ssh-ed25519 AAAA... <배포 서버>-deploy' | sudo -u rocky tee -a /home/rocky/.ssh/authorized_keys
 sudo -u rocky chmod 600 /home/rocky/.ssh/authorized_keys
 ```
-
-> **dev 키를 prod 서버에 등록하지 않는다.** 그 분리가 사고 차단의 핵심이다.
 
 #### 4·5단계 Infisical 변수 (프로젝트의 `/{backend,frontend}/github-actions/`)
 
@@ -254,7 +243,7 @@ sudo systemctl reload ssh          # 적용 (Ubuntu/Debian: ssh, Rocky: sshd)
 sudo sshd -T -C user=deploy | grep permitopen   # 적용 확인
 ```
 
-#### 7단계 Infisical 변수
+#### 6단계 Infisical 변수
 
 새 환경(prod 등)에 시나리오 A의 4·5단계 표와 동일한 변수 세트를 입력. 이때 `BACK_SSH_PRIVATE_KEY`는 2단계에서 생성한 새 키, `BACK_TARGET_HOST`는 새 서버 IP.
 

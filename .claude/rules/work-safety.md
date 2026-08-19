@@ -69,5 +69,16 @@ Full rules: the sensitive-data, external-side-effect, and auth sections of
 
 Claude Code runs `.harness/hooks/guardrails.mjs` before Bash, Write, Edit, and
 MultiEdit tool use. Codex mirrors the command-level intent in
-`.codex/rules/work-safety.rules`; branch-aware checks live in the hook because
-Codex execpolicy prefix rules cannot inspect the working directory or branch.
+`.codex/rules/work-safety.rules` (prefix layer) and — since 2026-07-06 — also
+enforces the same Bash blocks through its official PreToolUse hook:
+`.codex/hooks.json` wires `.harness/hooks/codex-pretooluse.mjs`, an adapter
+that feeds the Codex payload (cwd + full command) into `guardrails.mjs` and
+`project-profile-guard.mjs`. So branch-aware blocks, dangerous-command blocks,
+and profile app-surface blocks (including `planning-only`) run on both runtimes
+from one implementation. Pilot scope: blocks only — Claude-side non-blocking
+warnings are not yet ported to Codex.
+
+Non-blocking warning: bulk in-place edits (`sed -i`, `perl -i`,
+`awk -i inplace`) targeting `apps/**` draw a warning, not a block — batch
+edits have silently corrupted app code while passing lint. Prefer individual
+Edit-tool changes; verify each touched file before committing a batch.

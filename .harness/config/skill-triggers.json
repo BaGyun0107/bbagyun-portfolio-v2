@@ -1,4 +1,41 @@
 {
+  "codi-auto-loop": {
+    "keywords": [
+      "auto loop",
+      "auto-loop",
+      "codi-auto-loop",
+      "run the loop",
+      "자동 루프",
+      "자동루프",
+      "루프 시작",
+      "루프 실행",
+      "루프 돌려",
+      "자동 구현 루프"
+    ]
+  },
+  "codi-gnuboard": {
+    "keywords": [
+      "그누보드",
+      "gnuboard",
+      "영카트",
+      "youngcart",
+      "php",
+      ".php",
+      "쇼핑몰 온보딩",
+      "몰 온보딩",
+      "php-monolith"
+    ]
+  },
+  "codi-planning-retirement": {
+    "keywords": [
+      ".planning 정리",
+      ".planning 삭제",
+      ".planning 제거",
+      "planning retirement",
+      "legacy planning",
+      "플래닝 폐기"
+    ]
+  },
   "codi-phase-routing": {
     "keywords": [
       "phase",
@@ -11,17 +48,17 @@
       "plan review",
       "verify",
       "verification",
-      "gsd progress",
+      "spec kit",
+      "speckit",
+      "specify",
       "progress check",
       "resume",
       "manager",
       ".planning",
       "ship",
-      "gsd",
-      "gstack",
+      "스펙",
+      "기능 계획",
       "superpowers",
-      "autoplan",
-      "cso",
       "qa test",
       "qa pass",
       "tdd",
@@ -34,7 +71,24 @@
       "진행",
       "재개",
       "출시",
-      "인계"
+      "인계",
+      "end-to-end",
+      "from scratch",
+      "multiple",
+      "across",
+      "refactor",
+      "migration",
+      "rewrite",
+      "overhaul",
+      "전체",
+      "처음부터",
+      "전반",
+      "엔드투엔드",
+      "마이그레이션",
+      "리팩터",
+      "재작성",
+      "갈아엎",
+      "여러"
     ]
   },
   "karpathy-style": {
@@ -48,26 +102,6 @@
       "프롬프트",
       "오케스트레이터",
       "헤드리스"
-    ]
-  },
-  "team-mode-operator": {
-    "keywords": [
-      "team mode",
-      "team-mode",
-      "./harness team",
-      "cmux",
-      "tmux",
-      "pane",
-      "panes",
-      "agent team",
-      "multi-agent",
-      "worktree",
-      "CODI_TEAM_ROLE",
-      "팀 모드",
-      "팀모드",
-      "패널",
-      "페인",
-      "워크트리"
     ]
   },
   "codi-backend": {
@@ -120,6 +154,62 @@
       "화면",
       "컴포넌트",
       "페이지"
+    ]
+  },
+  "codi-design-system": {
+    "keywords": [
+      "design system",
+      "design tokens",
+      "brand color",
+      "brand colors",
+      "visual identity",
+      "tailwind tokens",
+      "shadcn tokens",
+      "디자인 시스템",
+      "디자인시스템",
+      "토큰",
+      "디자인 토큰",
+      "브랜드 컬러",
+      "브랜드 색상",
+      "시각 정체성"
+    ]
+  },
+  "codi-feature-definition-normalizer": {
+    "keywords": [
+      "feature definition normalizer",
+      "feature-definition normalizer",
+      "feature definition import",
+      "service definition import",
+      "service-definition",
+      "csv to feature definition",
+      "html to feature definition",
+      "markdown to feature definition",
+      "external feature document",
+      "legacy feature definition",
+      "기능정의서",
+      "기능 정의서",
+      "기능정의 정규화",
+      "기능 정의 정규화",
+      "기능정의 변환",
+      "기능 정의 변환",
+      "외부 문서 기능정의",
+      "CSV 기능정의",
+      "HTML 기능정의",
+      "MD 기능정의"
+    ]
+  },
+  "codi-feature-definition-authoring": {
+    "keywords": [
+      "feature definition authoring",
+      "new feature definition",
+      "기능정의서 작성",
+      "기능 정의서 작성",
+      "기능정의서 새로",
+      "기능정의 처음부터",
+      "새 기능 정의",
+      "새 기능정의",
+      "기능 정의 추가",
+      "카탈로그에 기능"
     ]
   },
   "codi-db": {
@@ -177,6 +267,20 @@
       "개발서버"
     ]
   },
+  "codi-e2e": {
+    "keywords": [
+      "e2e",
+      "playwright",
+      "e2e:changed",
+      "touches-user-flow",
+      "e2e-last-run",
+      "no task e2e",
+      "refusing to stamp",
+      "e2e 테스트",
+      "e2e 설치",
+      "이투이"
+    ]
+  },
   "codi-dependency-review": {
     "keywords": [
       "npm audit",
@@ -231,6 +335,44 @@
       "decorator",
       "passport",
       "NestJS"
+    ]
+  },
+  "codi-feature-hub": {
+    "keywords": [
+      "codi-feature-hub",
+      "기능 허브",
+      "기능허브",
+      "planning hub",
+      "플래닝 허브",
+      "허브 빌드",
+      "docs:build",
+      "사이트맵 스캔",
+      "추적성 스캔",
+      "기능 카탈로그"
+    ]
+  },
+  "codi-rule-authoring": {
+    "keywords": [
+      "codi-rule-authoring",
+      "룰 작성",
+      "규칙 작성",
+      "정책 작성",
+      "rule authoring",
+      "패리티 감사",
+      "codex 패리티",
+      "훅 규칙",
+      "가드레일 규칙"
+    ]
+  },
+  "skill-creator": {
+    "keywords": [
+      "skill-creator",
+      "스킬 만들",
+      "스킬 생성",
+      "스킬 작성",
+      "새 스킬",
+      "create a skill",
+      "new skill"
     ]
   }
 }

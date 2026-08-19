@@ -1,11 +1,21 @@
 # Harness Workflow
 
 The main agent acts as an orchestrator. The 1-5 phase model is an engineering
-thinking flow, not a requirement to create local feature spec files. For
-multi-phase work, use the external GSD commands and commit the `.planning/`
-workspace they produce.
+thinking flow, not a local feature-spec file convention. For multi-phase work,
+use the Spec Kit flow — Superpowers `brainstorming` output feeds
+`speckit-specify` (always request test tasks: "include test tasks (TDD)"),
+then `speckit-clarify` -> `speckit-plan` -> `speckit-tasks` ->
+`speckit-analyze`, implement guided by unchecked tasks.md items under harness
+discipline, and close with `speckit-converge` — and commit the
+`specs/<NNN-feature>/` directories it produces. Session continuity resumes
+from unchecked `specs/*/tasks.md` items plus `.specify/` state; cross-feature
+overview lives in the thin, manually maintained root `ROADMAP.md`.
 
-Users do not need to name GSD, GStack, or Superpowers in every prompt. Route to
+After clarify, the user may opt into the automated loop (`codi-auto-loop`
+skill), which runs plan through converge with a single mandatory pause at the
+tasks.md review gate.
+
+Users do not need to name Spec Kit or Superpowers in every prompt. Route to
 the smallest useful tool set according to phase, task size, and risk.
 
 ## Work Size and Phase Routing
@@ -29,28 +39,7 @@ Single-agent execution remains the default:
 ./harness claude
 ```
 
-Team Mode is an opt-in launcher for large work that benefits from visible,
-role-separated terminals:
-
-```sh
-./harness team
-./harness team claude
-./harness team --agent codex
-./harness team --agent claude
-./harness team --dry-run
-```
-
-The launcher runs the shared preflight once, then prefers cmux on macOS and
-falls back to tmux when cmux is unavailable. If neither tool exists, normal
-single-agent launchers are unaffected.
-
-Default roles are `orchestrator`, `planner`, `implementer`, `reviewer`, `qa`,
-and `shell`. Each role gets `CODI_TEAM_ROLE` and `CODI_AGENT_ROLE` in its
-environment. Use the panes for execution and monitoring, but do not treat pane
-scrollback as source of truth. Phase handoffs, decisions, verification output,
-and remaining risk stay in GSD `.planning/`, PR notes, or verification records.
-
-When operating or changing Team Mode, load `team-mode-operator` alongside
-`codi-phase-routing`. If official cmux skills are installed, prefer
-`cmux-workspace`, `cmux-diagnostics`, and `cmux-markdown` for workspace-safe
-automation and visible planning/verification notes.
+Do not treat session scrollback as source of truth. Phase handoffs, decisions,
+verification output, and remaining risk stay in the feature's
+`specs/<NNN-feature>/` directory (e.g. verification.md), PR notes, or
+verification records. Load `codi-phase-routing` for phase routing.

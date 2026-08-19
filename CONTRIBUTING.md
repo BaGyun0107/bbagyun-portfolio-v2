@@ -1,6 +1,6 @@
 # 하네스 사용 가이드
 
-> **이 파일은 shared 하네스 파일입니다.** 다운스트림 프로젝트는 이 파일을 직접 수정하지 않습니다. `./harness update --apply-harness`가 upstream 버전으로 덮어씁니다. 프로젝트별 절차나 추가 규칙은 다음 파일에 둡니다.
+> **이 파일은 shared 하네스 파일입니다.** 다운스트림 프로젝트는 이 파일을 직접 수정하지 않습니다. copy 모드에서는 `./harness update`가 upstream 버전으로 덮어쓰고, lock 모드(`harness.lock` 존재)에서는 버전 캐시 materialize로 함께 갱신됩니다. 프로젝트별 절차나 추가 규칙은 다음 파일에 둡니다.
 >
 > - `CONTRIBUTING.local.md` — 레포 전체에 적용되는 프로젝트별 절차
 > - `apps/*/CONTRIBUTING.md` — 특정 앱에만 적용되는 절차
@@ -12,8 +12,7 @@
 ## 기본 원칙
 
 - 에이전트는 `./harness codex` 또는 `./harness claude`로 실행합니다.
-- 팀 모드는 `./harness team`으로만 켜는 선택 기능입니다. 일반 실행을 대체하지 않습니다.
-- 여러 phase에 걸치는 작업 상태는 채팅이 아니라 외부 GSD의 `.planning/`에 남깁니다.
+- 여러 단계에 걸치는 작업 상태는 채팅이 아니라 Spec Kit이 만드는 커밋된 `specs/<NNN-feature>/`에 남깁니다.
 - 중요한 작업은 Brainstorming → Planning → Execution → Review → Verification 순서를 따릅니다.
 - 하네스 자체 런타임은 `mise`가 관리하는 Node.js 24 + npm입니다. 대상 앱이 Node.js 20/22를 선언하면 앱의 런타임 설정이 우선입니다.
 - 앱 패키지 매니저는 스택별로 고정합니다(README의 표 참고). `yarn`과 `bun`은 사용하지 않습니다.
@@ -102,7 +101,7 @@ deny는 allow보다 우선합니다. 운영, 시크릿, 데이터 삭제, Git �
 - 공통 정책은 `.harness/policies`, `.harness/imported-rules`, `.harness/skills`에 둡니다.
 - 프로젝트별 팀 규칙은 `.harness/config/project-profile.yaml` 또는 app-local `apps/*/AGENTS.md`, `apps/*/CLAUDE.md`에 둡니다.
 - 앱 소스와 app-local `apps/*/.env.example`, `apps/*/.infisical.json`은 downstream-owned 파일이며, 하네스 업데이트가 덮어쓰지 않습니다.
-- 작업별 결정과 이유는 GSD가 관리하는 `.planning/` 또는 관련 정책 문서에 남깁니다.
+- 작업별 결정과 이유는 해당 기능의 `specs/<NNN-feature>/` 또는 관련 정책 문서에 남깁니다.
 - 루트 진입점 파일은 각각 200줄 이하를 목표로 합니다.
 - 긴 코드 예시는 넣지 말고 실제 파일 경로나 정책 문서를 참조합니다.
 
@@ -216,12 +215,12 @@ Claude Code는 `Stop` hook에서 마지막 응답이 결정 질문처럼 보이�
 ```text
 사용자 요청
   -> 메인 에이전트
-      -> Strategy / Project Structure / Implementation / Validation / Completion
+      -> Strategy / Specify and plan / Implementation / Validation / Completion
 ```
 
-1~5단계는 개발 사고 흐름입니다. 로컬 feature spec 파일을 매번 만드는 규칙이 아닙니다. 여러 phase에 걸치는 작업은 외부 GSD가 만드는 `.planning/`을 커밋해 상태를 남깁니다.
+1~5단계는 개발 사고 흐름입니다. 로컬 feature spec 파일을 매번 만드는 규칙이 아닙니다. 여러 단계에 걸치는 작업은 Spec Kit이 만드는 `specs/<NNN-feature>/`를 커밋해 상태를 남깁니다.
 
-사용자는 매번 `GSD`, `GStack`, `Superpowers`를 직접 언급할 필요가 없습니다. 하네스가 내부 역할을 배정합니다. 세 도구를 항상 합쳐 쓰지 않고, 작업 크기와 phase 리스크에 맞춰 가장 필요한 도구만 고릅니다.
+사용자는 매번 `Spec Kit`, `Superpowers`를 직접 언급할 필요가 없습니다. 하네스가 내부 역할을 배정합니다. 도구를 항상 합쳐 쓰지 않고, 작업 크기와 phase 리스크에 맞춰 가장 필요한 도구만 고릅니다.
 
 ### Team Mode
 
@@ -232,33 +231,62 @@ Claude Code는 `Stop` hook에서 마지막 응답이 결정 질문처럼 보이�
 ./harness claude
 ```
 
-큰 작업에서 역할별 terminal이 필요하면 팀 모드를 선택합니다.
-
-```sh
-./harness team
-./harness team claude
-./harness team --agent codex
-./harness team --agent claude
-./harness team --dry-run
-```
-
-팀 모드는 shared preflight를 한 번 실행하고, macOS에서는 cmux를 먼저 쓰며 없으면 tmux로 fallback합니다. cmux/tmux가 없어도 `./harness doctor`는 실패하지 않고 선택 readiness warning만 냅니다.
-
-기본 역할은 `orchestrator`, `planner`, `implementer`, `reviewer`, `qa`, `shell`입니다. 각 process는 `CODI_TEAM_ROLE`/`CODI_AGENT_ROLE`을 받습니다. 역할 간 전달은 `.harness/policies/orchestration-loop.md`의 handoff contract를 따르고, durable state는 GSD `.planning/`에 남깁니다.
-
-팀 모드를 실행하거나 개선할 때는 `codi-phase-routing`과 함께 `team-mode-operator` skill을 사용합니다. cmux 공식 skill이 설치된 환경에서는 `cmux-workspace`, `cmux-diagnostics`, `cmux-markdown`을 우선 사용하고, tmux fallback에서는 pane title과 `tmux-agent-status` 같은 상태 표시 도구를 우선합니다.
+역할 간 전달은 `.harness/policies/orchestration-loop.md`의 handoff contract를 따르고, durable state는 커밋된 `specs/<NNN-feature>/`에 남깁니다. phase routing은 `codi-phase-routing` skill을 사용합니다.
 
 ### Phase별 기본 라우팅
 
-새 작업을 시작하기 전에 `.planning/`이 있으면 GSD progress/manager 상태를 먼저 확인합니다. `.planning/.continue-here.md`, paused 상태, 진행 중인 phase가 있으면 사용자가 명시적으로 새 작업을 지시하지 않는 한 기존 작업을 우선 이어갑니다.
+새 작업을 시작하기 전에 미완료 항목이 있는 `specs/<NNN-*>/tasks.md`가 있는지 먼저 확인합니다. 미완료 task가 있으면 사용자가 명시적으로 새 작업을 지시하지 않는 한 기존 기능을 우선 이어갑니다(미완료 tasks + `.specify/` 상태가 checkpoint). 감사 기록은 `docs/audits/`(harness 소유, 활성)에 있습니다. 남아 있는 legacy `.planning/` 디렉터리는 제거 예정이며 `docs/audits/2026-07-07-planning-retirement.md`의 절차(정제 후 `git rm`; git 히스토리가 아카이브)를 따릅니다 — 라우팅 목적으로 읽거나 갱신하지 않습니다.
+
+Planning Hub source 또는 `specs/`를 수정한 작업은 `mise run planning:check`와
+`mise run feature:status:sync`를 완료 전에 실행합니다. Stop hook은 편의 기능이며
+Planning Lock을 갱신하지 않습니다. 새 계획 수신은 후보를 검토한 뒤 명시적으로
+`mise run planning:pull`을 실행합니다. 소유권과 외부 저장소 인계 규칙은
+[`docs/planning-hub-handoff.md`](docs/planning-hub-handoff.md)를 따릅니다.
+
+#### 문서/Planning 페이지 작업 규칙
+
+`mise run docs:build`는 수집한 source/model 하나에서
+`docs/index.html`(문서 허브)과 `docs/planning.html`(Planning Hub)을 함께
+생성합니다. 두 renderer가 모두 완료된 뒤에만 두 파일을 교체하므로,
+생성 HTML을 직접 고치지 말고 소스를 고친 뒤 재생성해야 합니다.
+
+| 변경 대상 | 소유·처리 |
+| --- | --- |
+| `README.md`, `docs/**/*.md`, `.harness/docs/**/*.md`, `specs/**/*.md` | 사람/프로젝트가 수정, 문서 허브가 읽기 전용 projection |
+| `data/sitemap.json`, relation, flow, feature definition | 사람이 제품 구조를 소유, Planning Hub가 읽기 전용 projection |
+| Spec/task/test·Delivery Evidence | downstream이 구현 사실을 소유, bottom-up 현황으로 수집 |
+| `docs/index.html`, `docs/planning.html` | 생성물, 직접 수정 금지 |
+
+로컬 확인은 [문서 허브](docs/index.html#harness)와
+[Planning Hub](docs/planning.html)를 브라우저에서 열어 진행합니다. 문서 허브의
+`#harness`/`#project`는 범주를 복원하는 fragment이고, Planning Hub의
+기능 정의·기능 현황은 같은 stable feature ID 선택을 공유합니다. Planning Hub의
+제품 보기는 개요·화면 구조·기능 정의·기능 현황·사용자 흐름·추적성 여섯 개이고,
+version/digest·동기화·자동화 기록은 `운영·고급` disclosure에 있습니다. 기능정의
+(FeatureDefinition)는 구현 상태를 저장하지 않고 프로젝트 소유
+FeatureWorkItem(1:N, Release는 work item 속성)이 현황을 담으며, 명시적 work item이
+없는 legacy 근거는 기능당 최대 1개의 `unspecified` 작업으로 투영됩니다.
+
+검사가 missing/stale generated output으로 실패하면 다음 순서로 복구합니다.
+
+```sh
+mise run docs:build
+mise run planning:check
+```
+
+`data/hub-workspaces.json`의 `deliverySource`는 저장소 안의 안전한 상대
+경로여야 하며 symlink는 따라가지 않습니다. 실행 중인 `planning:watch`에
+설정이나 새 감시 root를 추가했다면 watcher를 재시작합니다. 현재 자동화는
+로컬에 배치된 source를 읽는 범위이며, 별도 `planning-hub` 저장소와의
+원격 전송·push·PR·자동 승인은 향후 아키텍처입니다.
 
 | 단계 | 기본 방향 |
 | --- | --- |
-| 1. Strategy | GStack `cso` 기본 보안 gate + 필요한 decision gate, 필요 시 Superpowers brainstorming |
-| 2. Project and plan | GSD codebase map, milestone, discuss, phase plan |
-| 3. Execution | GSD execute + Superpowers TDD/debugging/plan execution |
-| 4. Review / Verification | GSD code review/verify + GStack review/QA/design/DX/perf gate |
-| 5. Ship / Completion | GStack `ship` release gate + GSD audit/summary/complete |
+| 1. Strategy | 창작/제품/아키텍처 변경이면 Superpowers brainstorming |
+| 2. Specify and plan | `speckit-specify`(test task 명시 요청) -> `speckit-clarify` -> `speckit-plan` -> `speckit-tasks` -> `speckit-analyze` |
+| 3. Execution | 미완료 tasks.md 항목 기반 구현 + Superpowers TDD/debugging/plan execution |
+| 4. Review / Verification | `speckit-converge`("Converged"까지) + Superpowers 검증 습관; 필요 시 Playwright MCP 브라우저 QA |
+| 5. Ship / Completion | converge green -> `ROADMAP.md` 갱신 -> PR 준비 |
 
 상세 스킬 매핑과 조건부 스킬은 `.harness/policies/scenario-phase-routing.md`가 source of truth입니다.
 
@@ -268,8 +296,8 @@ Claude Code는 `Stop` hook에서 마지막 응답이 결정 질문처럼 보이�
 | --- | --- | --- |
 | 소 | 방향과 대상이 고정되어 있고, 영향 범위가 작고, 쉽게 되돌릴 수 있으며, 바로 검증 가능한 기계적 수정 | 직접 처리 |
 | 중 | 파일 1개여도 무엇을 확인하고 무엇을/어떻게 바꾸며 어떻게 검증할지 에이전트 판단이 필요한 순간 | 필요한 phase와 외부 도구만 사용 |
-| 대 | 여러 phase, 여러 소유 영역, 역할 검토, handoff, 사용자 workflow/API 영향, 넓은 영향 | GSD phase + 필요한 GStack gate + Superpowers |
-| 특대/위험 | production, deploy/rollback, CI/CD, infra, DB schema/data 이동, auth, permission, payment, security, secret, privacy, 파괴적 작업, 되돌리기 어려운 작업 | Triple Crown 전체 흐름과 명시적 checkpoint |
+| 대 | 여러 단계, 여러 소유 영역, 역할 검토, handoff, 사용자 workflow/API 영향, 넓은 영향 | Spec Kit 기능 흐름(specify -> converge) + Superpowers |
+| 특대/위험 | production, deploy/rollback, CI/CD, infra, DB schema/data 이동, auth, permission, payment, security, secret, privacy, 파괴적 작업, 되돌리기 어려운 작업 | 전체 기능 흐름(specify -> converge)과 모든 stage gate의 명시적 checkpoint |
 
 파일 개수, 키워드, 사용자가 붙인 규모 라벨은 결정적인 신호가 아닙니다. 작은 작업으로 시작했더라도 판단 지점이나 더 큰 리스크가 드러나면 즉시 중/대 이상으로 올립니다.
 
@@ -283,9 +311,9 @@ Claude Code는 `Stop` hook에서 마지막 응답이 결정 질문처럼 보이�
 - Codex는 `./harness codex` 시작 시 preflight 1회 + `AGENTS.md` 텍스트 정책으로 동작합니다. 매 응답마다 phase 표를 직접 적용해야 합니다.
 
 ```text
-이 기능을 Triple Crown 흐름으로 진행해줘.
-GSD milestone과 phase plan을 만들어줘.
-계획된 GSD phase를 실행해줘.
+이 기능을 Spec Kit 흐름으로 진행해줘.
+specify부터 tasks까지 진행해줘. 테스트 task(TDD)도 포함해줘.
+tasks.md의 미완료 항목을 구현해줘.
 리뷰와 검증까지 마무리해줘.
 ```
 
@@ -295,41 +323,39 @@ GSD milestone과 phase plan을 만들어줘.
 
 문제, 제약, 모르는 점, 가능한 접근을 정리합니다. 아직 구현하지 않습니다.
 
-- GStack: `cso`, 필요 시 `office-hours`, `autoplan`
-- 조건부 GStack: `plan-ceo-review`, `plan-eng-review`, `plan-design-review`, `plan-devex-review`
 - Superpowers: 창의적 기능, 제품 방향, 아키텍처 선택이 있으면 `brainstorming`
 
 ```text
 이 작업을 strategy 단계로 정리해줘.
 ```
 
-### 2. Project Structure
+### 2. Specify and plan
 
 구현 범위, acceptance criteria, 작업 순서, 리스크, 리뷰 게이트를 정합니다.
 
-- GSD: `gsd-map-codebase`, `gsd-new-project`, `gsd-new-milestone`, `gsd-discuss-phase`, `gsd-plan-phase`
-- GStack: 열린 decision gate가 있으면 해당 role review
+- Spec Kit: `speckit-specify` -> `speckit-clarify` -> `speckit-plan` -> `speckit-tasks` -> `speckit-analyze`. specify/tasks 요청에는 테스트 task를 명시적으로 포함시킵니다("include test tasks (TDD)"). 프로젝트 최초 1회 `speckit-constitution`.
 - Superpowers: 별도 구현 계획이 유용할 때만 `writing-plans`, 격리 작업이 필요하면 `using-git-worktrees`
-- 결과 상태는 `.planning/`에 남기고 커밋합니다.
+- 결과 상태는 `specs/<NNN-feature>/`에 남기고 커밋합니다.
+- 단계 체이닝은 허용되지만 두 가지 human gate는 생략할 수 없습니다: clarify 질문 답변, 구현 전 tasks.md 리뷰.
 
-GStack은 모든 planning에 고정으로 붙이지 않습니다. scope, architecture, UX, security, release confidence 중 열린 decision gate가 있을 때 해당 gate만 사용합니다.
+scope, architecture, UX, security, release confidence에 열린 결정이 있으면 사용자에게 표면화하고, 결정을 spec 디렉터리에 기록한 뒤 진행합니다.
 
 ```text
-GSD milestone과 phase plan을 만들어줘.
+이 기능을 specify부터 tasks까지 진행해줘. 테스트 task(TDD)도 포함해줘.
 ```
 
 ### 3. Implementation
 
 작은 단위로 구현하고, 가능한 경우 테스트를 먼저 작성합니다.
 
-- GSD: `gsd-execute-phase`, 이어가기에는 `gsd-progress --next`, `gsd-resume-work`, `gsd-pause-work --report`
+- Spec Kit: 미완료 tasks.md 항목을 따라 구현합니다. implement 단계는 커밋하지 않습니다(atomic commit과 품질/e2e gate는 하네스 규칙). 이어가기는 미완료 tasks.md + `.specify/` 상태에서 재개합니다.
 - Superpowers: `test-driven-development`, `systematic-debugging`, `executing-plans`, 필요 시 `dispatching-parallel-agents`, `subagent-driven-development`
 - Codi Skills: `codi-frontend` / `codi-backend` / `nestjs-expert` / `codi-db` / `codi-dev-workflow` / `codi-dependency-review`
 
 문서 전용, 주석 전용, 기계적 formatting, 실행 동작이 없는 순수 설정 scaffold는 TDD 예외로 기록할 수 있습니다.
 
 ```text
-계획된 GSD phase를 실행해줘.
+tasks.md의 미완료 항목을 구현해줘.
 ```
 
 직접 명령을 실행할 때는 mise task를 우선 사용합니다.
@@ -346,9 +372,9 @@ task가 없으면 `mise exec -- npm run test`, `mise exec -- npm run build` 형�
 
 버그, 회귀, 보안 문제, UX 문제, 유지보수 리스크를 찾습니다.
 
-- GSD: `gsd-code-review`, `gsd-verify-work`, validation coverage gap 보강이 필요할 때 `gsd-validate-phase`
-- GStack: 코드 리뷰는 `review`, QA는 `qa`/`qa-only`, 보안은 `cso`, UX/DX/perf는 `design-review`/`devex-review`/`benchmark`
+- Spec Kit: `speckit-converge`를 "Converged"가 나올 때까지 실행하고, 검증 증거는 spec 디렉터리에 남깁니다.
 - Superpowers: `requesting-code-review`, `receiving-code-review`, `verification-before-completion`
+- Playwright MCP: 사용자 노출 흐름의 라이브 확인이 필요하면 브라우저 QA(페이지 로드/폼 조작/스크린샷)
 
 ```text
 review phase를 진행해줘.
@@ -358,8 +384,7 @@ review phase를 진행해줘.
 
 실제로 동작하는지 명령, 테스트, 로그, 화면 확인으로 증명하고 완료 상태를 닫습니다.
 
-- GStack: `ship`, 필요 시 `document-release`, `canary`, `retro`
-- GSD: PR 준비를 GSD phase state에서 생성해야 할 때만 `gsd-ship`을 먼저 사용하고, milestone 마무리는 `gsd-audit-milestone`, `gsd-complete-milestone`, `gsd-milestone-summary`
+- Spec Kit: converge green 확인 후 루트 `ROADMAP.md` 상태를 갱신하고, spec 디렉터리를 기준으로 PR을 준비합니다.
 - Superpowers: `finishing-a-development-branch`, `verification-before-completion`
 
 ```text
@@ -410,23 +435,36 @@ verification과 ship 준비까지 마무리해줘.
 
 하네스를 `git clone`으로 받으면 `.git`에 하네스의 전체 히스토리와 `v1`/`v2` 버전 브랜치, 하네스 origin이 따라옵니다. 이 `.git`을 그대로 둔 채 새 프로젝트를 초기화하면 버전 브랜치가 프로젝트에 남고, 기존 레포를 `git subtree`로 통합할 때 그 레포의 브랜치와 충돌합니다.
 
-`./harness init-project`는 하네스 clone 상태(`codi-harness` origin 또는 `v1`/`v2` 브랜치)를 감지하면 경고하고, `--reset-git`을 주면 `.git`을 제거한 뒤 새 git 히스토리(`main` 브랜치)로 다시 시작합니다. 직접 하려면 초기화 전에 다음을 실행합니다.
-
-```sh
-rm -rf .git && git init && git checkout -b main
-```
+`./harness init-project`는 하네스 clone 상태(`codi-harness` origin 또는 `v1`/`v2` 브랜치)를 감지하면 경고하고, `--reset-git`을 주면 `.git`을 제거한 뒤 새 git 히스토리(`main` 브랜치)로 다시 시작합니다. upstream 하네스 작업 상태(spec·테스트·허브 산출물 등)는 `--reset-git` 여부와 **무관하게 항상** 정리됩니다 — `--reset-git`은 `.git` 재생성만 담당합니다. 정리 경로의 정본 목록은 `.harness/scripts/setup/upstream-project-state.mjs`의 `UPSTREAM_PROJECT_STATE_PATHS`이며, 문서에 재열거하지 않습니다(재열거된 목록은 낡아서 그대로 따라 하면 잔재가 첫 커밋에 들어갑니다 — 2026-07-31 감사 H-4). 수동 `rm -rf` 대체는 권장하지 않습니다. 정리가 필요하면 `init-project`를 다시 실행하세요.
 
 기존 front/back 레포 통합은 `git subtree add --prefix=apps/<front|back> <remote>/<branch> --squash`를 사용합니다. `--squash`로 외부 레포 히스토리를 단일 커밋으로 합쳐 모노레포 히스토리를 깔끔하게 유지하고, 외부 레포 브랜치 tip이 이 레포 ref에 섞이지 않게 합니다.
+
+## 기존 프로젝트의 lock 모드 전환 (harness migrate)
+
+복사본 커밋 방식의 기존 다운스트림을 패키지 소비(lock) 방식으로 전환하는
+절차의 정본은 [.harness/docs/packaging-guide.md](./.harness/docs/packaging-guide.md)
+7절입니다. 이 문서에 단계를 재열거하지 않습니다 — 선행
+`./harness update --apply-harness`부터 후행 `./harness prune-downstream --apply`
+및 정리 커밋까지가 한 묶음이며, 여기만 보고 일부 단계만 수행하면 레포당 수십
+건의 잔재가 남습니다(2026-07-30 롤아웃 실측).
+
+한 가지 원칙만 여기서도 강조합니다: 정리 커밋은 `git add -A`가 아니라
+`git add -u`로 스테이징합니다. `-A`는 비추적 materialize 링크를 도로 인덱스에
+넣어 잔재를 재생산합니다.
+
+전환 후 하네스 동기화는 자동입니다(세션 시작 시 minor/patch 반영). 버전
+고정/롤백은 `./harness pin <버전>`, major 전환은 `./harness update --major`.
+팀원은 pull 후 `./harness bootstrap` 1회로 합류합니다.
 
 ## Infisical 준비 체크리스트
 
 `./harness init-project`를 실행하기 전에 아래를 준비합니다.
 
-1. **Infisical 프로젝트 생성** — 프로젝트명 `codi-{project}`, URL `https://env.co-di.com`
+1. **Infisical 프로젝트 생성** — 프로젝트명은 입력한 `<repo-name>` 그대로 사용, URL `https://env.co-di.com`
 2. **프로젝트 경로 생성** — `/backend`, `/backend/github-actions`, `/frontend`, `/frontend/github-actions`
 3. **Shared-Secrets 접근 확인** — `/slack`, `/vercel`, `/cloudflare/<domain>/<subdomain>`(Cloudflare Tunnel 사용 시)
 4. **Machine Identity 생성** — Organization Access Control > Machine Identities, Auth Method: Universal Auth, TTL: 0
-5. **Machine Identity 권한 부여** — `codi-{project}`에 Read, Shared-Secrets에 Read
+5. **Machine Identity 권한 부여** — `<repo-name>`에 Read, Shared-Secrets에 Read
 6. **Client ID와 Client Secret 확보**
 
 ```sh
@@ -454,9 +492,9 @@ Cloudflare Tunnel을 쓰는 PM2/Docker 배포 프로젝트만 Shared-Secrets의 
 ```
 
 `.harness` 스크립트, 훅, 정책, 또는 워크플로우를 수정했다면 하네스 회귀
-스위트를 함께 실행합니다. `tests/`는 하네스 자체를 검증하는 shared 파일로,
-`./harness update --apply-harness`가 `.harness`와 함께 덮어쓰기 동기화합니다
-(소유권 규칙은 `.harness/policies/update-policy.md` 참고).
+스위트를 함께 실행합니다. `tests/`는 하네스 자체를 검증하지만 다운스트림에서는
+project-owned로 보존되므로 `./harness update --apply-harness`가 덮어쓰거나
+복구하지 않습니다(소유권 규칙은 `.harness/policies/update-policy.md` 참고).
 
 ```sh
 npm test

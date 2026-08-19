@@ -26,6 +26,7 @@ skills:
 
 enabled_skills:
   - codi-phase-routing
+  - codi-planning-retirement
   - karpathy-style
   - codi-backend
   - codi-frontend
@@ -35,20 +36,23 @@ enabled_skills:
   - init-project
   - nestjs-expert
   - skill-creator
-  - team-mode-operator
+  - codi-auto-loop
+  - codi-design-system
+  - codi-e2e
+  - codi-feature-hub
+  - codi-feature-definition-authoring
+  - codi-feature-definition-normalizer
+  - codi-rule-authoring
 
-disabled_as_overlapping:
-  - codi-architecture
-  - codi-qa
-  - codi-debug
-  - codi-scm
+# 실재하지 않는 스킬을 등재하지 않는다 — 2026-07-31 감사 1-4 에서
+# 유령 5건(team-mode-operator, codi-architecture/qa/debug/scm)을 제거했다.
+disabled_as_overlapping: []
 
 notes:
-  - Codi phase routing maps work to external GSD, GStack, and Superpowers tools.
-  - Existing .planning state is checked before opening new Medium or larger work.
-  - GStack owns role review and decision gates.
+  - Codi phase routing maps work to external Spec Kit and Superpowers tools.
+  - In-flight Spec Kit features (unchecked specs/*/tasks.md items) are checked before opening new Medium or larger work.
+  - Playwright MCP provides ad-hoc browser QA for both runtimes (user-level registration, pinned version).
   - Superpowers owns TDD and execution discipline.
-  - GSD owns milestones, phase state, and .planning context continuity.
+  - Spec Kit owns per-feature plan-of-record state in committed specs/ directories with .specify runtime continuity; cross-feature overview is the thin root ROADMAP.md. Audit records live in docs/audits/ (harness-owned, active); a leftover legacy .planning/ directory is scheduled for removal per docs/audits/2026-07-07-planning-retirement.md — never read or update it for routing.
   - Karpathy-style owns prompt shape and phase handoff clarity.
-  - Team-mode-operator owns cmux/tmux role-pane operating rules.
   - Codi skills only provide stack-specific implementation guidance.
