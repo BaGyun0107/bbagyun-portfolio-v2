@@ -1,0 +1,1949 @@
+{
+ "version": 1,
+ "entities": [
+  {
+   "type": "need",
+   "id": "NEED-DESIGN-CONSISTENCY",
+   "title": "프로젝트별 UI 규칙을 생성하고 준수한다",
+   "href": "specs/001-design-system-support/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-TEAM-VISIBILITY",
+   "title": "문서·기능·상태를 한 진입점에서 탐색한다",
+   "href": "specs/002-feature-hub/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-DEFINITION-SOURCE",
+   "title": "외부 정의와 Spec을 중복 없이 통합한다",
+   "href": "specs/003-feature-definition-source/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-ONBOARDING",
+   "title": "신규 팀원이 한 번에 작업 환경을 준비한다",
+   "href": "specs/004-onboarding-bootstrap/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-VERSIONED-DELIVERY",
+   "title": "버전 고정과 롤백이 가능한 하네스를 배포한다",
+   "href": "specs/005-harness-packaging/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-SAFE-MIGRATION",
+   "title": "다운스트림을 안전하게 lock 방식으로 전환한다",
+   "href": "specs/006-harness-migrate/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-IA-BEFORE-DEFINITION",
+   "title": "기능정의 전에 화면 구조를 확인한다",
+   "href": "specs/007-sitemap-board/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-DELIVERY-EVIDENCE",
+   "title": "구현·관계·검증 근거를 한곳에서 판단한다",
+   "href": "specs/008-linked-feature-hub/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-CANONICAL-IA",
+   "title": "실제 근거에 맞는 사이트맵·관계·흐름 정본을 유지한다",
+   "href": "specs/009-harness-information-architecture/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-PLANNING-DELIVERY-SYNC",
+   "title": "제품 계획과 구현 근거를 분리하고 차이를 지속적으로 조정한다",
+   "href": "specs/010-planning-hub-redesign/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-DEFINITION-LATER",
+   "title": "정의 없이 시작한 구현도 계획과 연결한다",
+   "href": "specs/011-definition-later-path/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-SINGLE-MODEL",
+   "title": "기능 정의가 하나의 정본 모델로 관리된다",
+   "href": "specs/012-harness-catalog-migration/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-ONE-RULE-BODY",
+   "title": "두 런타임이 같은 규칙 본문과 실제 스킬 이름을 읽는다",
+   "href": "specs/013-unify-naming-entrypoints/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-ONE-PREP-COMMAND",
+   "title": "팀원이 준비 명령 하나만 알면 된다",
+   "href": "specs/014-packaging-unification/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-RESIDUE-FREE-DOWNSTREAM",
+   "title": "다운스트림에 하네스 잔재가 남지 않아야 한다",
+   "href": "specs/015-downstream-residue-cleanup/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-AUDIT-FINDINGS-RESOLVED",
+   "title": "전수 감사에서 검증된 결함이 방치되지 않아야 한다",
+   "href": "specs/016-audit-remediation/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-AUDIT-BACKLOG-CLOSED",
+   "title": "감사 잔여분과 소유자 결정이 저장소 상태로 수렴해야 한다",
+   "href": "specs/017-audit-wave2/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-BROWSER-QA-TOOLING",
+   "title": "게이트 도구 제거 후에도 브라우저 QA 수단이 유지돼야 한다",
+   "href": "specs/018-gstack-to-playwright-mcp/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-FIRST-SETUP-PARITY",
+   "title": "새 프로젝트 최초 설정이 합류자만큼 단순해야 한다",
+   "href": "specs/019-first-setup-simplification/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-PROJECT-RULES-SAFETY",
+   "title": "프로젝트 고유 규칙이 하네스 업데이트에서 보존돼야 한다",
+   "href": "specs/020-rules-local-protection/spec.md"
+  },
+  {
+   "type": "need",
+   "id": "NEED-PHP-MALL-SUPPORT",
+   "title": "그누보드5 PHP 쇼핑몰 프로젝트도 하네스 워크플로로 관리돼야 한다",
+   "href": "specs/021-gnuboard-php-support/spec.md"
+  }
+ ],
+ "links": [
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-DESIGN-CONSISTENCY"
+   },
+   "to": {
+    "type": "feature",
+    "id": "001-design-system-support"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/001-design-system-support/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-TEAM-VISIBILITY"
+   },
+   "to": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/002-feature-hub/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-DEFINITION-SOURCE"
+   },
+   "to": {
+    "type": "feature",
+    "id": "003-feature-definition-source"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/003-feature-definition-source/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-ONBOARDING"
+   },
+   "to": {
+    "type": "feature",
+    "id": "004-onboarding-bootstrap"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/004-onboarding-bootstrap/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-VERSIONED-DELIVERY"
+   },
+   "to": {
+    "type": "feature",
+    "id": "005-harness-packaging"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/005-harness-packaging/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-SAFE-MIGRATION"
+   },
+   "to": {
+    "type": "feature",
+    "id": "006-harness-migrate"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/006-harness-migrate/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-IA-BEFORE-DEFINITION"
+   },
+   "to": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/007-sitemap-board/spec.md#user-story-2"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-DELIVERY-EVIDENCE"
+   },
+   "to": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/008-linked-feature-hub/spec.md#user-story-2"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-CANONICAL-IA"
+   },
+   "to": {
+    "type": "feature",
+    "id": "009-harness-information-architecture"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/009-harness-information-architecture/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-PLANNING-DELIVERY-SYNC"
+   },
+   "to": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/spec.md#user-story-3"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "001-design-system-support"
+   },
+   "to": {
+    "type": "spec",
+    "id": "001-design-system-support"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/001-design-system-support/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "spec",
+    "id": "002-feature-hub"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/002-feature-hub/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "003-feature-definition-source"
+   },
+   "to": {
+    "type": "spec",
+    "id": "003-feature-definition-source"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/003-feature-definition-source/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "004-onboarding-bootstrap"
+   },
+   "to": {
+    "type": "spec",
+    "id": "004-onboarding-bootstrap"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/004-onboarding-bootstrap/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "005-harness-packaging"
+   },
+   "to": {
+    "type": "spec",
+    "id": "005-harness-packaging"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/005-harness-packaging/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "006-harness-migrate"
+   },
+   "to": {
+    "type": "spec",
+    "id": "006-harness-migrate"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/006-harness-migrate/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "to": {
+    "type": "spec",
+    "id": "007-sitemap-board"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/007-sitemap-board/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "spec",
+    "id": "008-linked-feature-hub"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/008-linked-feature-hub/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "009-harness-information-architecture"
+   },
+   "to": {
+    "type": "spec",
+    "id": "009-harness-information-architecture"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/009-harness-information-architecture/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "spec",
+    "id": "010-planning-hub-redesign"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "003-feature-definition-source"
+   },
+   "to": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/003-feature-definition-source/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "005-harness-packaging"
+   },
+   "to": {
+    "type": "feature",
+    "id": "004-onboarding-bootstrap"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/005-harness-packaging/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "006-harness-migrate"
+   },
+   "to": {
+    "type": "feature",
+    "id": "005-harness-packaging"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/006-harness-migrate/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "to": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/007-sitemap-board/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "to": {
+    "type": "feature",
+    "id": "003-feature-definition-source"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/007-sitemap-board/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/008-linked-feature-hub/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "feature",
+    "id": "003-feature-definition-source"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/008-linked-feature-hub/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/008-linked-feature-hub/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "009-harness-information-architecture"
+   },
+   "to": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/009-harness-information-architecture/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "009-harness-information-architecture"
+   },
+   "to": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/009-harness-information-architecture/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "feature",
+    "id": "009-harness-information-architecture"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "001-design-system-support"
+   },
+   "to": {
+    "type": "verification",
+    "id": "001-design-system-support"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/001-design-system-support/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "verification",
+    "id": "002-feature-hub"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/002-feature-hub/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "003-feature-definition-source"
+   },
+   "to": {
+    "type": "verification",
+    "id": "003-feature-definition-source"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/003-feature-definition-source/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "004-onboarding-bootstrap"
+   },
+   "to": {
+    "type": "verification",
+    "id": "004-onboarding-bootstrap"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/004-onboarding-bootstrap/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "005-harness-packaging"
+   },
+   "to": {
+    "type": "verification",
+    "id": "005-harness-packaging"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/005-harness-packaging/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "006-harness-migrate"
+   },
+   "to": {
+    "type": "verification",
+    "id": "006-harness-migrate"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/006-harness-migrate/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "to": {
+    "type": "verification",
+    "id": "007-sitemap-board"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/007-sitemap-board/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "verification",
+    "id": "008-linked-feature-hub"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/008-linked-feature-hub/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "009-harness-information-architecture"
+   },
+   "to": {
+    "type": "verification",
+    "id": "009-harness-information-architecture"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/009-harness-information-architecture/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "verification",
+    "id": "010-planning-hub-redesign"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "001-design-system-support"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-PROJECT"
+   },
+   "type": "appears-on",
+   "label": "inferred — PM/PL review · approved 2026-07-16",
+   "evidence": "inferred: specs/001-design-system-support/spec.md#user-story-3"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "001-design-system-support"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#definition-detail"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-ROOT"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/002-feature-hub/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#TABS"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-PROJECT"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#TABS"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/002-feature-hub/spec.md#user-story-2"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/002-feature-hub/spec.md#FR-004"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-SPEC"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#status-panel"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-C-SEARCH"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/002-feature-hub/spec.md#FR-003"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "002-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-C-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#detail-pane"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "003-feature-definition-source"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-TABLE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/003-feature-definition-source/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "003-feature-definition-source"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/003-feature-definition-source/spec.md#FR-001"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "003-feature-definition-source"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#definition-detail"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "004-onboarding-bootstrap"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "label": "inferred — PM/PL review · approved 2026-07-16",
+   "evidence": "inferred: specs/004-onboarding-bootstrap/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "004-onboarding-bootstrap"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#definition-detail"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "004-onboarding-bootstrap"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#status-board"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "005-harness-packaging"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "label": "inferred — PM/PL review · approved 2026-07-16",
+   "evidence": "inferred: specs/005-harness-packaging/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "005-harness-packaging"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#definition-detail"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "005-harness-packaging"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#status-board"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "006-harness-migrate"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "label": "inferred — PM/PL review · approved 2026-07-16",
+   "evidence": "inferred: specs/006-harness-migrate/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "006-harness-migrate"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#definition-detail"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "006-harness-migrate"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: .harness/scripts/docs/lib/render-hub.mjs#status-board"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-SITEMAP"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/007-sitemap-board/spec.md#FR-007"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "007-sitemap-board"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/007-sitemap-board/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-RELATION"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/008-linked-feature-hub/spec.md#FR-010"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-FLOW"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/008-linked-feature-hub/spec.md#FR-010"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/008-linked-feature-hub/spec.md#FR-003"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-DELIVERY"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/008-linked-feature-hub/spec.md#FR-013"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-C-EMPTY"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/008-linked-feature-hub/spec.md#edge-cases"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-C-HEALTH"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/008-linked-feature-hub/spec.md#FR-007"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "009-harness-information-architecture"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-SITEMAP"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/009-harness-information-architecture/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "009-harness-information-architecture"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-RELATION"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/009-harness-information-architecture/spec.md#user-story-2"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "009-harness-information-architecture"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-FLOW"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/009-harness-information-architecture/spec.md#user-story-3"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-ROOT"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-SITEMAP"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/spec.md#FR-007"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/spec.md#FR-011"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-FLOW"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/spec.md#FR-008"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-RELATION"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/spec.md#FR-013"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-DELIVERY"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/spec.md#FR-014"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-C-HEALTH"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/010-planning-hub-redesign/spec.md#FR-017"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-DEFINITION-LATER"
+   },
+   "to": {
+    "type": "feature",
+    "id": "011-definition-later-path"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/011-definition-later-path/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "011-definition-later-path"
+   },
+   "to": {
+    "type": "spec",
+    "id": "011-definition-later-path"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/011-definition-later-path/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "011-definition-later-path"
+   },
+   "to": {
+    "type": "feature",
+    "id": "008-linked-feature-hub"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/011-definition-later-path/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "011-definition-later-path"
+   },
+   "to": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/011-definition-later-path/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "011-definition-later-path"
+   },
+   "to": {
+    "type": "verification",
+    "id": "011-definition-later-path"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/011-definition-later-path/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "011-definition-later-path"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/011-definition-later-path/spec.md#FR-002"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "011-definition-later-path"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-C-HEALTH"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/011-definition-later-path/spec.md#FR-011"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-SINGLE-MODEL"
+   },
+   "to": {
+    "type": "feature",
+    "id": "012-harness-catalog-migration"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/012-harness-catalog-migration/spec.md#user-story-2"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "012-harness-catalog-migration"
+   },
+   "to": {
+    "type": "spec",
+    "id": "012-harness-catalog-migration"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/012-harness-catalog-migration/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "012-harness-catalog-migration"
+   },
+   "to": {
+    "type": "feature",
+    "id": "010-planning-hub-redesign"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/012-harness-catalog-migration/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "012-harness-catalog-migration"
+   },
+   "to": {
+    "type": "feature",
+    "id": "011-definition-later-path"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/012-harness-catalog-migration/status.yaml#depends_on"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "012-harness-catalog-migration"
+   },
+   "to": {
+    "type": "verification",
+    "id": "012-harness-catalog-migration"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/012-harness-catalog-migration/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "012-harness-catalog-migration"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/012-harness-catalog-migration/spec.md#FR-003"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "012-harness-catalog-migration"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-C-HEALTH"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/012-harness-catalog-migration/spec.md#FR-001"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-ONE-RULE-BODY"
+   },
+   "to": {
+    "type": "feature",
+    "id": "013-unify-naming-entrypoints"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/013-unify-naming-entrypoints/spec.md#user-story-1"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "013-unify-naming-entrypoints"
+   },
+   "to": {
+    "type": "spec",
+    "id": "013-unify-naming-entrypoints"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/013-unify-naming-entrypoints/status.yaml#id"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "013-unify-naming-entrypoints"
+   },
+   "to": {
+    "type": "verification",
+    "id": "013-unify-naming-entrypoints"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/013-unify-naming-entrypoints/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "013-unify-naming-entrypoints"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/013-unify-naming-entrypoints/spec.md#success-criteria"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "013-unify-naming-entrypoints"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/013-unify-naming-entrypoints/spec.md#success-criteria"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "013-unify-naming-entrypoints"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/013-unify-naming-entrypoints/spec.md#success-criteria"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-ONE-PREP-COMMAND"
+   },
+   "to": {
+    "type": "feature",
+    "id": "014-packaging-unification"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/014-packaging-unification/spec.md#user-scenarios--testing-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "014-packaging-unification"
+   },
+   "to": {
+    "type": "spec",
+    "id": "014-packaging-unification"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/014-packaging-unification/spec.md#requirements-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "014-packaging-unification"
+   },
+   "to": {
+    "type": "verification",
+    "id": "014-packaging-unification"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/014-packaging-unification/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "014-packaging-unification"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/014-packaging-unification/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "014-packaging-unification"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/014-packaging-unification/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "014-packaging-unification"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/014-packaging-unification/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-RESIDUE-FREE-DOWNSTREAM"
+   },
+   "to": {
+    "type": "feature",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/015-downstream-residue-cleanup/spec.md#user-scenarios--testing-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "to": {
+    "type": "spec",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/015-downstream-residue-cleanup/spec.md#requirements-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "to": {
+    "type": "verification",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/015-downstream-residue-cleanup/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "to": {
+    "type": "feature",
+    "id": "014-packaging-unification"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/015-downstream-residue-cleanup/status.yaml"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/015-downstream-residue-cleanup/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/015-downstream-residue-cleanup/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/015-downstream-residue-cleanup/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-AUDIT-FINDINGS-RESOLVED"
+   },
+   "to": {
+    "type": "feature",
+    "id": "016-audit-remediation"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/016-audit-remediation/spec.md#user-scenarios--testing-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "016-audit-remediation"
+   },
+   "to": {
+    "type": "spec",
+    "id": "016-audit-remediation"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/016-audit-remediation/spec.md#requirements-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "016-audit-remediation"
+   },
+   "to": {
+    "type": "verification",
+    "id": "016-audit-remediation"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/016-audit-remediation/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "016-audit-remediation"
+   },
+   "to": {
+    "type": "feature",
+    "id": "015-downstream-residue-cleanup"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/016-audit-remediation/status.yaml"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "016-audit-remediation"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/016-audit-remediation/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "016-audit-remediation"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/016-audit-remediation/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "016-audit-remediation"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/016-audit-remediation/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-AUDIT-BACKLOG-CLOSED"
+   },
+   "to": {
+    "type": "feature",
+    "id": "017-audit-wave2"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/017-audit-wave2/spec.md#user-scenarios--testing-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "017-audit-wave2"
+   },
+   "to": {
+    "type": "spec",
+    "id": "017-audit-wave2"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/017-audit-wave2/spec.md#requirements-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "017-audit-wave2"
+   },
+   "to": {
+    "type": "verification",
+    "id": "017-audit-wave2"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/017-audit-wave2/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "017-audit-wave2"
+   },
+   "to": {
+    "type": "feature",
+    "id": "016-audit-remediation"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/017-audit-wave2/status.yaml"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "017-audit-wave2"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/017-audit-wave2/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "017-audit-wave2"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-DEFINITIONS-DETAIL"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/017-audit-wave2/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "017-audit-wave2"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/017-audit-wave2/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-BROWSER-QA-TOOLING"
+   },
+   "to": {
+    "type": "feature",
+    "id": "018-gstack-to-playwright-mcp"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/018-gstack-to-playwright-mcp/spec.md#user-scenarios--testing-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "018-gstack-to-playwright-mcp"
+   },
+   "to": {
+    "type": "spec",
+    "id": "018-gstack-to-playwright-mcp"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/018-gstack-to-playwright-mcp/spec.md#requirements-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "018-gstack-to-playwright-mcp"
+   },
+   "to": {
+    "type": "verification",
+    "id": "018-gstack-to-playwright-mcp"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/018-gstack-to-playwright-mcp/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "018-gstack-to-playwright-mcp"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/018-gstack-to-playwright-mcp/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "018-gstack-to-playwright-mcp"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/018-gstack-to-playwright-mcp/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-FIRST-SETUP-PARITY"
+   },
+   "to": {
+    "type": "feature",
+    "id": "019-first-setup-simplification"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/019-first-setup-simplification/spec.md#user-scenarios--testing-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "019-first-setup-simplification"
+   },
+   "to": {
+    "type": "spec",
+    "id": "019-first-setup-simplification"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/019-first-setup-simplification/spec.md#requirements-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "019-first-setup-simplification"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/019-first-setup-simplification/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "019-first-setup-simplification"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/019-first-setup-simplification/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "019-first-setup-simplification"
+   },
+   "to": {
+    "type": "verification",
+    "id": "019-first-setup-simplification"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/019-first-setup-simplification/verification.md"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "019-first-setup-simplification"
+   },
+   "to": {
+    "type": "feature",
+    "id": "018-gstack-to-playwright-mcp"
+   },
+   "type": "depends-on",
+   "evidence": "confirmed: specs/019-first-setup-simplification/status.yaml"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-PROJECT-RULES-SAFETY"
+   },
+   "to": {
+    "type": "feature",
+    "id": "020-rules-local-protection"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/020-rules-local-protection/spec.md#user-scenarios--testing-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "020-rules-local-protection"
+   },
+   "to": {
+    "type": "spec",
+    "id": "020-rules-local-protection"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/020-rules-local-protection/spec.md#requirements-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "020-rules-local-protection"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/020-rules-local-protection/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "020-rules-local-protection"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/020-rules-local-protection/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "020-rules-local-protection"
+   },
+   "to": {
+    "type": "verification",
+    "id": "020-rules-local-protection"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/020-rules-local-protection/verification.md"
+  },
+  {
+   "from": {
+    "type": "need",
+    "id": "NEED-PHP-MALL-SUPPORT"
+   },
+   "to": {
+    "type": "feature",
+    "id": "021-gnuboard-php-support"
+   },
+   "type": "satisfied-by",
+   "evidence": "confirmed: specs/021-gnuboard-php-support/spec.md#user-scenarios--testing-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "021-gnuboard-php-support"
+   },
+   "to": {
+    "type": "spec",
+    "id": "021-gnuboard-php-support"
+   },
+   "type": "specified-by",
+   "evidence": "confirmed: specs/021-gnuboard-php-support/spec.md#requirements-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "021-gnuboard-php-support"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-GUIDE"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/021-gnuboard-php-support/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "021-gnuboard-php-support"
+   },
+   "to": {
+    "type": "screen",
+    "id": "HUB-STATUS-BOARD"
+   },
+   "type": "appears-on",
+   "evidence": "confirmed: specs/021-gnuboard-php-support/spec.md#success-criteria-mandatory"
+  },
+  {
+   "from": {
+    "type": "feature",
+    "id": "021-gnuboard-php-support"
+   },
+   "to": {
+    "type": "verification",
+    "id": "021-gnuboard-php-support"
+   },
+   "type": "verified-by",
+   "evidence": "confirmed: specs/021-gnuboard-php-support/verification.md"
+  }
+ ]
+}

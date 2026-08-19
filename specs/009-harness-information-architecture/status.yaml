@@ -1,0 +1,14 @@
+id: "009-harness-information-architecture"
+title: "하네스 정보구조·기능 추적성·사용자 흐름 정본화"
+phase: P2
+status: done
+decision_level: 확정
+owner_roles: [pm, frontend]
+surface: 내부도구
+depends_on: ["007-sitemap-board", "008-linked-feature-hub"]
+open_decisions: []
+history:
+  - { at: "2026-07-16", to: planned }
+  - { at: "2026-07-16", to: in-progress }
+  - { at: "2026-07-16", to: in-review }
+  - { at: "2026-07-16", to: done }

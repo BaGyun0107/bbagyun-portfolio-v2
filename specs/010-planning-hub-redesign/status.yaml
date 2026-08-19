@@ -1,0 +1,12 @@
+id: "010-planning-hub-redesign"
+title: "Planning Hub 데모·동기화·기능 허브 재설계"
+status: done
+phase: P1
+owner_roles: [frontend, workflow, product]
+depends_on: [007-sitemap-board, 008-linked-feature-hub, 009-harness-information-architecture]
+open_decisions: []
+history:
+  - { at: "2026-07-16", to: planned }
+  - { at: "2026-07-16", to: in-progress }
+  - { at: "2026-08-03", to: in-review }
+  - { at: "2026-08-03", to: done }

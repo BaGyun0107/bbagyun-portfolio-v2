@@ -1,0 +1,13 @@
+id: "018-gstack-to-playwright-mcp"
+title: "GStack 전면 제거 및 Playwright MCP 대체 도입"
+phase: P3
+status: done
+decision_level: 검토메모
+owner_roles: [backend]
+surface: 내부도구
+depends_on: []
+history:
+  - { at: "2026-08-06", to: planned }
+  - { at: "2026-08-06", to: in-progress }
+  - { at: "2026-08-06", to: in-review }
+  - { at: "2026-08-06", to: done }

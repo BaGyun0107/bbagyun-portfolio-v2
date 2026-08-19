@@ -1,0 +1,71 @@
+# Codex narrative rule: e2e validation gate.
+#
+# When a change adds or alters a user-facing flow, e2e is required and the
+# verification record must include e2e run evidence (flows passed, command,
+# observed output). A user-facing flow: new page/route, the flow created by a
+# new API endpoint, login/auth, payment/order, core domain CRUD end-to-end.
+# Excluded: selector/style-only, internal utils/refactors, config/build, docs,
+# logging.
+#
+# Validation order: typecheck -> unit -> integration -> e2e. e2e does not
+# replace unit tests; run it after unit/integration are green. Critical flows
+# only -- no test-per-feature.
+#
+# Self-declare marker (same as the Size marker): when touching a user-facing
+# flow, printf 'yes\n' > .harness/state/touches-user-flow. Run e2e with
+# `mise run e2e:changed` (default) or `mise run e2e`. A real passing run stamps
+# .harness/state/e2e-last-run and auto-clears the marker to no. When dropping to
+# non-flow work, printf 'no\n' > .harness/state/touches-user-flow.
+# .harness/state/ is git-ignored (per-session, local-only).
+#
+# Setup: the root e2e / e2e:changed tasks ship in the harness root mise.toml
+# (new projects inherit them; without per-app suites they skip gracefully and
+# stamp nothing). Per-app suite scaffolding, older projects missing the tasks,
+# and refuse-to-stamp messages are handled by the codi-e2e skill (canonical
+# task source: .harness/skills/codi-e2e/resources/mise-e2e-tasks.toml). A
+# missing task or suite is a scaffolding signal, not permission to skip e2e.
+#
+# execpolicy cannot read a marker file or inspect the staged tree (it is
+# path/full-input dependent, not a command prefix), so on Codex this rule + the
+# markers are the control; there is no automated warning. Only Claude's
+# PreToolUse guardrails.mjs reads the markers to emit a non-blocking reminder at
+# git commit time (tone escalates with repeated unheeded commits via
+# .harness/state/e2e-warn-count; resets on fresh evidence or marker-down).
+# Same limitation and handling as the Size-marker mirror.
+#
+# The marker/evidence gate above is not enforceable by execpolicy. The only
+# command-level surface execpolicy can act on is the e2e validation commands
+# themselves, declared allow below so running e2e is never gated. The narrative
+# rule + markers remain the actual control for "when e2e is required".
+
+# `e2e` and `e2e:changed` are DISTINCT argv tokens to execpolicy (the colon is
+# not a separator), so a single prefix_rule whose pattern ends in `e2e` cannot
+# match `mise run e2e:changed` -- and listing it under `match` made the whole
+# .codex/rules/ load fail with "expected every example to match at least one
+# rule". They must be two prefix rules, one per task name.
+prefix_rule(
+    pattern = ["mise", "run", "e2e"],
+    decision = "allow",
+    justification = "Running e2e validation is always allowed; the gate is the marker/evidence rule, not the command.",
+    match = [
+        "mise run e2e",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "run", "e2e:changed"],
+    decision = "allow",
+    justification = "Running the changed-scope e2e validation is always allowed; the gate is the marker/evidence rule, not the command.",
+    match = [
+        "mise run e2e:changed",
+    ],
+)
+
+prefix_rule(
+    pattern = ["mise", "run", "validate"],
+    decision = "allow",
+    justification = "The ordered typecheck->test->e2e validate pipeline is always allowed to run.",
+    match = [
+        "mise run validate",
+    ],
+)

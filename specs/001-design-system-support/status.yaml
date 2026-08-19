@@ -1,0 +1,10 @@
+id: "001-design-system-support"
+title: "프로젝트별 디자인 시스템 지원 구조"
+phase: P1
+status: done
+decision_level: 확정
+owner_roles: [designer, frontend]
+surface: 둘다
+depends_on: []
+history:
+  - { at: "2026-07-08", to: done }

@@ -1,0 +1,81 @@
+# Codex execpolicy rules: phase routing.
+#
+# Use Spec Kit for feature planning/state, Superpowers for execution
+# discipline, Playwright MCP for ad-hoc browser QA.
+# Before new Medium or larger work, check for in-flight features: any
+# specs/NNN-*/tasks.md with unchecked items gets resumed first (unchecked
+# tasks + .specify/ state are the checkpoint). specs/ is a shared team asset
+# committed via git; cross-feature overview is the thin root ROADMAP.md.
+# Audit records live in docs/audits/ (harness-owned, active). A leftover
+# legacy .planning/ directory is scheduled for removal — follow
+# docs/audits/2026-07-07-planning-retirement.md (distill -> git rm; git
+# history is the archive); never read or update it for routing.
+# P1: Superpowers brainstorming for creative/product/architecture changes.
+# P2: speckit-specify (request test tasks) -> clarify -> plan -> tasks -> analyze; speckit-constitution once per project.
+# P3: implement guided by unchecked tasks.md items plus Superpowers TDD/debugging/plan execution; the implement step never commits — commits and quality/e2e gates are harness rules.
+# P4: speckit-converge until "Converged" plus Superpowers verification discipline; Playwright MCP browser QA when live verification helps.
+# P5: converge green -> update ROADMAP.md -> PR flow.
+# Planning Hub Stop automation is non-blocking convenience. It shares one core
+# with Claude, never advances Planning Lock, and does not replace explicit
+# planning:check / feature:status:sync verification from the active tasks.
+# Two human gates must never be skipped when chaining steps: answering
+# clarify questions and reviewing tasks.md before implementation.
+# Size: Small requires fixed direction, obvious target, localized edit, easy rollback, low blast radius, and direct verification.
+# Medium starts when the agent must decide what to inspect, change, or verify.
+# Large adds multiple boundaries, role gates, handoff, or user/API impact.
+# Extra large/risky covers production, deploy/rollback, CI/CD, infrastructure, data, auth/permissions/payments, security, secrets, privacy, destructive operations, or hard-to-reverse work.
+# Medium direct handling is only for localized, single-stream work that does not
+# need durable state. App scaffolds, split frontend/backend work, scaffold/import
+# work, multi-stage implementation, and session-continuity work are Large/spec
+# cases. Absence of specs/ is not a no-spec reason for those cases.
+# When declaring Medium or larger, also record the Size marker so the Claude-side
+# warning hook can see the declaration: printf 'Medium\n' (or Large /
+# Extra-large) > .harness/state/current-size, and reset to Small when done.
+# .harness/state/ is git-ignored, so the marker is per-session and local-only.
+# execpolicy cannot enforce this file-write step (it is path/full-input
+# dependent, not a command prefix); it is a narrative rule the agent follows,
+# and only Claude's PreToolUse guardrails.mjs reads the marker to warn. Codex has
+# no equivalent PreToolUse hook, so on Codex the marker + this rule are the
+# control; there is no automated warning.
+# If unchecked tasks.md items exist, resume that feature before subagent,
+# design, or implementation gates. Skimming spec files without adopting the
+# unchecked tasks is not a substitute for resuming the feature.
+# Writing a spec only after implementation is a handoff record, not evidence
+# that the planning gate was used.
+# After declaring Size: Large or larger, do not downshift the same split app or
+# scaffold task to a small/mock-data-only exemption to skip the spec flow.
+# For split frontend/backend or multi-workstream work, Codex must make a
+# Subagent decision before implementation. Without explicit user authorization
+# for subagents, ask before code; inline fallback requires user denial or a
+# concrete runtime/tool limitation.
+# If selected action is ask, stop in that response; do not write implementation
+# files, install dependencies, or continue with an inline plan.
+# The removed local commands are forbidden so Codex does not route new work
+# through the old local phase/spec/board convention.
+
+prefix_rule(
+    pattern = ["./harness", "phase-prompt"],
+    decision = "forbidden",
+    justification = "Local phase prompts were removed. Use the Spec Kit flow and committed specs/ state instead.",
+    match = [
+        "./harness phase-prompt demo execution",
+    ],
+)
+
+prefix_rule(
+    pattern = ["./harness", "spec"],
+    decision = "forbidden",
+    justification = "Local feature spec commands were removed. Use the Spec Kit flow and shared specs/ state instead.",
+    match = [
+        "./harness spec init demo",
+    ],
+)
+
+prefix_rule(
+    pattern = ["./harness", "board"],
+    decision = "forbidden",
+    justification = "The local spec board was removed with the local spec convention.",
+    match = [
+        "./harness board",
+    ],
+)

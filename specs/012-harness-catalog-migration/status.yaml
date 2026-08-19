@@ -1,0 +1,13 @@
+id: "012-harness-catalog-migration"
+title: "하네스 카탈로그 전환 + legacy 기능정의서 표 은퇴"
+phase: P2
+status: done
+decision_level: 검토메모
+owner_roles: [backend, frontend]
+surface: 내부도구
+depends_on: ["010-planning-hub-redesign", "011-definition-later-path"]
+history:
+  - { at: "2026-07-17", to: planned }
+  - { at: "2026-07-18", to: in-progress }
+  - { at: "2026-07-18", to: in-review }
+  - { at: "2026-07-18", to: done }

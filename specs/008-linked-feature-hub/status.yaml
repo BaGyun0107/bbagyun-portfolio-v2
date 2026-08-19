@@ -1,0 +1,14 @@
+id: "008-linked-feature-hub"
+title: "연결형 기능 허브 v2"
+status: done
+phase: P2
+decision_level: 확정
+owner_roles: [frontend]
+surface: 내부도구
+depends_on: ["002-feature-hub", "003-feature-definition-source", "007-sitemap-board"]
+open_decisions: []
+history:
+  - { at: "2026-07-16", to: planned }
+  - { at: "2026-07-16", to: in-progress }
+  - { at: "2026-07-16", to: in-review }
+  - { at: "2026-07-16", to: done }

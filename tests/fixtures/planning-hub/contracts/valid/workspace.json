@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "defaultWorkspaceId": "actual-project",
+  "workspaces": [
+    {
+      "id": "actual-project",
+      "title": "Actual Project",
+      "kind": "downstream",
+      "root": "."
+    }
+  ]
+}

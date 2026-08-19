@@ -1,0 +1,9 @@
+id: "091-broken"
+title: "잘못된 상태값 기능"
+phase: P1
+status: nonsense-status
+decision_level: 확정
+owner_roles: [frontend]
+surface: UserApp
+history:
+  - { at: "2026-07-08", to: planned }

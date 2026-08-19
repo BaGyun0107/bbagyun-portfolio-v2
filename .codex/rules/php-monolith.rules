@@ -1,0 +1,36 @@
+# Codex narrative rule: php-monolith profile routing.
+#
+# Claude-side counterpart: .claude/rules/php-monolith.md (path-scoped to
+# **/*.php). Codex has no path-scoping mechanism, so this always-on narrative
+# is the compensating control (same pattern as monorepo-packages).
+#
+# When .harness/config/project-profile.yaml says `mode: php-monolith`:
+# - The project is a PHP monolith (typically a Gnuboard5/YoungCart mall).
+#   Mall code lives under apps/<mall>/ (any name other than front/back).
+# - Do not create or modify apps/front/** or apps/back/**; do not assume
+#   Node.js surfaces or npm/pnpm package management for mall code.
+# - Route PHP mall work through the codi-gnuboard skill
+#   (.agents/skills/codi-gnuboard/SKILL.md): structure knowledge, git
+#   onboarding of server-resident code, local Docker environment
+#   (php 7.4 + MySQL 5.7 template), e2e suite wiring.
+# - Never patch Gnuboard core files in place; use extend/ or skins/themes.
+# - Editing files directly on the live server is a production-affecting
+#   operation: explicit user approval naming the operation and target.
+#
+# Enforcement note: the app-surface blocks themselves are NOT execpolicy's
+# job — .harness/hooks/codex-pretooluse.mjs feeds Bash commands into the
+# shared project-profile-guard.mjs, so apps/front|back targeting is blocked
+# on both runtimes from one implementation. This file carries the routing
+# narrative that execpolicy cannot express (it matches command prefixes,
+# not file paths or profile state). The only command-level surface worth
+# declaring is the read-only PHP syntax check, allowed below.
+
+# php -l -> allow (읽기 전용 문법 검사)
+prefix_rule(
+    pattern = ["php", "-l"],
+    decision = "allow",
+    justification = "PHP syntax lint is read-only; running it on mall files is always safe.",
+    match = [
+        "php -l apps/bzmall/common.php",
+    ],
+)

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://codi.works/harness/hub-workspace-schema.v1.json",
+  "version": 1,
+  "kind": "hub-workspace-config",
+  "ownership": "current-project",
+  "generated": false,
+  "description": "Repository-relative workspace selection. Missing configuration resolves only to the actual project and never to demo data.",
+  "requiredFields": ["version", "defaultWorkspaceId", "workspaces"],
+  "workspaceRequiredFields": ["id", "title", "kind", "root"],
+  "sourceDescriptorFields": ["repositoryId", "relativeRoot"],
+  "forbiddenSourceFields": ["command", "exec", "executable", "script", "token", "password", "secret"],
+  "kindValues": ["demo", "internal", "downstream"]
+}

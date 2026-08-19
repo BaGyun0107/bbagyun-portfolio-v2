@@ -1,0 +1,13 @@
+id: "006-harness-migrate"
+title: "기존 다운스트림 migrate와 구 동기화 은퇴 (Phase 3)"
+phase: P2
+status: done
+decision_level: 확정
+owner_roles: [devops]
+surface: 내부도구
+depends_on: ["005-harness-packaging"]
+history:
+  - { at: "2026-07-15", to: planned }
+  - { at: "2026-07-15", to: in-progress }
+  - { at: "2026-07-15", to: in-review }
+  - { at: "2026-07-18", to: done }

@@ -1,0 +1,23 @@
+{
+  "generated_at": null,
+  "features": [
+    {
+      "id": "003-sample",
+      "title": "레지스트리의 샘플(스펙이 우선해야 함)",
+      "phase": "P2",
+      "status": "planned",
+      "owner_roles": ["pm"],
+      "surface": "UserApp",
+      "spec_link": null
+    },
+    {
+      "id": "090-registry-only",
+      "title": "스펙 없는 레지스트리 전용 기능",
+      "phase": "P2",
+      "status": "planned",
+      "owner_roles": ["pm", "backend"],
+      "surface": "Admin",
+      "spec_link": null
+    }
+  ]
+}

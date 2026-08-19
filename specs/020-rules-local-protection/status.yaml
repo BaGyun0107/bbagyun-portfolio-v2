@@ -1,0 +1,12 @@
+id: "020-rules-local-protection"
+title: "프로젝트 소유 규칙 경로와 stale 삭제 제한"
+phase: P3
+status: in-review
+decision_level: 검토메모
+owner_roles: [backend]
+surface: 내부도구
+depends_on: []
+history:
+  - { at: "2026-08-07", to: planned }
+  - { at: "2026-08-07", to: in-progress }
+  - { at: "2026-08-07", to: in-review }

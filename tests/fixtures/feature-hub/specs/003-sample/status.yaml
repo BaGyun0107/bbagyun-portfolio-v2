@@ -1,0 +1,10 @@
+id: "003-sample"
+title: "샘플 기능"
+phase: P1
+status: in-progress
+decision_level: 확정
+owner_roles: [frontend, backend]
+surface: UserApp
+depends_on: ["002-feature-hub"]
+history:
+  - { at: "2026-07-08", to: in-progress }

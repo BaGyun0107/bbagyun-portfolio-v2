@@ -1,0 +1,13 @@
+id: "013-unify-naming-entrypoints"
+title: "speckit 이름 통일 + 엔트리포인트 단일화"
+phase: P2
+status: done
+decision_level: 검토메모
+owner_roles: [backend]
+surface: 내부도구
+depends_on: []
+history:
+  - { at: "2026-07-29", to: planned }
+  - { at: "2026-07-29", to: in-progress }
+  - { at: "2026-07-29", to: in-review }
+  - { at: "2026-07-30", to: done }

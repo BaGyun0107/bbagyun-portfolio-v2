@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|shell|local_shell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.harness/hooks/codex-pretooluse.mjs\"",
+            "timeout": 15,
+            "statusMessage": "harness guardrails"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.harness/hooks/codex-stop.mjs\"",
+            "timeout": 30,
+            "statusMessage": "planning sync on relevant source change"
+          }
+        ]
+      }
+    ]
+  }
+}

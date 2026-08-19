@@ -1,0 +1,14 @@
+id: "002-feature-hub"
+title: "기능 허브 + 기능정의 상태 flow"
+phase: P1
+status: done
+decision_level: 확정
+owner_roles: [frontend, backend]
+surface: UserApp
+depends_on: []
+history:
+  - { at: "2026-07-08", to: in-progress }
+  - { at: "2026-07-08", to: in-review }
+  - { at: "2026-07-08", to: in-progress }
+  - { at: "2026-07-08", to: in-review }
+  - { at: "2026-07-18", to: done }

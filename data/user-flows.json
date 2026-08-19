@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "flows": [
+    {
+      "id": "FLOW-ONBOARD",
+      "title": "신규 팀원 온보딩",
+      "actor": "신규 개발자",
+      "goal": "새 macOS에서 검증된 작업 환경으로 첫 세션을 시작한다",
+      "entryStepId": "clone",
+      "steps": [
+        { "id": "clone", "title": "저장소를 clone한다", "kind": "start", "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "bootstrap" }] },
+        { "id": "bootstrap", "title": "단일 bootstrap 명령을 실행한다", "kind": "action", "screenIds": ["HUB-GUIDE"], "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "supported-os" }] },
+        { "id": "supported-os", "title": "지원하는 macOS인가?", "kind": "decision", "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "prepare-tools", "condition": "macOS" }, { "to": "unsupported", "condition": "Linux 또는 Windows" }] },
+        { "id": "unsupported", "title": "변경 없이 미지원 안내로 종료한다", "kind": "end", "featureIds": ["004-onboarding-bootstrap"] },
+        { "id": "prepare-tools", "title": "개발자 도구와 선언된 런타임을 확인·설치한다", "kind": "system", "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "authenticated" }] },
+        { "id": "authenticated", "title": "GitHub 인증이 완료됐는가?", "kind": "decision", "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "install-harness", "condition": "인증됨" }, { "to": "login", "condition": "미인증" }] },
+        { "id": "login", "title": "대화형 GitHub 로그인을 완료한다", "kind": "action", "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "install-harness" }] },
+        { "id": "install-harness", "title": "하네스·스킬·Spec Kit 자산을 준비한다", "kind": "system", "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "superpowers" }] },
+        { "id": "superpowers", "title": "Superpowers 자동 설치가 가능한가?", "kind": "decision", "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "doctor", "condition": "자동 설치 또는 이미 설치됨" }, { "to": "manual-guide", "condition": "자동 설치 불가" }] },
+        { "id": "manual-guide", "title": "최종 요약에 수동 설치 절차를 표시한다", "kind": "system", "screenIds": ["HUB-GUIDE"], "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "doctor" }] },
+        { "id": "doctor", "title": "doctor 검증이 통과하는가?", "kind": "decision", "featureIds": ["004-onboarding-bootstrap"], "next": [{ "to": "ready", "condition": "통과" }, { "to": "retry", "condition": "실패" }] },
+        { "id": "retry", "title": "완료 상태를 보존하고 원인·다음 행동·재실행을 안내한다", "kind": "end", "screenIds": ["HUB-GUIDE"], "featureIds": ["004-onboarding-bootstrap"] },
+        { "id": "ready", "title": "첫 작업 세션을 시작한다", "kind": "end", "featureIds": ["004-onboarding-bootstrap"] }
+      ]
+    },
+    {
+      "id": "FLOW-FEATURE-DELIVERY",
+      "title": "PM/PL 기능 전달 관리",
+      "actor": "PM/PL",
+      "goal": "사용자 요구를 검증 가능한 구현과 완료 근거로 전달한다",
+      "entryStepId": "record-need",
+      "steps": [
+        { "id": "record-need", "title": "사용자·사업 요구와 출처를 기록한다", "kind": "start", "featureIds": ["009-harness-information-architecture"], "next": [{ "to": "derive-structure" }] },
+        { "id": "derive-structure", "title": "capability와 화면 후보를 도출한다", "kind": "action", "screenIds": ["HUB-DEFINITIONS-SITEMAP"], "featureIds": ["007-sitemap-board", "009-harness-information-architecture"], "next": [{ "to": "approve-sitemap" }] },
+        { "id": "approve-sitemap", "title": "사이트맵 근거와 구조가 승인됐는가?", "kind": "decision", "screenIds": ["HUB-DEFINITIONS-SITEMAP"], "featureIds": ["007-sitemap-board", "009-harness-information-architecture"], "next": [{ "to": "normalize-definition", "condition": "승인" }, { "to": "revise-structure", "condition": "수정 필요" }] },
+        { "id": "revise-structure", "title": "근거와 구조를 수정한 뒤 재검토 대상으로 남긴다", "kind": "end", "screenIds": ["HUB-DEFINITIONS-SITEMAP"], "featureIds": ["007-sitemap-board", "009-harness-information-architecture"] },
+        { "id": "normalize-definition", "title": "기능정의 행과 stable ID를 정규화한다", "kind": "action", "screenIds": ["HUB-DEFINITIONS-TABLE"], "featureIds": ["003-feature-definition-source"], "next": [{ "to": "plan-feature" }] },
+        { "id": "plan-feature", "title": "Specify·Clarify·Plan·Tasks·Analyze를 수행한다", "kind": "action", "screenIds": ["HUB-DEFINITIONS-DETAIL"], "featureIds": ["002-feature-hub", "003-feature-definition-source", "010-planning-hub-redesign", "012-harness-catalog-migration"], "next": [{ "to": "implement" }] },
+        { "id": "implement", "title": "TDD로 구현하고 리뷰한다", "kind": "action", "featureIds": ["002-feature-hub", "011-definition-later-path"], "next": [{ "to": "build-hub" }] },
+        { "id": "build-hub", "title": "허브를 생성하고 broken·duplicate·orphan을 검사한다", "kind": "system", "screenIds": ["HUB-DEFINITIONS-RELATION", "HUB-C-HEALTH"], "featureIds": ["008-linked-feature-hub", "009-harness-information-architecture", "010-planning-hub-redesign"], "next": [{ "to": "delivery-ready" }] },
+        { "id": "delivery-ready", "title": "task·verification 100%이고 열린 결정이 0건인가?", "kind": "decision", "screenIds": ["HUB-STATUS-DELIVERY"], "featureIds": ["008-linked-feature-hub"], "next": [{ "to": "approve-done", "condition": "모두 충족" }, { "to": "resolve-gap", "condition": "미완료 또는 미기록" }] },
+        { "id": "resolve-gap", "title": "다음 작업·검증·결정을 보완 대상으로 남긴다", "kind": "end", "screenIds": ["HUB-STATUS-DELIVERY"], "featureIds": ["008-linked-feature-hub", "011-definition-later-path"] },
+        { "id": "approve-done", "title": "상태 전이 제안을 사람이 명시적으로 승인한다", "kind": "action", "screenIds": ["HUB-STATUS-BOARD"], "featureIds": ["002-feature-hub", "008-linked-feature-hub"], "next": [{ "to": "delivery-complete" }] },
+        { "id": "delivery-complete", "title": "완료 근거와 변경 이력을 확인한다", "kind": "end", "screenIds": ["HUB-STATUS-DELIVERY"], "featureIds": ["008-linked-feature-hub"] }
+      ]
+    },
+    {
+      "id": "FLOW-HARNESS-DELIVERY",
+      "title": "하네스 유지보수·배포",
+      "actor": "하네스 관리자와 다운스트림 담당자",
+      "goal": "검증된 하네스 버전을 기존·신규 프로젝트에 안전하게 전달한다",
+      "entryStepId": "verified-change",
+      "steps": [
+        { "id": "verified-change", "title": "릴리스할 변경과 검증이 완료된다", "kind": "start", "screenIds": ["HUB-STATUS-DELIVERY"], "featureIds": ["005-harness-packaging", "006-harness-migrate"], "next": [{ "to": "release-valid" }] },
+        { "id": "release-valid", "title": "semver와 CHANGELOG가 유효한가?", "kind": "decision", "featureIds": ["005-harness-packaging"], "next": [{ "to": "publish", "condition": "유효" }, { "to": "release-rejected", "condition": "형식 오류 또는 CHANGELOG 누락" }] },
+        { "id": "release-rejected", "title": "이유를 표시하고 발행을 거부한다", "kind": "end", "screenIds": ["HUB-GUIDE"], "featureIds": ["005-harness-packaging"] },
+        { "id": "publish", "title": "검증된 semver 버전을 발행한다", "kind": "action", "featureIds": ["005-harness-packaging"], "next": [{ "to": "automatic-channel" }] },
+        { "id": "automatic-channel", "title": "minor/patch 자동 채널인가?", "kind": "decision", "featureIds": ["005-harness-packaging"], "next": [{ "to": "materialize", "condition": "자동 minor/patch" }, { "to": "approve-version", "condition": "major 또는 pin" }] },
+        { "id": "approve-version", "title": "명시적으로 버전을 승인하고 lock을 변경한다", "kind": "action", "featureIds": ["005-harness-packaging"], "next": [{ "to": "materialize" }] },
+        { "id": "materialize", "title": "다음 세션에서 캐시 수신과 원자적 materialize를 수행한다", "kind": "system", "featureIds": ["005-harness-packaging"], "next": [{ "to": "materialized" }] },
+        { "id": "materialized", "title": "버전 수신과 materialize가 성공했는가?", "kind": "decision", "featureIds": ["005-harness-packaging"], "next": [{ "to": "existing-project", "condition": "성공" }, { "to": "keep-current", "condition": "오프라인 또는 수신 실패" }] },
+        { "id": "keep-current", "title": "현재 버전을 유지하고 부분 적용 없이 다음 행동을 안내한다", "kind": "end", "screenIds": ["HUB-GUIDE"], "featureIds": ["005-harness-packaging"] },
+        { "id": "existing-project", "title": "기존 복사형 다운스트림인가?", "kind": "decision", "featureIds": ["006-harness-migrate"], "next": [{ "to": "dry-run", "condition": "기존 복사형" }, { "to": "doctor", "condition": "신규 lock 프로젝트" }] },
+        { "id": "dry-run", "title": "migrate dry-run 결과와 diff를 검토한다", "kind": "action", "screenIds": ["HUB-GUIDE"], "featureIds": ["006-harness-migrate"], "next": [{ "to": "safe-worktree" }] },
+        { "id": "safe-worktree", "title": "워킹트리가 깨끗하고 공유 파일 로컬 수정이 없는가?", "kind": "decision", "featureIds": ["006-harness-migrate"], "next": [{ "to": "migrate", "condition": "안전" }, { "to": "preserve", "condition": "dirty 또는 로컬 수정" }] },
+        { "id": "preserve", "title": "변경 없이 중단하고 기존 데이터를 보존한다", "kind": "end", "screenIds": ["HUB-GUIDE"], "featureIds": ["006-harness-migrate"] },
+        { "id": "migrate", "title": "lock 방식으로 migrate한다", "kind": "system", "featureIds": ["006-harness-migrate"], "next": [{ "to": "doctor" }] },
+        { "id": "doctor", "title": "doctor와 기능 동등성 검증이 통과하는가?", "kind": "decision", "featureIds": ["005-harness-packaging", "006-harness-migrate"], "next": [{ "to": "review-diff", "condition": "통과" }, { "to": "restore", "condition": "실패" }] },
+        { "id": "restore", "title": "원인을 기록하고 이전 상태를 유지하거나 복원한다", "kind": "end", "screenIds": ["HUB-GUIDE"], "featureIds": ["005-harness-packaging", "006-harness-migrate"] },
+        { "id": "review-diff", "title": "팀이 최종 diff를 리뷰한다", "kind": "action", "screenIds": ["HUB-DEFINITIONS-DETAIL"], "featureIds": ["006-harness-migrate"], "next": [{ "to": "delivered" }] },
+        { "id": "delivered", "title": "사용자가 커밋하거나 기존 상태로 복원한다", "kind": "end", "featureIds": ["006-harness-migrate"] }
+      ]
+    }
+  ]
+}

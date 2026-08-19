@@ -1,0 +1,13 @@
+id: "017-audit-wave2"
+title: "감사 후속 웨이브 (2차) — 결정 집행·갱신 체인 단일화·테스트 견고화"
+phase: P3
+status: done
+decision_level: 검토메모
+owner_roles: [backend]
+surface: 내부도구
+depends_on: ["016-audit-remediation"]
+history:
+  - { at: "2026-08-03", to: planned }
+  - { at: "2026-08-03", to: in-progress }
+  - { at: "2026-08-03", to: in-review }
+  - { at: "2026-08-03", to: done }

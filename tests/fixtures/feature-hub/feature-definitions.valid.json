@@ -1,0 +1,20 @@
+[
+  {
+    "Row_ID": "ADD-U2-009",
+    "Master_Group": "화면/상태 보강",
+    "Record_Type": "Screen",
+    "Title": "공공 관광정보 기반 지역 콘텐츠 보강",
+    "Area": "UserApp",
+    "Status": "원본기록",
+    "Decision_Question": "출처 노출 기준"
+  },
+  {
+    "Row_ID": "ADD-U2-010",
+    "Master_Group": "결제",
+    "Record_Type": "Flow",
+    "Title": "간편결제 연동",
+    "Area": "UserApp",
+    "Status": "범위결정",
+    "Decision_Question": "PG사 선택"
+  }
+]

@@ -1,0 +1,12 @@
+id: "014-packaging-unification"
+title: "패키징 단일화 — bootstrap 단일 표면 + copy 은퇴 예고"
+phase: P3
+status: in-review
+decision_level: 검토메모
+owner_roles: [backend]
+surface: 내부도구
+depends_on: []
+history:
+  - { at: "2026-07-30", to: planned }
+  - { at: "2026-07-30", to: in-progress }
+  - { at: "2026-07-30", to: in-review }

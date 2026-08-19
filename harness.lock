@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "channel": "latest-minor",
+  "repo": "https://github.com/CODIWORKS-Engineer/codi-harness.git"
+}

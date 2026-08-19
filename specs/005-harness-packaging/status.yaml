@@ -1,0 +1,13 @@
+id: "005-harness-packaging"
+title: "하네스 패키지화 — 버전 캐시와 lock 기반 배포 (Phase 2)"
+phase: P2
+status: done
+decision_level: 확정
+owner_roles: [devops]
+surface: 내부도구
+depends_on: ["004-onboarding-bootstrap"]
+history:
+  - { at: "2026-07-15", to: planned }
+  - { at: "2026-07-15", to: in-progress }
+  - { at: "2026-07-15", to: in-review }
+  - { at: "2026-07-18", to: done }

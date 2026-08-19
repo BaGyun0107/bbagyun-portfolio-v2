@@ -1,0 +1,57 @@
+# 그누보드5 몰 로컬 개발 환경 템플릿 (codi-gnuboard resources).
+# 사용법: 레포 루트에 복사 후 <mall> 을 실제 몰 디렉터리명으로 치환한다.
+# 파일럿(gnuboard5.6.32 레포)에서 실측 검증된 함정 대응을 담고 있다 —
+# 각 주석의 이유를 지우지 말 것.
+services:
+  web:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM php:7.4-apache
+        RUN apt-get update && apt-get install -y --no-install-recommends \
+              libpng-dev libjpeg-dev libfreetype6-dev \
+            && docker-php-ext-configure gd --with-jpeg --with-freetype \
+            && docker-php-ext-install -j4 mysqli gd \
+            && rm -rf /var/lib/apt/lists/*
+    container_name: gnuboard-local-web
+    ports:
+      - "38080:80"
+    # 레포 루트를 통째로 마운트하고 DocumentRoot 만 몰 디렉터리로 지정한다.
+    # 호스트/컨테이너 경로 구조가 같아져 상대경로 심볼릭 링크가 그대로
+    # 유효하다 — 몰 디렉터리만 마운트하면 링크가 컨테이너 밖을 가리켜
+    # 끊어진다(403).
+    volumes:
+      - .:/repo
+      - web-data:/repo/apps/<mall>/data
+    # Apache 기본 설정은 /var/www 밖(/repo) 접근을 거부한다(403) —
+    # DocumentRoot 치환과 함께 /repo 디렉터리 허용 conf 를 만들어야 한다.
+    command: bash -c "sed -ri 's!/var/www/html!/repo/apps/<mall>!g' /etc/apache2/sites-available/*.conf; printf '<Directory /repo>\\nRequire all granted\\nAllowOverride All\\n</Directory>\\n' > /etc/apache2/conf-enabled/repo-docroot.conf; mkdir -p /repo/apps/<mall>/data/cache; chown -R www-data:www-data /repo/apps/<mall>/data 2>/dev/null; apache2-foreground"
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mysql:5.7
+    platform: linux/amd64   # Apple Silicon: arm64 이미지가 없어 에뮬레이션 실행
+    container_name: gnuboard-local-db
+    environment:
+      MYSQL_ROOT_PASSWORD: localdev
+      MYSQL_DATABASE: gnuboard
+    ports:
+      - "33057:3306"
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+      # 그누보드 5.6 은 datetime '0000-00-00' 을 관습적으로 쓴다.
+      # MySQL 5.7 STRICT 기본 모드와 충돌(err 1292)하므로 비STRICT 로.
+      # 로컬 전용 런타임 호환 설정(코어 무수정·데이터 값 불변).
+      - --sql-mode=
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-plocaldev"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  # data/ 는 컨테이너 전용 볼륨으로 분리한다 — 캐시·세션·업로드가
+  # 호스트 워킹트리(깃 제외 대상)에 섞이지 않게 한다.
+  web-data:

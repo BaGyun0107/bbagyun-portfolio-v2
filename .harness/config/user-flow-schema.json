@@ -1,0 +1,16 @@
+{
+  "$schema": "https://codi.works/harness/user-flow-schema.v1.json",
+  "version": 1,
+  "description": "Canonical contract for optional user goal and decision flows.",
+  "sourcePath": "data/user-flows.json",
+  "ownership": "human-owned artifact — docs:build reads it and never writes it",
+  "requiredRootFields": ["version", "flows"],
+  "requiredFlowFields": ["id", "title", "actor", "goal", "entryStepId", "steps"],
+  "requiredStepFields": ["id", "title", "kind"],
+  "optionalStepFields": ["screenIds", "featureIds", "next", "normalNextId"],
+  "requiredEdgeFields": ["to"],
+  "optionalEdgeFields": ["condition", "kind", "normal"],
+  "stepKinds": ["start", "action", "decision", "system", "end", "success", "failure", "recovery"],
+  "edgeKinds": ["normal", "success", "happy-path", "decision", "failure", "recovery"],
+  "failOpen": "파일 부재/파싱 실패/최상위 구조 위반은 null, 개별 flow/step/edge 위반은 제외 후 경고"
+}

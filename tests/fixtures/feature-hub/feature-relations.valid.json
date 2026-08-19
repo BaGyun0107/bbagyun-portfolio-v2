@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "entities": [
+    {
+      "type": "need",
+      "id": "NEED-001",
+      "title": "기능 검토 근거 확인"
+    },
+    {
+      "type": "test",
+      "id": "TEST-003",
+      "title": "샘플 기능 인수 검증"
+    }
+  ],
+  "links": [
+    {
+      "from": { "type": "need", "id": "NEED-001" },
+      "to": { "type": "feature", "id": "003-sample" },
+      "type": "satisfied-by"
+    },
+    {
+      "from": { "type": "feature", "id": "003-sample" },
+      "to": { "type": "spec", "id": "003-sample" },
+      "type": "specified-by"
+    },
+    {
+      "from": { "type": "feature", "id": "003-sample" },
+      "to": { "type": "screen", "id": "U1-1" },
+      "type": "appears-on"
+    },
+    {
+      "from": { "type": "feature", "id": "003-sample" },
+      "to": { "type": "test", "id": "TEST-003" },
+      "type": "verified-by"
+    }
+  ]
+}

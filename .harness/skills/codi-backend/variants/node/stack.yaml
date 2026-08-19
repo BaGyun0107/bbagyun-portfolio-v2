@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=../stack.schema.json
+language: node
+runtime: project-detected
+package_manager: stack-specific
+package_managers:
+  express: npm
+  nestjs: pnpm
+framework: express-or-nestjs
+orm: prisma
+source: variant
+
+verify:
+  detect: package.json
+  syntax:
+    cmd: "mise exec -- npm run typecheck"
+    skip_if_missing: mise
+  tests:
+    cmd: "mise exec -- npm test"
+    skip_if_missing: mise
+  raw_sql:
+    patterns:
+      - "\\$queryRawUnsafe\\("
+      - "\\$executeRawUnsafe\\("
+      - "sql\\.raw\\("
+    include_glob: "*.ts"
+    exclude_dirs: [node_modules, dist, build, coverage]

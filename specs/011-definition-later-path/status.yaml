@@ -1,0 +1,13 @@
+id: "011-definition-later-path"
+title: "정의-후행(definition-later) 경량 경로"
+phase: P2
+status: done
+decision_level: 검토메모
+owner_roles: [backend]
+surface: 내부도구
+depends_on: ["008-linked-feature-hub", "010-planning-hub-redesign"]
+history:
+  - { at: "2026-07-17", to: planned }
+  - { at: "2026-07-17", to: in-progress }
+  - { at: "2026-07-17", to: in-review }
+  - { at: "2026-07-17", to: done }

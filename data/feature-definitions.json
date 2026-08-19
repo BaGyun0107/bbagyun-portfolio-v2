@@ -1,0 +1,673 @@
+[
+  {
+    "id": "001-design-system-support",
+    "title": "프로젝트별 디자인 시스템 지원 구조",
+    "summary": "프로젝트별 디자인 시스템 지원 구조",
+    "actor": "developer",
+    "priority": "P1",
+    "owner": "harness",
+    "definitionStatus": "approved",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-PROJECT",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-PROJECT",
+      "HUB-DEFINITIONS-DETAIL"
+    ]
+  },
+  {
+    "id": "002-feature-hub",
+    "title": "기능 허브 + 기능정의 상태 flow",
+    "summary": "기능 허브 + 기능정의 상태 flow",
+    "actor": "developer",
+    "priority": "P1",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-ROOT",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-PROJECT",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-SPEC",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-C-SEARCH",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-C-DETAIL",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-ROOT",
+      "HUB-GUIDE",
+      "HUB-PROJECT",
+      "HUB-STATUS",
+      "HUB-STATUS-BOARD",
+      "HUB-STATUS-SPEC",
+      "HUB-C-SEARCH",
+      "HUB-C-DETAIL"
+    ]
+  },
+  {
+    "id": "003-feature-definition-source",
+    "title": "기능정의서 탭 데이터 소스 전환",
+    "summary": "산출물(data/feature-definitions.json)로 전환한다. 002-feature-hub의 후속 기능. STICKY 절대경로 하드코딩 제거, 소스 부재 시 빈 탭 + 빌드 성공.",
+    "actor": "developer",
+    "priority": "P3",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-DEFINITIONS-TABLE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-DEFINITIONS-TABLE",
+      "HUB-DEFINITIONS",
+      "HUB-DEFINITIONS-DETAIL"
+    ]
+  },
+  {
+    "id": "004-onboarding-bootstrap",
+    "title": "하네스 원클릭 온보딩 부트스트랩 (Phase 1)",
+    "summary": "하네스 설치·검증까지 한 번에 수행한다. 설계 정본: specs/004-onboarding-bootstrap/ (초안은 git 히스토리 보존 — 2026-08-03 감사 D-5).\"",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "005-harness-packaging",
+    "title": "하네스 패키지화 — 버전 캐시와 lock 기반 배포 (Phase 2)",
+    "summary": "다운스트림은 머신 글로벌 버전 캐시 + 커밋된 lock 한 줄로 소비한다. 상위 설계 정본: specs/005-harness-packaging/spec.md.\"",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "006-harness-migrate",
+    "title": "기존 다운스트림 migrate와 구 동기화 은퇴 (Phase 3)",
+    "summary": "전환하는 harness migrate, 룰 이중 로드 해소, 구 동기화 흐름 은퇴, 문서 정합화. 상위 설계 정본: specs/005-harness-packaging/, specs/006-harness-migrate/.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "007-sitemap-board",
+    "title": "기능정의서 사이트맵 보드 + 사이트맵 선행 플로우",
+    "summary": "설계 확정본 docs/superpowers/specs/2026-07-16-feature-definition-sitemap-board-design.md 기반. 사이트맵 독립 산출물 선행 + 허브 기능정의서 탭 사이트맵 보드 재구성 + 기존 표는 토글 보조 뷰. include test ta",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-DEFINITIONS-SITEMAP",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-DEFINITIONS-SITEMAP",
+      "HUB-DEFINITIONS"
+    ]
+  },
+  {
+    "id": "008-linked-feature-hub",
+    "title": "연결형 기능 허브 v2",
+    "summary": "연결형 기능 허브 v2",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "approved",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-DEFINITIONS-RELATION",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-FLOW",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-DELIVERY",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-C-EMPTY",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-C-HEALTH",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-DEFINITIONS-RELATION",
+      "HUB-DEFINITIONS-FLOW",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-STATUS-DELIVERY",
+      "HUB-C-EMPTY",
+      "HUB-C-HEALTH"
+    ]
+  },
+  {
+    "id": "009-harness-information-architecture",
+    "title": "하네스 정보구조·기능 추적성·사용자 흐름 정본화",
+    "summary": "하네스 정보구조·기능 추적성·사용자 흐름 정본화",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "approved",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-DEFINITIONS-SITEMAP",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-RELATION",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-FLOW",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-DEFINITIONS-SITEMAP",
+      "HUB-DEFINITIONS-RELATION",
+      "HUB-DEFINITIONS-FLOW"
+    ]
+  },
+  {
+    "id": "010-planning-hub-redesign",
+    "title": "Planning Hub 데모·동기화·기능 허브 재설계",
+    "summary": "구현 가능한 기능정의 상세, Planning Manifest와 Delivery Evidence 기반 동기화, 격리된 Community Demo 워크스페이스를 구현한다. Claude/Codex 및 사람의 편집을 공용 동기화 흐름과 CI로 검증하며 include test tasks (TDD",
+    "actor": "developer",
+    "priority": "P1",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-ROOT",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-SITEMAP",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-FLOW",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-RELATION",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-DELIVERY",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-C-HEALTH",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-ROOT",
+      "HUB-DEFINITIONS-SITEMAP",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-DEFINITIONS-FLOW",
+      "HUB-DEFINITIONS-RELATION",
+      "HUB-STATUS-DELIVERY",
+      "HUB-C-HEALTH"
+    ]
+  },
+  {
+    "id": "011-definition-later-path",
+    "title": "정의-후행(definition-later) 경량 경로",
+    "summary": "기능정의서에 없는 기능을 먼저 구현하는 bottom-up/유지보수 흐름을 1급 시민으로 지원한다. FEAT stub 경량 등록, 미등록 기능 버킷 투영, status.yaml featureId 역방향 연결, specs deliverySource 투영. include test tasks ",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "approved",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-C-HEALTH",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-STATUS-BOARD",
+      "HUB-C-HEALTH"
+    ]
+  },
+  {
+    "id": "012-harness-catalog-migration",
+    "title": "하네스 카탈로그 전환 + legacy 기능정의서 표 은퇴",
+    "summary": "카탈로그로 관리하고, 문서 허브의 legacy 21필드 표를 은퇴시켜 이중 모델을 해소한다. spec ID 재사용, 상세 처리 전략, advisory health 구분, legacy 하위호환 유지. include test tasks (TDD)\"",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-17",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-C-HEALTH",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-C-HEALTH"
+    ]
+  },
+  {
+    "id": "013-unify-naming-entrypoints",
+    "title": "speckit 이름 통일 + 엔트리포인트 단일화",
+    "summary": "라이브 하네스 표면의 speckit.* 논리명을 실제 설치 스킬명 speckit-*로 통일하고, CLAUDE.md를 bare @AGENTS.md import + Claude 전용 델타로 재편해 두 런타임이 하나의 공용 규칙 본문을 읽게 한다.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-29",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "014-packaging-unification",
+    "title": "패키징 단일화 — bootstrap 단일 표면 + copy 은퇴 예고",
+    "summary": "팀원이 알아야 할 하네스 명령을 ./harness bootstrap 하나로 좁히고, 실행 결과를 요약해 무엇이 바뀌었는지 알린다. copy 모드 갱신에는 은퇴 예고와 전환 방법을 붙이고 doctor 가 배포 모드를 보고한다.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-30",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "015-downstream-residue-cleanup",
+    "title": "다운스트림 잔재 정리 완결 — 구조 갭 6개 해소",
+    "summary": "하네스 clone 잔재가 다운스트림에 영구 잔존하던 구조 갭 6개를 닫는다. 소유자는 prune-downstream 으로 분류별 정리하고, 팀원 bootstrap 은 인덱스를 바꾸지 않으며, 리포 내부 링크는 상대경로로 이식 가능하다.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-31",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "016-audit-remediation",
+    "title": "감사 발견 일괄 수정 (1차) — 소실 방지·가드 실효화·서술 부채 정정",
+    "summary": "2026-07-31 전수 감사에서 검증된 34건 중 소유자 결정이 불필요한 19개 항목을 수정한다. lock 전환 시 가이드 소실 방지와 드리프트 가드 실효화를 한 묶음으로 처리하고, 문서 서술 부채와 테스트 인프라 위생(temp 무누수·git 격리)을 함께 정리한다.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-07-31",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "017-audit-wave2",
+    "title": "감사 후속 웨이브 (2차) — 결정 집행·갱신 체인 단일화·테스트 견고화",
+    "summary": "2026-07-31 전수 감사 잔여분 처리. 소유자 결정(D-2·D-3·D-5) 집행, materialize+keep-committed 단일 진입점, manifest 고아 해소, 테스트 유도 불변식 전환과 LOW 마감.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-08-03",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-DEFINITIONS-DETAIL",
+        "role": "support"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-DEFINITIONS-DETAIL",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "018-gstack-to-playwright-mcp",
+    "title": "GStack 전면 제거 및 Playwright MCP 대체 도입",
+    "summary": "2026-08-06 재측정 근거로 GStack을 전면 제거하고 브라우저 QA를 Playwright MCP(사용자 레벨 등록, 버전 핀)로 대체. 양 런타임 패리티 점검, PHP 파일럿 실증, 정책 참조 정리, 전역 삭제와 롤백 문서.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-08-06",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "019-first-setup-simplification",
+    "title": "최초 프로젝트 설정 단순화",
+    "summary": "소비자(bootstrap 1회)와 최초 생성자 경험 격차 해소 — init-project 스킬 대화 경로 승격과 git 히스토리 재시작 갭 수정, lock 자가 부트스트랩 기반 최소 스켈레톤 시작점으로 신규 생성도 bootstrap 경험으로 통일.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-08-06",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "020-rules-local-protection",
+    "title": "프로젝트 소유 규칙 경로와 stale 삭제 제한",
+    "summary": "다운스트림 팀 규칙의 보장 경로 .harness/rules-local 신설(project-owned 4중 등재 + Claude 링크 배선 + Codex 진입점 안내), update stale 삭제를 이전 로컬 shared-manifest 실재 파일로 제한해 배포 이력 없는 파일의 오삭제를 구조적으로 차단.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-08-07",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-STATUS-BOARD"
+    ]
+  },
+  {
+    "id": "021-gnuboard-php-support",
+    "title": "그누보드5 PHP 쇼핑몰 하네스 지원",
+    "summary": "파일럿 검증 패턴을 업스트림으로 증류: codi-gnuboard 공유 스킬(구조 지식·깃 온보딩·도커 로컬 환경·e2e 스위트 예시), php-monolith 프로필 모드(레지스트리·가드·인젝터), PHP 감지 path-scoped 룰과 Codex 미러.",
+    "actor": "developer",
+    "priority": "P2",
+    "owner": "harness",
+    "definitionStatus": "draft",
+    "lastReviewedAt": "2026-08-07",
+    "featureGroupId": "GROUP-HARNESS",
+    "targetReleaseId": "R-HARNESS",
+    "placements": [
+      {
+        "screenId": "HUB-GUIDE",
+        "role": "primary"
+      },
+      {
+        "screenId": "HUB-STATUS-BOARD",
+        "role": "support"
+      }
+    ],
+    "screenIds": [
+      "HUB-GUIDE",
+      "HUB-STATUS-BOARD"
+    ]
+  }
+]

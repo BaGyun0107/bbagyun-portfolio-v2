@@ -1,0 +1,13 @@
+id: "019-first-setup-simplification"
+title: "최초 프로젝트 설정 단순화"
+phase: P3
+status: done
+decision_level: 검토메모
+owner_roles: [backend]
+surface: 내부도구
+depends_on: ["018-gstack-to-playwright-mcp"]
+history:
+  - { at: "2026-08-06", to: planned }
+  - { at: "2026-08-06", to: in-progress }
+  - { at: "2026-08-06", to: in-review }
+  - { at: "2026-08-07", to: done }

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "defaultWorkspaceId": "escape",
+  "workspaces": [
+    {
+      "id": "escape",
+      "title": "Unsafe",
+      "kind": "downstream",
+      "root": "../../outside"
+    }
+  ]
+}

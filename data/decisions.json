@@ -1,0 +1,12 @@
+[
+  {
+    "id": "DEC-HARNESS-DETAIL-BACKFILL",
+    "title": "하네스 카탈로그 11그룹 상세 백필 계획",
+    "status": "resolved",
+    "owner": "product",
+    "question": "카탈로그 우선 도입으로 상세(11그룹)가 비어 있다. 우선순위 높은 기능부터 소급 작성한다.",
+    "resolutionCondition": "전 기능 feature-details 작성 후 definitionStatus 정리",
+    "resolvedAt": "2026-08-03",
+    "resolution": "백필하지 않기로 확정 — 하네스 워크스페이스는 카탈로그-only 로 운영한다 (2026-07-31 감사 D-3, 소유자 결정). detailId 는 전부 제거했고, 상세-누락 경고는 detailId 를 명시 선언한 기능에만 발생한다."
+  }
+]

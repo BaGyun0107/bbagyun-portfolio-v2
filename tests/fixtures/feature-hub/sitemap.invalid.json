@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "surfaces": [
+    {
+      "key": "storefront",
+      "title": "잘못된 서피스",
+      "nodes": [
+        { "id": "X1", "title": "임의 화면" }
+      ]
+    }
+  ]
+}
