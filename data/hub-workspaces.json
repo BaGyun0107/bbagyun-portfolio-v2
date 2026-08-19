@@ -1,8 +1,0 @@
-{
-  "version": 1,
-  "defaultWorkspaceId": "community-demo",
-  "workspaces": [
-    { "id": "community-demo", "title": "Community Demo", "kind": "demo", "badge": "DEMO DATA", "root": "examples/community-app", "planningSource": "planning", "deliverySource": "downstream" },
-    { "id": "harness-internal", "title": "Harness Internal", "kind": "internal", "root": ".", "planningSource": "data", "deliverySource": "specs" }
-  ]
-}
