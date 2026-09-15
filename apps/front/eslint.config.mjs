@@ -1,20 +1,11 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
+import nextConfig from 'eslint-config-next';
 import importPlugin from 'eslint-plugin-import';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Next.js의 기존(Legacy) 설정을 Flat Config에서 사용하기 위한 호환성 객체
-const compat = new FlatCompat({
-  baseDirectory: __dirname
-});
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 const eslintConfig = [
-  // 1. Next.js 및 TypeScript 기본 권장 설정 가져오기
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  // Next 16 exposes its recommended rules as a native flat-config array.
+  ...nextConfig,
 
   // 2. Prettier 설정 (포매팅 충돌 방지 및 규칙 강제)
   eslintPluginPrettierRecommended,
@@ -22,7 +13,8 @@ const eslintConfig = [
   // 3. 커스텀 플러그인 및 팀 컨벤션 규칙 (설계적 관점 반영)
   {
     plugins: {
-      import: importPlugin
+      import: importPlugin,
+      '@typescript-eslint': typescriptEslintPlugin
     },
     rules: {
       // 사용하지 않는 변수 경고 (인터페이스 설계 시 '_' 시작 변수 허용)

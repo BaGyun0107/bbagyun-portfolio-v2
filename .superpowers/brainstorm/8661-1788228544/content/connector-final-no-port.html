@@ -1,0 +1,69 @@
+<style>
+  .final-card{margin-top:24px;overflow:hidden;border:2px solid #1f6feb;border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(24,32,48,.07)}
+  .head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid #e4e9f0;background:#f8fafc}
+  .head strong{color:#172033}.badge{padding:4px 9px;border-radius:999px;background:#e8f1ff;color:#0b4ca1;font-size:11px;font-weight:750}
+  .layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.65fr);gap:18px;padding:18px;background:#fbfcfe}
+  .canvas,.detail{border:1px solid #d8dee8;border-radius:12px;background:#fff;padding:12px}svg{display:block;width:100%;height:auto}
+  .line{fill:none;stroke:#344256;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.exception{stroke:#c2414b;stroke-dasharray:7 5}
+  .node{fill:#fff;stroke:#526176;stroke-width:1.7}.node-text{fill:#27364a;font-size:10px;font-weight:750}
+  .label-bg{fill:#fff;stroke:#cfd7e3}.label{fill:#334155;font-size:9px;font-weight:750}
+  .detail h3{margin:0 0 6px;font-size:14px}.detail p{margin:0 0 14px;color:#64748b;font-size:11px;line-height:1.55}
+  .rule{margin-top:9px;padding:10px;border-radius:10px;background:#f6f8fb}.rule strong{display:block;color:#27364a;font-size:11px}.rule span{display:block;margin-top:3px;color:#64748b;font-size:10px;line-height:1.45}
+  .footer{padding:0 18px 18px;color:#526176;font-size:12px;line-height:1.6}
+  @media(max-width:850px){.layout{grid-template-columns:1fr}}
+</style>
+
+<h2>최종 연결선 후보 — 수신 포트 없이 정돈</h2>
+<p class="subtitle">작은 화살촉 자체가 도착점을 설명합니다. 마지막 직선 구간이 노드 변에 수직으로 닿기 때문에 별도의 점이 없어도 방향을 분명히 읽을 수 있습니다.</p>
+
+<div class="card final-card" data-choice="approve-no-port" onclick="toggleSelect(this)">
+  <div class="head"><strong>A1 최종 수정안</strong><span class="badge">clean FigJam connector</span></div>
+  <div class="layout">
+    <div class="canvas">
+      <svg viewBox="0 0 500 315" aria-label="수신 포트 없이 작은 화살촉을 적용한 연결선">
+        <rect x="12" y="12" width="476" height="290" rx="13" fill="#fbfcfe" stroke="#e0e5ed"/>
+
+        <!-- shafts below nodes -->
+        <path class="line" d="M148 77H170Q184 77 184 91V141Q184 155 198 155"/>
+        <path class="line" d="M318 155H340Q354 155 354 141V91Q354 77 368 77"/>
+        <path class="line" d="M258 188V207Q258 221 272 221H354Q368 221 368 227"/>
+        <path class="line exception" d="M198 169H184Q170 169 170 183V237Q170 251 156 251"/>
+
+        <!-- nodes above shafts -->
+        <rect class="node" x="38" y="53" width="110" height="48" rx="10"/><text class="node-text" x="93" y="81" text-anchor="middle">인증 API 요청</text>
+        <rect class="node" x="198" y="126" width="120" height="62" rx="11"/><text class="node-text" x="258" y="153" text-anchor="middle">Access Token</text><text class="node-text" x="258" y="168" text-anchor="middle">검증</text>
+        <rect class="node" x="368" y="53" width="96" height="48" rx="10"/><text class="node-text" x="416" y="81" text-anchor="middle">데이터 응답</text>
+        <rect class="node" x="368" y="227" width="96" height="48" rx="10"/><text class="node-text" x="416" y="255" text-anchor="middle">토큰 갱신</text>
+        <rect class="node" x="48" y="227" width="108" height="48" rx="10"/><text class="node-text" x="102" y="255" text-anchor="middle">인증 실패</text>
+
+        <!-- compact arrowheads above node borders, no receive ports -->
+        <path d="M190.5 151.2L198 155L190.5 158.8Z" fill="#344256"/>
+        <path d="M360.5 73.2L368 77L360.5 80.8Z" fill="#344256"/>
+        <path d="M364.2 219.5L368 227L371.8 219.5Z" fill="#344256"/>
+        <path d="M163.5 247.2L156 251L163.5 254.8Z" fill="#c2414b"/>
+
+        <!-- label pills in clear mid-segments -->
+        <g transform="translate(354 119)"><rect class="label-bg" x="-23" y="-10" width="46" height="20" rx="10"/><text class="label" y="3" text-anchor="middle">유효</text></g>
+        <g transform="translate(313 221)"><rect class="label-bg" x="-23" y="-10" width="46" height="20" rx="10"/><text class="label" y="3" text-anchor="middle">만료</text></g>
+        <g transform="translate(170 205)"><rect class="label-bg" x="-28" y="-10" width="56" height="20" rx="10"/><text class="label" y="3" text-anchor="middle">검증 실패</text></g>
+      </svg>
+    </div>
+
+    <div class="detail">
+      <h3>도착부 확대</h3>
+      <p>화살촉이 노드 테두리 위에 놓이고, 팁은 정확히 변 중앙에서 끝납니다.</p>
+      <svg viewBox="0 0 260 145" aria-label="수신 포트 없는 도착 화살촉 확대">
+        <path class="line" d="M24 72H140"/>
+        <rect class="node" x="140" y="35" width="96" height="74" rx="12"/>
+        <path d="M128 66L140 72L128 78Z" fill="#344256"/>
+        <text class="node-text" x="188" y="76" text-anchor="middle">도착 노드</text>
+        <path d="M140 119V127" stroke="#1f6feb" stroke-width="1.5"/>
+        <text x="140" y="139" text-anchor="middle" fill="#1f6feb" font-size="9" font-weight="700">팁이 변 중앙에 정확히 닿음</text>
+      </svg>
+      <div class="rule"><strong>화살촉 7–8px</strong><span>선 굵기에 비례한 작은 filled triangle</span></div>
+      <div class="rule"><strong>수직 진입</strong><span>도착 전 12–16px를 직선으로 유지</span></div>
+      <div class="rule"><strong>상단 레이어</strong><span>화살촉만 노드 테두리 위에 렌더링해 잘림 방지</span></div>
+    </div>
+  </div>
+  <p class="footer">출발점과 도착점 모두 별도 포트 표시는 하지 않습니다. 네 방향 anchor는 배치 계산에만 사용하고, 화면에는 둥근 연결선·작은 화살촉·라벨 pill만 남깁니다.</p>
+</div>

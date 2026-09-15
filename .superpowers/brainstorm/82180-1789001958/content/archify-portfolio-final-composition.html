@@ -1,0 +1,57 @@
+<h2>확정 방향 미리보기</h2>
+<p class="subtitle">현재 포트폴리오 카드 안에서 Archify 배치를 사용하고, 같은 구조를 작은 보기와 Dialog의 두 밀도로 표시합니다.</p>
+
+<div class="mockup">
+  <div class="mockup-header">작은 보기 · MAP 밀도</div>
+  <div class="mockup-body" style="background:#fff;color:#18181b;padding:24px">
+    <div style="border:1px solid #e4e4e7;border-radius:12px;padding:22px">
+      <div style="display:flex;gap:18px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap">
+        <div><h3 style="margin:0;color:#18181b">플랫폼 변경·검증·배포 흐름</h3><p style="margin:7px 0 0;color:#71717a;font-size:13px">변경 성격에 따라 코드 경계를 선택하고 검증한 뒤 배포한 흐름입니다.</p></div>
+        <button class="mock-button" style="white-space:nowrap">크게 보기</button>
+      </div>
+      <svg viewBox="0 0 1040 390" style="width:100%;margin-top:20px;background:#fff;border:1px solid #e4e4e7;border-radius:9px">
+        <g fill="#fafafa" stroke="#e4e4e7"><rect x="10" y="10" width="1020" height="105" rx="6"/><rect x="10" y="125" width="1020" height="125" rx="6"/><rect x="10" y="260" width="1020" height="120" rx="6"/></g>
+        <g fill="#71717a" font-size="13" font-family="sans-serif"><text x="25" y="32">요구사항</text><text x="25" y="147">코드 경계</text><text x="25" y="282">검증·배포</text></g>
+        <g fill="#fff" stroke="#18181b" stroke-width="2">
+          <rect x="80" y="50" width="145" height="43" rx="8"/><rect x="275" y="50" width="145" height="43" rx="8"/><rect x="805" y="50" width="160" height="43" rx="8"/>
+          <rect x="90" y="165" width="165" height="45" rx="8"/><rect x="300" y="140" width="180" height="45" rx="8"/><rect x="300" y="195" width="180" height="45" rx="8"/><rect x="805" y="165" width="160" height="45" rx="8"/>
+          <rect x="500" y="300" width="155" height="45" rx="8"/><rect x="680" y="300" width="155" height="45" rx="8"/><rect x="860" y="300" width="145" height="45" rx="8"/>
+        </g>
+        <g fill="#18181b" font-size="13" font-weight="600" text-anchor="middle" font-family="sans-serif">
+          <text x="152" y="76">변경 요청</text><text x="347" y="76">차이 분류</text><text x="885" y="76">운영 브랜치 감사</text>
+          <text x="172" y="193">rsConfig에 값 배치</text><text x="390" y="168">platform에 화면·로직 배치</text><text x="390" y="223">core에 공통 동작 배치</text><text x="885" y="193">core·platform 수동 이식</text>
+          <text x="577" y="328">플랫폼별 빌드</text><text x="757" y="328">계약·동작 검증</text><text x="932" y="328">호텔별 운영 폴더 배포</text>
+        </g>
+        <g stroke="#18181b" stroke-width="2" fill="none"><path d="M225 71H275"/><path d="M420 71C470 71 45 186 90 186"/><path d="M420 71C460 71 300 162 300 162"/><path d="M420 71C460 71 300 217 300 217"/><path d="M255 187C330 187 500 322 500 322"/><path d="M480 162C520 162 530 280 577 300"/><path d="M480 217C520 217 540 280 577 300"/><path d="M655 322H680"/><path d="M835 322H860"/></g>
+        <g stroke="#d4183d" stroke-width="2" stroke-dasharray="8 6" fill="none"><path d="M757 300C757 100 805 72 805 72"/><path d="M885 93V165"/><path d="M805 187C730 187 720 270 757 300"/></g>
+      </svg>
+      <div style="margin-top:16px;padding:15px;background:#f4f4f5;border-radius:8px"><strong style="font-size:13px">전체 흐름 설명</strong><p style="margin:7px 0 0;color:#71717a;font-size:12px">작은 보기에서는 node 제목과 전체 경로만 읽고, 세부 조건은 크게 보기에서 확인합니다.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="mockup" style="margin-top:24px">
+  <div class="mockup-header">크게 보기 · READ 밀도</div>
+  <div class="mockup-body" style="background:rgba(24,24,27,.82);padding:26px">
+    <div style="background:#fff;border-radius:12px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.35)">
+      <div style="display:flex;justify-content:space-between;gap:20px"><div><h3 style="margin:0;color:#18181b">플랫폼 변경·검증·배포 흐름 크게 보기</h3><p style="margin:6px 0 0;color:#71717a;font-size:12px">동일한 배치에 node 설명과 관계 조건을 복원합니다.</p></div><button style="border:0;background:transparent;font-size:20px;color:#52525b">×</button></div>
+      <div style="margin-top:18px;border:1px solid #e4e4e7;border-radius:9px;padding:16px;background:#fafafa">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:center;color:#18181b;font-size:11px;text-align:center">
+          <div style="padding:14px 5px;border:1.5px solid #18181b;border-radius:7px;background:#fff"><strong>변경 요청</strong><br><span style="color:#71717a">기능 또는 정책 변경 접수</span></div>
+          <div style="padding:14px 5px;border:1.5px solid #18181b;border-radius:7px;background:#fff"><strong>차이 분류</strong><br><span style="color:#71717a">변경 성격 판단</span></div>
+          <div style="color:#71717a">공통 / 값 / 화면·로직</div>
+          <div style="padding:14px 5px;border:1.5px solid #18181b;border-radius:7px;background:#fff"><strong>플랫폼별 빌드</strong><br><span style="color:#71717a">build-time alias 선택</span></div>
+          <div style="padding:14px 5px;border:1.5px solid #18181b;border-radius:7px;background:#fff"><strong>계약·동작 검증</strong><br><span style="color:#71717a">주요 흐름 확인</span></div>
+          <div></div><div style="padding:14px 5px;border:1.5px solid #18181b;border-radius:7px;background:#fff"><strong>core</strong><br><span style="color:#71717a">모든 플랫폼 공통</span></div><div style="padding:14px 5px;border:1.5px solid #18181b;border-radius:7px;background:#fff"><strong>rsConfig</strong><br><span style="color:#71717a">값만 다름</span></div><div style="padding:14px 5px;border:1.5px solid #18181b;border-radius:7px;background:#fff"><strong>platform</strong><br><span style="color:#71717a">화면·로직 차이</span></div><div style="padding:14px 5px;border:1.5px solid #18181b;border-radius:7px;background:#fff"><strong>호텔별 배포</strong><br><span style="color:#71717a">검증된 산출물</span></div>
+        </div>
+        <div style="margin-top:13px;color:#d4183d;font-size:11px;text-align:center">┄ 패리티 누락 → 운영 브랜치 감사 → 수동 이식 → 재검증</div>
+      </div>
+      <p style="margin:12px 0 0;color:#71717a;font-size:11px;text-align:center">툴바 · 검색 · 내보내기 · 확대/축소 · 프레젠테이션 없음</p>
+    </div>
+  </div>
+</div>
+
+<div class="options" style="margin-top:24px">
+  <div class="option" data-choice="approve" onclick="toggleSelect(this)"><div class="letter">✓</div><div class="content"><h3>이 구성으로 승인</h3><p>현재 카드 구조, MAP 작은 보기, READ Dialog와 A1 색상 규칙을 확정합니다.</p></div></div>
+  <div class="option" data-choice="revise" onclick="toggleSelect(this)"><div class="letter">↺</div><div class="content"><h3>조정 필요</h3><p>카드 또는 Dialog의 정보 계층을 더 수정합니다.</p></div></div>
+</div>

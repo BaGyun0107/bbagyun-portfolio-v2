@@ -1,50 +1,127 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+- Version change: template placeholder -> 1.0.0
+- Added principles:
+  - I. Evidence-First Portfolio Truth
+  - II. Interview-Driven Progressive Completion
+  - III. Shared Information Architecture, Optional Evidence
+  - IV. Accessible and Responsive Reading
+  - V. Test-First, Verifiable Delivery
+- Added sections:
+  - Project Constraints
+  - Development Workflow and Quality Gates
+- Removed sections: none; template placeholders were concretized
+- Follow-up TODOs: none
+-->
+
+# Bbagyun Portfolio Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Evidence-First Portfolio Truth
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Every public claim MUST be traceable to an interview record, source code,
+runtime evidence, or an explicitly labeled estimate. Measured, reported, and
+estimated values MUST remain distinguishable. The portfolio MUST NOT invent
+demo URLs, operational status, metrics, architecture relationships, API
+contracts, or implementation outcomes. Private source code, customer data,
+secrets, and internal-only operational details MUST remain unpublished.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+Rationale: the portfolio's primary value is credible engineering judgment;
+unsupported precision or fabricated evidence damages that credibility.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. Interview-Driven Progressive Completion
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+Each project MUST be completed through a focused interview before its content
+is materially rewritten or its demo strategy is published. Projects MUST be
+handled one at a time so facts, public scope, demo constraints, and evidence
+can be reviewed without contaminating other project narratives. Uninterviewed
+project content MUST be preserved until its own cycle begins.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Rationale: project histories differ, and chat or neighboring project content
+is not a reliable substitute for the author's decisions.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### III. Shared Information Architecture, Optional Evidence
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Project detail pages MUST use one shared reading order and one reusable page
+template. Demos, swimlanes, architecture diagrams, ERDs, API contracts, and
+operational metrics MUST remain optional evidence. Missing evidence MUST be
+omitted without empty cards, disabled calls to action, or "coming soon"
+placeholders. Structured content contracts MUST be type-safe and support
+incremental migration from legacy content without forcing unsupported facts.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+Rationale: consistency improves comparison, while optional evidence prevents
+uniform presentation from becoming uniform fabrication.
+
+### IV. Accessible and Responsive Reading
+
+User-facing content MUST remain readable and operable by keyboard and assistive
+technology. Visual evidence MUST provide meaningful text alternatives. State
+and flow differences MUST NOT rely on color alone. Wide diagrams MAY scroll
+inside their own containers, but the page MUST NOT introduce horizontal
+overflow at supported viewport widths. External links MUST have accessible
+labels and safe new-tab behavior.
+
+Rationale: architecture evidence is part of the content, not decorative media,
+and must remain understandable regardless of device or visual access.
+
+### V. Test-First, Verifiable Delivery
+
+Behavioral changes MUST follow test-driven development unless the repository
+rules explicitly exempt the task. Tests MUST cover content contracts, type
+boundaries, conditional evidence rendering, and affected user flows. A change
+MUST NOT be declared complete without fresh type, lint, build, and relevant
+browser or E2E evidence. Verification records MUST distinguish automated proof,
+manual review, and remaining risk.
+
+Rationale: portfolio content and presentation are both production behavior;
+regressions in facts, accessibility, or navigation are user-facing defects.
+
+## Project Constraints
+
+- The project profile and app-local ownership rules define which application
+  surface may change. Frontend portfolio UI work belongs under `apps/front`.
+- App-local package manager and runtime declarations MUST be preserved. Root
+  dependency installation and runtime upgrades are prohibited unless explicitly
+  requested.
+- Identifiers and file names use English. User-facing Korean content remains
+  natural Korean; repository language rules govern comments and delivery text.
+- GitHub Secrets MUST contain only the approved Infisical bootstrap credentials;
+  secret values MUST NOT be read or published for portfolio content.
+- AI MUST NOT merge pull requests. Destructive, history-rewriting, production,
+  or secret-sensitive actions require the approval boundaries in `AGENTS.md`
+  and the harness policies.
+
+## Development Workflow and Quality Gates
+
+1. Non-trivial product, content-architecture, or UI changes start with approved
+   brainstorming.
+2. Medium or larger durable work uses a committed Spec Kit
+   `specs/<NNN-feature>/` directory as the plan of record.
+3. Specification explicitly requests test tasks, and critical ambiguity is
+   resolved through clarify before planning continues.
+4. The user explicitly starts any automated plan-to-converge loop and reviews
+   `tasks.md` before implementation.
+5. Implementation follows unchecked tasks and test-first discipline, preserves
+   unrelated user changes, and does not commit without current authorization.
+6. Review and verification include content-source consistency, type checking,
+   linting, production build, and E2E/browser evidence for affected user flows.
+7. Completion requires convergence, feature status synchronization when
+   applicable, and a handoff that records commands, decisions, and residual risk.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution operationalizes the repository's portfolio-quality principles.
+Direct user instructions, `AGENTS.md`, and the canonical harness policies remain
+the routing and safety authority; amendments MUST remain consistent with them.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+An amendment requires a documented rationale, explicit user approval, an impact
+review of active specifications, and a migration note when existing content or
+contracts are affected. Semantic versioning applies: MAJOR for incompatible
+principle removal or redefinition, MINOR for a new principle or materially
+expanded governance, and PATCH for non-semantic clarification. Every feature
+plan and final review MUST include a constitution compliance check, and any
+intentional exception MUST record its reason, owner, and expiry in the feature
+specification.
+
+**Version**: 1.0.0 | **Ratified**: 2026-08-20 | **Last Amended**: 2026-08-20

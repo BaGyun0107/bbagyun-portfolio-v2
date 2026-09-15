@@ -1,0 +1,90 @@
+<style>
+  .choice-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:24px; }
+  .choice-card { border:1px solid #d7dce5; border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 8px 24px rgba(24,32,48,.06); }
+  .choice-card.recommended { border:2px solid #1f6feb; }
+  .choice-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 14px; border-bottom:1px solid #e5e9f0; background:#f8fafc; }
+  .choice-title { display:flex; align-items:center; gap:8px; font-weight:750; color:#172033; }
+  .badge { padding:4px 8px; border-radius:999px; color:#0b4ca1; background:#e8f1ff; font-size:11px; font-weight:750; }
+  .zoom { border:1px solid #b8c2d2; border-radius:8px; background:#fff; padding:6px 9px; font-size:11px; font-weight:700; color:#334155; }
+  .diagram-shell { padding:14px; min-height:285px; background:linear-gradient(#fff,#fafbfc); }
+  .lanes { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid #cfd6e2; border-radius:8px; overflow:hidden; height:205px; }
+  .lane { position:relative; border-right:1px solid #d8dee8; background:#fff; }
+  .lane:last-child { border-right:0; }
+  .lane-name { height:31px; display:flex; align-items:center; justify-content:center; background:#eef2f6; border-bottom:1px solid #d8dee8; font-size:9px; font-weight:750; color:#364152; }
+  .node { position:absolute; left:10%; right:10%; min-height:24px; display:flex; align-items:center; justify-content:center; border:1px solid #57657a; border-radius:6px; background:#fff; padding:3px; text-align:center; font-size:8px; font-weight:700; color:#27364a; }
+  .arrow { position:absolute; width:26px; border-top:2px solid #374151; }
+  .arrow:after { content:""; position:absolute; right:-1px; top:-4px; width:6px; height:6px; border-top:2px solid #374151; border-right:2px solid #374151; transform:rotate(45deg); }
+  .edge-label { position:absolute; z-index:2; padding:2px 4px; border-radius:4px; background:#fff; color:#374151; font-size:7px; font-weight:750; white-space:nowrap; box-shadow:0 0 0 2px #fff; }
+  .mini-note { margin-top:11px; font-size:11px; line-height:1.5; color:#64748b; }
+  .hover-pop { margin:14px; padding:12px; border:1px solid #a9b5c6; border-radius:12px; background:#fff; box-shadow:0 18px 45px rgba(15,23,42,.18); transform:scale(1.03); }
+  .fullscreen { display:flex; align-items:center; justify-content:center; height:205px; border-radius:10px; background:#111827; color:#e5e7eb; }
+  .fullscreen-card { width:86%; padding:12px; border:1px solid #64748b; border-radius:10px; background:#f8fafc; color:#1e293b; }
+  @media(max-width:900px){ .choice-grid{grid-template-columns:1fr;} }
+</style>
+
+<h2>스윔레인 다이어그램을 어떻게 보여줄까요?</h2>
+<p class="subtitle">세 안 모두 본문 가로 스크롤을 없앱니다. 차이는 크게 보기의 진입 방식과 본문에서 보이는 정보량입니다.</p>
+
+<div class="choice-grid">
+  <div class="card choice-card recommended" data-choice="a" onclick="toggleSelect(this)">
+    <div class="choice-head">
+      <div class="choice-title">A. 맞춤형 미리보기 <span class="badge">추천</span></div>
+      <button class="zoom">↗ 크게 보기</button>
+    </div>
+    <div class="diagram-shell">
+      <div class="lanes">
+        <div class="lane"><div class="lane-name">사용자</div><div class="node" style="top:52px">로그인 요청</div><div class="node" style="top:137px">인증 API 요청</div></div>
+        <div class="lane"><div class="lane-name">HiPass</div><div class="node" style="top:91px">인증 전달</div><div class="node" style="top:164px">토큰 검증</div></div>
+        <div class="lane"><div class="lane-name">중앙 회원</div><div class="node" style="top:52px">토큰 발급</div><div class="node" style="top:127px">토큰 갱신</div></div>
+        <div class="lane"><div class="lane-name">DB·캐시</div><div class="node" style="top:91px">세션 저장</div><div class="node" style="top:164px">데이터 응답</div></div>
+        <span class="arrow" style="left:20%;top:87px"></span>
+        <span class="arrow" style="left:45%;top:126px"></span>
+        <span class="edge-label" style="left:42%;top:114px">성공</span>
+      </div>
+      <p class="mini-note">본문에서는 SVG 전체가 카드 폭에 맞춰 축소됩니다. 라벨은 흰 배경 칩으로 분리해 화살표와 겹치지 않습니다. 버튼·키보드로 Dialog를 엽니다.</p>
+    </div>
+  </div>
+
+  <div class="card choice-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="choice-head">
+      <div class="choice-title">B. 호버·포커스 확대</div>
+      <span class="badge">빠른 확인</span>
+    </div>
+    <div class="diagram-shell">
+      <div class="hover-pop">
+        <div class="choice-head" style="margin:-12px -12px 10px;padding:10px">
+          <strong style="font-size:11px">마우스오버 미리보기</strong><span style="font-size:10px;color:#64748b">Esc 닫기</span>
+        </div>
+        <div class="lanes" style="height:170px">
+          <div class="lane"><div class="lane-name">사용자</div><div class="node" style="top:55px">로그인</div></div>
+          <div class="lane"><div class="lane-name">HiPass</div><div class="node" style="top:93px">검증</div></div>
+          <div class="lane"><div class="lane-name">중앙 회원</div><div class="node" style="top:55px">발급</div></div>
+          <div class="lane"><div class="lane-name">DB·캐시</div><div class="node" style="top:93px">저장</div></div>
+        </div>
+      </div>
+      <p class="mini-note">포인터를 올리거나 키보드 포커스하면 큰 팝오버가 열립니다. 빠르지만 본문을 읽다가 의도치 않게 열릴 수 있고 모바일에서는 별도 탭 동작이 필요합니다.</p>
+    </div>
+  </div>
+
+  <div class="card choice-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="choice-head">
+      <div class="choice-title">C. 전체 화면 전용</div>
+      <button class="zoom">⛶ 전체 화면</button>
+    </div>
+    <div class="diagram-shell">
+      <div class="fullscreen">
+        <div class="fullscreen-card">
+          <div class="lanes" style="height:150px">
+            <div class="lane"><div class="lane-name">사용자</div><div class="node" style="top:52px">요청</div></div>
+            <div class="lane"><div class="lane-name">HiPass</div><div class="node" style="top:88px">검증</div></div>
+            <div class="lane"><div class="lane-name">중앙 회원</div><div class="node" style="top:52px">발급</div></div>
+            <div class="lane"><div class="lane-name">DB·캐시</div><div class="node" style="top:88px">응답</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="mini-note">본문에는 간단한 썸네일만 두고 전체 화면 오버레이에서 읽습니다. 가장 크게 볼 수 있지만 본문과 흐름을 오가며 비교하기는 조금 번거롭습니다.</p>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:22px"><strong>권장:</strong> A — 데스크톱·모바일 모두 같은 명시적 버튼을 쓰고, 본문은 스크롤 없이 전체 구조를 먼저 파악하게 합니다.</p>

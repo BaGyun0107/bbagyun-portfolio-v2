@@ -1,6 +1,15 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/insights/enterprise-bff-architecture-and-cors',
+        destination: '/insights/nextjs-nestjs-domain-separation-and-bff',
+        permanent: true
+      }
+    ];
+  },
   images: {
     remotePatterns: [
       {
@@ -8,7 +17,7 @@ const nextConfig: NextConfig = {
         hostname: '**'
       }
     ]
-  },
+  }
 };
 
 export default nextConfig;

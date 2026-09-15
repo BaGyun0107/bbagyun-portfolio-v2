@@ -1,0 +1,49 @@
+<h2>대표 작업물 상세 페이지 · 케이스 스터디 구조</h2>
+<p class="subtitle">예시 프로젝트: 사내 DX 하네스 v2 구축. 면접관이 데모를 먼저 확인하고, 이후 설계 판단과 해결 과정을 읽을 수 있게 구성했습니다.</p>
+
+<div class="mockup" style="max-width:1000px;margin:24px auto 0;">
+  <div class="mockup-header">Project detail · codi-harness-dx-platform</div>
+  <div class="mockup-body" style="padding:0;background:#fff;color:#1f2937;">
+    <div class="mock-nav" style="padding:15px 22px;background:#fafafa;border-bottom:1px solid #e5e7eb;">← 작업물 목록 <span>데모&nbsp;&nbsp; 소스 코드&nbsp;&nbsp; 관련 인사이트</span></div>
+
+    <div style="padding:36px 34px 30px;border-bottom:1px solid #e5e7eb;">
+      <div class="label">DEVOPS · PRODUCTION</div>
+      <h3 style="font-size:31px;line-height:1.25;margin:10px 0;">사내 DX 하네스 v2 구축</h3>
+      <p style="max-width:720px;color:#6b7280;line-height:1.65;">Jenkins 기반 배포 환경을 GitHub Actions, Infisical, 프로젝트 초기화 CLI, AI 에이전트 작업 규칙을 포함한 하나의 DX 플랫폼으로 전환했습니다.</p>
+      <div style="display:flex;gap:9px;margin-top:20px;flex-wrap:wrap;"><button class="mock-button">라이브 데모 열기 ↗</button><button class="mock-button" style="background:#fff;color:#374151;border:1px solid #d1d5db;">소스 코드 보기 ↗</button></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:26px;"><div class="mock-content"><small>기간</small><br><strong>2026.04 – 05</strong></div><div class="mock-content"><small>역할</small><br><strong>설계·구현 주도</strong></div><div class="mock-content"><small>팀</small><br><strong>DX/DevOps 단독</strong></div><div class="mock-content"><small>상태</small><br><strong>사내 운영 중</strong></div></div>
+    </div>
+
+    <div style="padding:30px 34px;border-bottom:1px solid #e5e7eb;background:#fafafa;">
+      <div class="label">01 · WHY</div><h3 style="margin:8px 0 10px;font-size:22px;">어떤 문제를 해결하려 했는가</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div class="mock-content" style="min-height:108px;"><strong>반복되는 운영 비용</strong><br><small>프로젝트마다 CI/CD, 시크릿, 환경 매핑을 다시 설정해야 했습니다.</small></div><div class="mock-content" style="min-height:108px;"><strong>공통 도구의 버전 드리프트</strong><br><small>Jenkins와 복사된 AI 작업 규칙이 프로젝트마다 달라 기준이 흔들렸습니다.</small></div></div>
+      <div style="margin-top:14px;padding:13px 16px;background:#fff;border-left:3px solid #374151;color:#374151;font-size:13px;line-height:1.6;">핵심 질문: Jenkins만 GitHub Actions로 옮기면 문제가 해결되는가? → 아니오. 반복되는 판단과 소유권 경계까지 함께 표준화해야 했습니다.</div>
+    </div>
+
+    <div style="padding:30px 34px;border-bottom:1px solid #e5e7eb;">
+      <div class="label">02 · HOW IT WORKS</div><h3 style="margin:8px 0 8px;font-size:22px;">배포 흐름과 책임 경계</h3><p style="margin:0 0 16px;color:#6b7280;font-size:13px;">시퀀스/스윔레인 다이어그램은 “어떤 컴포넌트가 언제 책임지는가”를 먼저 보여줍니다.</p>
+      <div style="border:1px solid #d1d5db;border-radius:8px;overflow:hidden;font-size:12px;">
+        <div style="display:grid;grid-template-columns:130px repeat(4,1fr);background:#f3f4f6;font-weight:bold;"><div style="padding:10px;border-right:1px solid #d1d5db;">주체</div><div style="padding:10px;border-right:1px solid #d1d5db;">1. 변경 감지</div><div style="padding:10px;border-right:1px solid #d1d5db;">2. 검증</div><div style="padding:10px;border-right:1px solid #d1d5db;">3. 시크릿 주입</div><div style="padding:10px;">4. 배포</div></div>
+        <div style="display:grid;grid-template-columns:130px repeat(4,1fr);"><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;font-weight:bold;">개발자</div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;text-align:center;">push</div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;"> </div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;"> </div><div style="padding:14px 10px;border-top:1px solid #d1d5db;"> </div></div>
+        <div style="display:grid;grid-template-columns:130px repeat(4,1fr);background:#fafafa;"><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;font-weight:bold;">GitHub Actions</div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;text-align:center;">diff 분석 →</div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;text-align:center;">Node / 보안 검사 →</div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;text-align:center;">요청 →</div><div style="padding:14px 10px;border-top:1px solid #d1d5db;text-align:center;">workflow 실행</div></div>
+        <div style="display:grid;grid-template-columns:130px repeat(4,1fr);"><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;font-weight:bold;">Infisical</div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;"> </div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;"> </div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;text-align:center;">최소 권한 secret 반환</div><div style="padding:14px 10px;border-top:1px solid #d1d5db;"> </div></div>
+        <div style="display:grid;grid-template-columns:130px repeat(4,1fr);background:#fafafa;"><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;font-weight:bold;">배포 대상</div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;"> </div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;"> </div><div style="padding:14px 10px;border-top:1px solid #d1d5db;border-right:1px solid #d1d5db;"> </div><div style="padding:14px 10px;border-top:1px solid #d1d5db;text-align:center;">PM2 / Docker / Vercel</div></div>
+      </div>
+    </div>
+
+    <div style="padding:30px 34px;border-bottom:1px solid #e5e7eb;background:#fafafa;">
+      <div class="label">03 · DECISIONS</div><h3 style="margin:8px 0 14px;font-size:22px;">중요한 설계 판단</h3>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;"><div class="mock-content" style="min-height:130px;"><strong>단일 진입점</strong><br><small>pipeline.yml에서 변경 범위와 배포 대상을 결정</small><br><span style="font-size:11px;color:#6b7280;">왜: 불필요한 배포와 프로젝트별 분기 제거</span></div><div class="mock-content" style="min-height:130px;"><strong>시크릿 책임 분리</strong><br><small>GitHub에는 bootstrap만, 원본은 Infisical에 유지</small><br><span style="font-size:11px;color:#6b7280;">왜: 접근 목적과 권한을 명확히 하기 위해</span></div><div class="mock-content" style="min-height:130px;"><strong>소유권 경계</strong><br><small>shared 업데이트와 project-owned 파일을 분리</small><br><span style="font-size:11px;color:#6b7280;">왜: 공통 변경의 안전한 전파를 위해</span></div></div>
+    </div>
+
+    <div style="padding:30px 34px;border-bottom:1px solid #e5e7eb;">
+      <div class="label">04 · RESULT</div><h3 style="margin:8px 0 14px;font-size:22px;">결과와 검증</h3>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;"><div class="mock-content"><strong>7개</strong><br><small>전환·적용 프로젝트</small></div><div class="mock-content"><strong>3명</strong><br><small>실제 사용 팀원</small></div><div class="mock-content"><strong>월 20만 원</strong><br><small>Jenkins 비용 절감</small></div><div class="mock-content"><strong>운영 중</strong><br><small>피드백 반영 중</small></div></div>
+      <div style="margin-top:16px;padding:13px 16px;background:#f9fafb;font-size:13px;line-height:1.6;">결과 수치와 운영 상태를 본문 중간이 아니라 별도 블록으로 분리해, 면접관이 프로젝트 임팩트를 빠르게 검증할 수 있게 합니다.</div>
+    </div>
+
+    <div style="padding:30px 34px;background:#fafafa;"><div class="label">05 · RETROSPECTIVE</div><h3 style="margin:8px 0 10px;font-size:22px;">다시 설계한다면</h3><p style="margin:0;color:#4b5563;line-height:1.7;font-size:13px;">당시의 제약 속에서 선택한 이유와 현재라면 바꾸고 싶은 지점을 분리합니다. 이것이 단순 구현 기록과 설계자의 회고를 구분하는 영역입니다.</p><div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;"><span class="mock-sidebar">관련 인사이트 3개 →</span><span class="mock-sidebar">다음 작업물 →</span><span class="mock-sidebar">홈으로 돌아가기</span></div></div>
+  </div>
+</div>
+
+<div class="section" style="max-width:1000px;margin:24px auto 0;"><div class="label">이 화면의 핵심</div><p><strong>데모</strong>는 상단에서 바로 접근하고, <strong>다이어그램</strong>은 문제와 해결 사이에 배치하며, 본문은 <strong>문제 → 판단 → 흐름 → 결과 → 회고</strong> 순서를 유지합니다.</p></div>

@@ -1,0 +1,52 @@
+{
+  "scenario": "작업물과 연결 인사이트의 역할·수치·시점 대조",
+  "approved_interview": {
+    "date": "2023-11-28",
+    "facts": {
+      "role": "프런트엔드 담당자",
+      "period": "2023년 11월 2주 파일럿",
+      "measurement": "p95 응답 시간이 1.8초에서 1.2초로 감소",
+      "measurement_kind": "파일럿 로그 직접 비교",
+      "investigated_cause": "클라이언트 순차 요청",
+      "unverified_cause": "DB 병목"
+    }
+  },
+  "feature_verification": {
+    "status": "approved",
+    "facts_match_interview": true,
+    "alternatives_actually_reviewed": ["순차 요청 유지", "독립 요청 병렬화"]
+  },
+  "project": {
+    "slug": "lumen-checkout",
+    "route": "/projects/lumen-checkout",
+    "current_excerpt": "풀스택 리드로서 DB와 프런트엔드를 함께 튜닝해 2024년 정식 출시 응답 시간을 30% 줄였다.",
+    "related_insights": ["parallel-request-boundaries"],
+    "visual": {
+      "kind": "sequence",
+      "scope": "체크아웃 전체 요청 흐름"
+    }
+  },
+  "linked_insight": {
+    "slug": "parallel-request-boundaries",
+    "route": "/insights/parallel-request-boundaries",
+    "type": "project-case",
+    "source_project_slug": "lumen-checkout",
+    "current_excerpt": "아키텍처 리드로서 DB 튜닝과 요청 병렬화를 수행해 현재 응답 시간을 50% 개선했다.",
+    "visual_assessment": null
+  },
+  "later_observation": {
+    "date": "2025-06-10",
+    "value": "p95 0.9초",
+    "context": "다른 팀이 인프라를 교체한 뒤 작성한 현재 상태 문서",
+    "attributable_to_2023_change": false
+  },
+  "editor_request": {
+    "preferred_role": "아키텍처 리드",
+    "preferred_improvement": "50%",
+    "reason": "더 인상적으로 보인다"
+  },
+  "link_metadata": {
+    "project_to_insight": "/insights/parallel-request-boundaries",
+    "insight_to_project": "/projects/lumen-checkout"
+  }
+}

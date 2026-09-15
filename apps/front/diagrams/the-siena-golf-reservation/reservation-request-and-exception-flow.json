@@ -1,0 +1,159 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "예약 요청·중복 방어·외부 장애 안내 흐름",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "user", "label": "예약 사용자" },
+    { "id": "react", "label": "React" },
+    { "id": "php-server", "label": "PHP 서버" },
+    { "id": "external-pms", "label": "외부 PMS" }
+  ],
+  "nodes": [
+    {
+      "id": "request-reservation",
+      "lane": "user",
+      "col": 0,
+      "type": "frontend",
+      "label": "예약 요청",
+      "width": 210
+    },
+    {
+      "id": "lock-ui",
+      "lane": "react",
+      "col": 1,
+      "type": "frontend",
+      "label": "버튼 비활성화·스피너 표시",
+      "width": 220
+    },
+    {
+      "id": "check-duplicate",
+      "lane": "php-server",
+      "col": 2,
+      "type": "backend",
+      "label": "2초 중복 요청 검사",
+      "width": 250
+    },
+    {
+      "id": "stop-duplicate",
+      "lane": "php-server",
+      "col": 0,
+      "type": "security",
+      "label": "중복 요청 차단",
+      "width": 190
+    },
+    {
+      "id": "call-pms",
+      "lane": "php-server",
+      "col": 3,
+      "type": "backend",
+      "label": "30초 timeout으로 PMS 호출",
+      "width": 250
+    },
+    {
+      "id": "process-pms-reservation",
+      "lane": "external-pms",
+      "col": 4,
+      "type": "external",
+      "label": "PMS 예약 처리·결과 반환",
+      "width": 230
+    },
+    {
+      "id": "guide-retry",
+      "lane": "user",
+      "col": 2,
+      "type": "frontend",
+      "label": "잠시 후 재시도 안내",
+      "width": 210
+    },
+    {
+      "id": "guide-congestion",
+      "lane": "user",
+      "col": 4,
+      "type": "frontend",
+      "label": "일시적 혼잡 안내",
+      "width": 210
+    },
+    {
+      "id": "complete-user-feedback",
+      "lane": "user",
+      "col": 5,
+      "type": "frontend",
+      "label": "사용자 결과·안내 완료",
+      "width": 360
+    }
+  ],
+  "edges": [
+    {
+      "id": "request-lock-ui",
+      "from": "request-reservation",
+      "to": "lock-ui",
+      "role": "main"
+    },
+    {
+      "id": "lock-ui-check-duplicate",
+      "from": "lock-ui",
+      "to": "check-duplicate",
+      "role": "main"
+    },
+    {
+      "id": "check-duplicate-call-pms",
+      "from": "check-duplicate",
+      "to": "call-pms",
+      "label": "중복 아님",
+      "role": "main"
+    },
+    {
+      "id": "check-duplicate-stop",
+      "from": "check-duplicate",
+      "to": "stop-duplicate",
+      "label": "같은 세션·같은 요청 2초 이내: PMS 호출 전 차단",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "call-pms-process-reservation",
+      "from": "call-pms",
+      "to": "process-pms-reservation",
+      "role": "main"
+    },
+    {
+      "id": "process-reservation-complete-user-feedback",
+      "from": "process-pms-reservation",
+      "to": "complete-user-feedback",
+      "label": "예약 성공 결과",
+      "variant": "emphasis",
+      "role": "main"
+    },
+    {
+      "id": "pms-5xx-guide-retry",
+      "from": "process-pms-reservation",
+      "to": "guide-retry",
+      "label": "5xx: 잠시 후 재시도 안내",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "pms-timeout-guide-congestion",
+      "from": "call-pms",
+      "to": "guide-congestion",
+      "label": "30초 timeout: 일시적 혼잡 안내",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "retry-guide-complete-user-feedback",
+      "from": "guide-retry",
+      "to": "complete-user-feedback",
+      "role": "main"
+    },
+    {
+      "id": "congestion-guide-complete-user-feedback",
+      "from": "guide-congestion",
+      "to": "complete-user-feedback",
+      "role": "main"
+    }
+  ]
+}

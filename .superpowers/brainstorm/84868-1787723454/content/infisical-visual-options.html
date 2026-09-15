@@ -1,0 +1,70 @@
+<h2>Infisical 인사이트의 시각 자료 범위</h2>
+<p class="subtitle">작업물의 CI/CD 스윔레인과 겹치지 않으면서, 어떤 관계를 별도로 보여줄지 비교합니다.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px;display:grid;gap:12px;background:#f8fafc">
+      <div style="display:grid;grid-template-columns:1fr auto 1.2fr;gap:10px;align-items:center">
+        <div style="border:1px solid #ef4444;border-radius:10px;padding:12px;background:white">
+          <strong>도입 전</strong><br>
+          Jenkins UI · 로컬 .env · Slack<br>
+          <small>호텔 환경변수 혼입 → 약 10분 장애</small>
+        </div>
+        <div style="font-size:24px">→</div>
+        <div style="border:1px solid #2563eb;border-radius:10px;padding:12px;background:white">
+          <strong>Infisical SSOT</strong><br>
+          프로젝트 · 환경 · front/back · 배포 · Shared-Secrets
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="border:1px solid #94a3b8;border-radius:10px;padding:12px;background:white">
+          <strong>배포 경계</strong><br>
+          조회 실패 → 새 배포 중단<br>
+          기존 서비스 → 기존 .env로 동작
+        </div>
+        <div style="border:1px solid #f59e0b;border-radius:10px;padding:12px;background:white">
+          <strong>남은 복구 경계</strong><br>
+          백업도 동일 인스턴스<br>
+          DB·파일 동시 손실 → 복구 불가
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 시크릿 소유권과 실패 경계 아키텍처</h3>
+      <p>중앙화 구조, 배포 장애 격리, 아직 분리하지 못한 백업 경계를 한 장에서 보여줍니다. 작업물의 단계별 배포 스윔레인과 역할이 다릅니다.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px;display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;background:#f8fafc">
+      <div style="border:1px solid #ef4444;border-radius:10px;padding:16px;background:white;text-align:center">
+        <strong>Before</strong><br><br>
+        Jenkins<br>로컬 .env<br>Slack
+      </div>
+      <div style="font-size:28px">→</div>
+      <div style="border:1px solid #2563eb;border-radius:10px;padding:16px;background:white;text-align:center">
+        <strong>After</strong><br><br>
+        Infisical<br>표준 경로<br>Machine Identity
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 단순 Before / After</h3>
+      <p>환경변수가 흩어진 상태에서 중앙화된 상태로 바뀐 핵심만 빠르게 전달합니다. 읽기 쉽지만 배포 실패 경계와 백업 한계는 본문으로 따로 설명해야 합니다.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:28px;background:#f8fafc;text-align:center">
+      <div style="border:1px dashed #94a3b8;border-radius:10px;padding:28px;background:white">
+        <strong>새 다이어그램 없음</strong><br><br>
+        경로 책임 표 + 장애 경계 문장만 사용
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. 시각 자료 추가하지 않음</h3>
+      <p>작업물의 기존 CI/CD 스윔레인을 재사용하고 인사이트는 글과 표에 집중합니다. 다만 중앙화로 해결한 경계와 남은 복구 경계를 한눈에 비교하기는 어렵습니다.</p>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle">권장안은 A입니다. 이 글만의 핵심인 “분리한 경계와 아직 분리하지 못한 경계”를 보여주며 기존 작업물 시각 자료를 반복하지 않습니다.</p>

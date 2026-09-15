@@ -1,0 +1,59 @@
+<h2>홈 화면 구조 초안 · 하이브리드 방향</h2>
+<p class="subtitle">선택하신 C 방향을 실제 페이지의 세로 흐름으로 풀었습니다. 위에서 아래로 면접관이 읽는 순서를 확인해 주세요.</p>
+
+<div class="mockup" style="max-width:980px;margin:24px auto 0;">
+  <div class="mockup-header">BbaGyun Portfolio · Home page wireframe</div>
+  <div class="mockup-body" style="padding:0;background:#fff;color:#1f2937;">
+    <div class="mock-nav" style="padding:16px 22px;background:#fafafa;border-bottom:1px solid #e5e7eb;">BbaGyun <span>메인&nbsp;&nbsp; 작업물&nbsp;&nbsp; 공부&nbsp;&nbsp; 인사이트&nbsp;&nbsp; 소개&nbsp;&nbsp; 문의</span></div>
+
+    <div style="padding:42px 32px 34px;text-align:center;border-bottom:1px solid #e5e7eb;">
+      <div class="label">01 · WHO I AM</div>
+      <h3 style="font-size:27px;margin:12px 0 10px;">단순한 기능 구현을 넘어,<br>견고한 아키텍처를 설계합니다.</h3>
+      <p style="max-width:590px;margin:0 auto;color:#6b7280;line-height:1.6;">사용자를 위한 경험과 팀을 위한 구조를 함께 고민하는<br>백엔드 중심 풀스택 개발자 BbaGyun입니다.</p>
+      <div style="display:flex;justify-content:center;gap:10px;margin-top:20px;"><button class="mock-button">대표 작업물 보기</button><button class="mock-button" style="background:#fff;color:#374151;border:1px solid #d1d5db;">개발 여정 보기</button></div>
+    </div>
+
+    <div style="padding:22px 32px;border-bottom:1px solid #e5e7eb;background:#fafafa;">
+      <div class="label">02 · PROOF AT A GLANCE</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;">
+        <div class="mock-content"><strong>작업물 12+</strong><br><small>실무 프로젝트와 내부 도구</small></div>
+        <div class="mock-content"><strong>인사이트 20+</strong><br><small>문제 해결과 설계 회고</small></div>
+        <div class="mock-content"><strong>2023 — 현재</strong><br><small>개발 경험의 축적</small></div>
+      </div>
+    </div>
+
+    <div style="padding:32px;border-bottom:1px solid #e5e7eb;">
+      <div style="display:flex;justify-content:space-between;align-items:end;"><div><div class="label">03 · FEATURED WORK</div><h3 style="margin:8px 0 0;font-size:21px;">대표 작업물</h3></div><span style="color:#6b7280;font-size:12px;">전체 작업물 →</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;">
+        <div class="mock-content" style="min-height:150px;"><div style="display:flex;justify-content:space-between;"><strong>사내 DX 하네스 v2 구축</strong><span>↗</span></div><small>Jenkins 기반 배포 환경을 GitHub Actions와 Infisical 중심으로 전환한 DX 플랫폼</small><div style="margin-top:18px;color:#6b7280;font-size:11px;">GitHub Actions · Node.js · Infisical · Docker</div><button class="mock-button" style="margin-top:12px;">케이스 스터디 + 데모</button></div>
+        <div class="mock-content" style="min-height:150px;"><div style="display:flex;justify-content:space-between;"><strong>더시에나 골프 예약 시스템</strong><span>↗</span></div><small>외부 예약 API 의존성과 로깅 병목을 해결한 예약 시스템</small><div style="margin-top:18px;color:#6b7280;font-size:11px;">PHP · MySQL · 외부 API · Buffering</div><button class="mock-button" style="margin-top:12px;">케이스 스터디 + 데모</button></div>
+      </div>
+      <div style="margin-top:12px;padding:12px;background:#f9fafb;border-left:3px solid #9ca3af;font-size:12px;color:#4b5563;">각 작업물 카드는 “무엇을 만들었는가”에서 끝나지 않고, 상세 페이지의 문제 → 판단 → 해결 → 결과로 이어집니다.</div>
+    </div>
+
+    <div style="padding:32px;border-bottom:1px solid #e5e7eb;background:#fafafa;">
+      <div style="display:flex;justify-content:space-between;align-items:end;"><div><div class="label">04 · RECENT JOURNAL</div><h3 style="margin:8px 0 0;font-size:21px;">최근 개발 기록</h3></div><span style="color:#6b7280;font-size:12px;">전체 여정 →</span></div>
+      <div style="display:grid;grid-template-columns:150px 1fr;gap:18px;margin-top:18px;">
+        <div class="mock-sidebar" style="min-height:132px;text-align:center;padding-top:42px;">2026.08<br><strong>이번 주</strong></div>
+        <div>
+          <div class="mock-content" style="margin-bottom:8px;"><strong>하네스 업데이트 규칙 정리</strong><br><small>Claude Code와 Codex가 같은 개발 규칙을 따르도록 shared/project-owned 경계를 정리함</small></div>
+          <div class="mock-content" style="margin-bottom:8px;"><strong>포트폴리오 콘텐츠 구조 논의</strong><br><small>작업물을 기능 목록이 아닌 문제 해결 사례로 보여주는 방향을 검토함</small></div>
+          <div class="mock-content"><strong>다음 기록을 기다리는 입력 지점</strong><br><small>매일 작업 후 LLM과 대화하고, 승인된 내용만 게시 상태로 전환</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:32px;border-bottom:1px solid #e5e7eb;">
+      <div style="display:flex;justify-content:space-between;align-items:end;"><div><div class="label">05 · THINKING</div><h3 style="margin:8px 0 0;font-size:21px;">공부와 인사이트</h3></div><span style="color:#6b7280;font-size:12px;">전체 보기 →</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;"><div class="mock-content" style="min-height:92px;"><strong>공부</strong><br><small>DX 하네스 v1 PoC와 CI/CD·시크릿 인프라 검증</small></div><div class="mock-content" style="min-height:92px;"><strong>인사이트</strong><br><small>외부 연동 시스템에서의 로깅 분리와 버퍼링 전략</small></div></div>
+      <div style="margin-top:14px;text-align:center;font-size:12px;color:#6b7280;">공부는 배운 내용을, 인사이트는 실제 문제와 판단을 기록합니다.</div>
+    </div>
+
+    <div style="padding:28px 32px;text-align:center;background:#fafafa;"><div class="label">06 · NEXT STEP</div><h3 style="margin:8px 0;font-size:19px;">더 궁금한 작업이나 협업 이야기가 있다면</h3><button class="mock-button">소개 및 문의하기</button></div>
+  </div>
+</div>
+
+<div class="section" style="max-width:980px;margin:24px auto 0;">
+  <div class="label">이 시안에서 확인할 것</div>
+  <p>이제 선택지는 카드가 아니라 흐름입니다. 첫 화면에서 작업물을 먼저 보게 할지, 개발 기록을 대표 작업물 바로 아래에 둘지, 공부·인사이트를 어느 정도 비중으로 둘지를 확인하는 단계입니다.</p>
+</div>

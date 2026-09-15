@@ -1,0 +1,54 @@
+<h2>Cloudflare Tunnel 인사이트의 시각 자료 범위</h2>
+<p class="subtitle">작업물의 CI/CD 실행 스윔레인을 반복하지 않고, 이 인사이트만의 질문을 가장 잘 설명하는 안을 골라주세요.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px; font-family:ui-monospace,monospace; line-height:1.7">
+      <div class="label">2026.04 초기</div>
+      <div>GitHub Actions → WAF 차단 ✕</div>
+      <div style="margin-left:42px">↓ 예외 적용</div>
+      <div>같은 hostname → connector A / B</div>
+      <div style="margin-left:42px">└ 잘못된 방향 → SSH 실패</div>
+      <div class="label" style="margin-top:14px">2026.05 이후</div>
+      <div>Actions → Access → Bastion</div>
+      <div style="margin-left:42px">├ PermitOpen → 서버 A</div>
+      <div style="margin-left:42px">└ PermitOpen → 서버 B</div>
+    </div>
+    <div class="card-body">
+      <h3>A. 실패에서 현재 구조까지</h3>
+      <p>초기 WAF·connector 문제와 Bastion 전환을 한 흐름으로 비교합니다. 문제 해결과 설계 발전이 함께 보입니다.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px; font-family:ui-monospace,monospace; line-height:1.7">
+      <div>GitHub Actions</div>
+      <div style="margin-left:24px">↓ Service Token</div>
+      <div>Cloudflare Access</div>
+      <div style="margin-left:24px">↓ Bastion SSH key</div>
+      <div>Bastion / nologin / PermitOpen</div>
+      <div style="margin-left:24px">↓ project × server key</div>
+      <div>배포 서버</div>
+    </div>
+    <div class="card-body">
+      <h3>B. 현재 다중 보안 경계</h3>
+      <p>현재 운영 구조의 인증 계층에 집중합니다. 초기 트러블슈팅은 본문 산문으로만 남깁니다.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px; font-family:ui-monospace,monospace; line-height:1.7">
+      <div class="label">공용 리소스</div>
+      <div>Tunnel 1 + Bastion 1 + Access 1</div>
+      <div style="margin:10px 0">──────── 경계 ────────</div>
+      <div class="label">분리 리소스</div>
+      <div>프로젝트 9개</div>
+      <div>├ project × server key</div>
+      <div>└ 배포 서버 5대 / PermitOpen</div>
+    </div>
+    <div class="card-body">
+      <h3>C. 재사용과 분리의 기준</h3>
+      <p>무엇을 공용으로 재사용하고 무엇을 서버별로 분리했는지 보여줍니다. 운영 모델은 선명하지만 사건의 흐름은 약합니다.</p>
+    </div>
+  </div>
+</div>

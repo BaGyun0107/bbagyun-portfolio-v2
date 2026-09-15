@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Core Product 관계도",
+    "output": "public/diagrams/integrated-reservation-platform/core-product-relationships.html",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "viewBox": [1040, 650]
+  },
+  "components": [
+    {
+      "id": "products",
+      "type": "database",
+      "label": "Products",
+      "sublabel": "객실·관광 공통 상품 부모",
+      "tag": "parent",
+      "pos": [425, 72],
+      "size": [190, 76]
+    },
+    {
+      "id": "product-rooms",
+      "type": "database",
+      "label": "ProductRooms",
+      "sublabel": "객실 상품 세부 모델",
+      "tag": "subtype",
+      "pos": [90, 255],
+      "size": [190, 76]
+    },
+    {
+      "id": "product-tours",
+      "type": "database",
+      "label": "ProductTours",
+      "sublabel": "관광 상품 세부 모델",
+      "tag": "subtype",
+      "pos": [425, 255],
+      "size": [190, 76]
+    },
+    {
+      "id": "purchase-order-items",
+      "type": "database",
+      "label": "PurchaseOrderItems",
+      "sublabel": "공통 productId 참조",
+      "tag": "transaction",
+      "pos": [760, 255],
+      "size": [200, 76]
+    },
+    {
+      "id": "product-room-options",
+      "type": "database",
+      "label": "ProductRoomOptions",
+      "sublabel": "객실 선택 옵션",
+      "tag": "option",
+      "pos": [90, 468],
+      "size": [200, 76]
+    },
+    {
+      "id": "product-room-stocks",
+      "type": "database",
+      "label": "ProductRoomStocks",
+      "sublabel": "날짜별 객실 재고",
+      "tag": "inventory",
+      "pos": [500, 468],
+      "size": [200, 76]
+    }
+  ],
+  "connections": [
+    {
+      "id": "products-rooms",
+      "from": "products",
+      "to": "product-rooms",
+      "label": "1 → 0..1 · 객실 세부"
+    },
+    {
+      "id": "products-tours",
+      "from": "products",
+      "to": "product-tours",
+      "label": "1 → 0..1 · 관광 세부",
+      "labelDy": 24
+    },
+    {
+      "id": "products-orders",
+      "from": "products",
+      "to": "purchase-order-items",
+      "label": "1 → N · productId 참조"
+    },
+    {
+      "id": "rooms-options",
+      "from": "product-rooms",
+      "to": "product-room-options",
+      "label": "1 → N · 객실 옵션",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "rooms-stocks",
+      "from": "product-rooms",
+      "to": "product-room-stocks",
+      "label": "1 → N · 객실 직접 참조"
+    },
+    {
+      "id": "options-stocks",
+      "from": "product-room-options",
+      "to": "product-room-stocks",
+      "label": "1 → N · 옵션 직접 참조",
+      "labelAt": [395, 570]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+<style>
+  .explain{margin:18px 0;padding:14px 16px;border:1px solid #b9cff1;border-radius:12px;background:#f3f7ff;color:#334155;font-size:12px;line-height:1.65}
+  .final-card{overflow:hidden;border:2px solid #1f6feb;border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(24,32,48,.07)}
+  .head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid #e4e9f0;background:#f8fafc}
+  .head strong{color:#172033}.badge{padding:4px 9px;border-radius:999px;background:#e8f1ff;color:#0b4ca1;font-size:11px;font-weight:750}
+  .layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(340px,.9fr);gap:18px;padding:18px;background:#fbfcfe}
+  .canvas,.directions{border:1px solid #d8dee8;border-radius:12px;background:#fff;padding:12px}svg{display:block;width:100%;height:auto}
+  .line{fill:none;stroke:#344256;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.exception{stroke:#c2414b;stroke-dasharray:7 5}
+  .node{fill:#fff;stroke:#526176;stroke-width:1.7}.node-text{fill:#27364a;font-size:10px;font-weight:750}
+  .label-bg{fill:#fff;stroke:#cfd7e3}.label{fill:#334155;font-size:9px;font-weight:750}
+  .directions h3{margin:0 0 6px;font-size:14px}.directions p{margin:0 0 12px;color:#64748b;font-size:11px;line-height:1.5}
+  .rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}.rule{padding:11px;border:1px solid #d8dee8;border-radius:11px;background:#fff}.rule strong{display:block;color:#27364a;font-size:11px}.rule span{display:block;margin-top:3px;color:#64748b;font-size:10px;line-height:1.45}
+  .footer{padding:0 18px 18px;color:#526176;font-size:12px;line-height:1.6}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}.rules{grid-template-columns:1fr 1fr}}
+</style>
+
+<h2>곡선과 화살촉을 하나의 접선으로 연결</h2>
+<div class="explain"><strong>변경:</strong> 삼각형 좌표를 별도로 계산하지 않습니다. 하나의 SVG <code>path</code>에 작은 <code>markerEnd</code>를 붙여, 마지막 직선 구간의 방향이 곧 화살촉의 회전각이 되게 합니다. 따라서 상·하·좌·우 어느 변에 도착해도 선과 촉 사이의 이음새가 생기지 않습니다.</div>
+
+<div class="card final-card" data-choice="approve-tangent-routing" onclick="toggleSelect(this)">
+  <div class="head"><strong>상대 위치 기반 anchor + 단일 path marker</strong><span class="badge">추천 최종안</span></div>
+  <div class="layout">
+    <div class="canvas">
+      <svg viewBox="0 0 500 315" aria-label="토큰 갱신 노드의 왼쪽 변으로 자연스럽게 도착하는 연결선">
+        <defs>
+          <marker id="flow-arrow" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+            <path d="M1 1L7 4L1 7Z" fill="#344256"/>
+          </marker>
+          <marker id="error-arrow" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+            <path d="M1 1L7 4L1 7Z" fill="#c2414b"/>
+          </marker>
+        </defs>
+        <rect x="12" y="12" width="476" height="290" rx="13" fill="#fbfcfe" stroke="#e0e5ed"/>
+
+        <rect class="node" x="38" y="53" width="110" height="48" rx="10"/><text class="node-text" x="93" y="81" text-anchor="middle">인증 API 요청</text>
+        <rect class="node" x="198" y="126" width="120" height="62" rx="11"/><text class="node-text" x="258" y="153" text-anchor="middle">Access Token</text><text class="node-text" x="258" y="168" text-anchor="middle">검증</text>
+        <rect class="node" x="368" y="53" width="96" height="48" rx="10"/><text class="node-text" x="416" y="81" text-anchor="middle">데이터 응답</text>
+        <rect class="node" x="368" y="227" width="96" height="48" rx="10"/><text class="node-text" x="416" y="255" text-anchor="middle">토큰 갱신</text>
+        <rect class="node" x="48" y="227" width="108" height="48" rx="10"/><text class="node-text" x="102" y="255" text-anchor="middle">인증 실패</text>
+
+        <path class="line" marker-end="url(#flow-arrow)" d="M148 77H170Q184 77 184 91V141Q184 155 198 155"/>
+        <path class="line" marker-end="url(#flow-arrow)" d="M318 155H340Q354 155 354 141V91Q354 77 368 77"/>
+        <path class="line" marker-end="url(#flow-arrow)" d="M318 169H330Q344 169 344 183V237Q344 251 358 251H368"/>
+        <path class="line exception" marker-end="url(#error-arrow)" d="M198 169H184Q170 169 170 183V237Q170 251 156 251"/>
+
+        <g transform="translate(354 119)"><rect class="label-bg" x="-23" y="-10" width="46" height="20" rx="10"/><text class="label" y="3" text-anchor="middle">유효</text></g>
+        <g transform="translate(344 210)"><rect class="label-bg" x="-23" y="-10" width="46" height="20" rx="10"/><text class="label" y="3" text-anchor="middle">만료</text></g>
+        <g transform="translate(170 205)"><rect class="label-bg" x="-28" y="-10" width="56" height="20" rx="10"/><text class="label" y="3" text-anchor="middle">검증 실패</text></g>
+      </svg>
+    </div>
+
+    <div class="directions">
+      <h3>네 방향 접선 검증</h3>
+      <p>각 화살촉은 별도 도형이 아니라 동일한 marker입니다. path의 마지막 직선 방향만 따라 자동 회전합니다.</p>
+      <svg viewBox="0 0 360 310" aria-label="상하좌우 네 방향 화살촉 접선 검증">
+        <defs>
+          <marker id="direction-arrow" viewBox="0 0 8 8" markerWidth="7" markerHeight="7" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+            <path d="M1 1L7 4L1 7Z" fill="#344256"/>
+          </marker>
+        </defs>
+
+        <g transform="translate(0 0)">
+          <rect class="node" x="100" y="38" width="80" height="50" rx="9"/><text class="node-text" x="140" y="67" text-anchor="middle">TOP</text>
+          <path class="line" marker-end="url(#direction-arrow)" d="M35 18H126Q140 18 140 32V38"/>
+        </g>
+        <g transform="translate(180 0)">
+          <rect class="node" x="35" y="38" width="80" height="50" rx="9"/><text class="node-text" x="75" y="67" text-anchor="middle">RIGHT</text>
+          <path class="line" marker-end="url(#direction-arrow)" d="M145 18V49Q145 63 131 63H115"/>
+        </g>
+        <g transform="translate(0 155)">
+          <rect class="node" x="100" y="22" width="80" height="50" rx="9"/><text class="node-text" x="140" y="51" text-anchor="middle">BOTTOM</text>
+          <path class="line" marker-end="url(#direction-arrow)" d="M35 102H126Q140 102 140 88V72"/>
+        </g>
+        <g transform="translate(180 155)">
+          <rect class="node" x="65" y="22" width="80" height="50" rx="9"/><text class="node-text" x="105" y="51" text-anchor="middle">LEFT</text>
+          <path class="line" marker-end="url(#direction-arrow)" d="M15 102V61Q15 47 29 47H65"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="rules">
+    <div class="rule"><strong>상대 위치 우선</strong><span>이번 만료 경로는 right → left가 가장 짧음</span></div>
+    <div class="rule"><strong>단일 path</strong><span>선과 화살촉을 분리하지 않아 접선 불일치 제거</span></div>
+    <div class="rule"><strong>최종 직선 10px+</strong><span>도착 변에 수직으로 진입할 길이를 항상 확보</span></div>
+    <div class="rule"><strong>명시적 override</strong><span>복잡한 예외만 데이터의 anchor·waypoint로 교정</span></div>
+  </div>
+
+  <p class="footer">기본 anchor는 노드의 상대 위치와 장애물 없는 최단 경로를 기준으로 선택합니다. 데이터에 anchor가 명시된 경우에는 이를 override로 사용하되, 모서리 좌표는 허용하지 않고 모든 도착점은 변 중앙에서 계산합니다.</p>
+</div>

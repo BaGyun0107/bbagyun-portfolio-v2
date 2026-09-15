@@ -1,3 +1,8 @@
+monorepo_root = true
+
+[monorepo]
+config_roots = ["apps/*"]
+
 [tools]
 node = "24"
 
@@ -19,3 +24,113 @@ run = "./harness update-check"
 [tasks.update]
 description = "Check harness dependency updates"
 run = "./harness update --check"
+
+[tasks.e2e]
+description = "Run e2e for all apps that have a suite (stamps evidence on pass)"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+ran_any=0
+
+# suite 존재는 `mise tasks ls`의 첫 컬럼(task명)과 정확 비교로 판정한다.
+# 과거의 `mise tasks | grep -qxF "$task"`는 표 형식 출력 줄과 task명이 절대
+# 일치하지 않아 suite가 있어도 항상 skip되는 버그였다.
+tasks_list="$(mise tasks ls --no-header 2>/dev/null | awk '{print $1}')"
+has_task() { printf '%s\n' "$tasks_list" | grep -qxF "$1"; }
+
+run_app_e2e() {
+  app="$1"; task="$2"
+  if [ -d "$app" ] && has_task "$task"; then
+    echo "→ e2e: $task"
+    mise run "$task" || exit 1
+    ran_any=1
+  fi
+}
+
+run_app_e2e apps/front "//apps/front:e2e"
+run_app_e2e apps/back "//apps/back:e2e"
+
+if [ "$ran_any" -eq 0 ]; then
+  echo "[e2e] no e2e suite found, skipping (no evidence stamped)"
+  exit 0
+fi
+
+# stamp는 staged tree 해시이고 e2e는 working tree를 실행하므로, tracked 미스테이징
+# 변경뿐 아니라 untracked(.gitignore 제외) 파일도 "테스트한 트리 ≠ 증거 트리"를
+# 만든다. 둘 다 깨끗할 때만 stamp한다.
+if ! git diff --quiet || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+  echo "[e2e] unstaged or untracked changes present — refusing to stamp (test tree != staged tree)." >&2
+  echo "[e2e] stage everything you tested (git add -A) and re-run, or commit then re-run." >&2
+  exit 1
+fi
+
+# 실제로 통과한 경우에만 staged tree hash 를 증거로 기록하고 흐름 마커를 내린다.
+mkdir -p .harness/state
+git write-tree > .harness/state/e2e-last-run
+printf 'no\n' > .harness/state/touches-user-flow
+echo "[e2e] passed; stamped .harness/state/e2e-last-run"
+'''
+
+[tasks."e2e:changed"]
+description = "Run e2e only for changed apps (index-scoped); default entry point"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+changed=$(git diff --cached --name-only)  # 스테이징된 게 없으면 빈 문자열 → 모든 검사 skip
+ran_any=0
+uncovered=""
+
+# suite 존재는 `mise tasks ls`의 첫 컬럼(task명)과 정확 비교로 판정한다.
+# 과거의 `mise tasks | grep -qxF "$task"`는 출력이 표 형식(name + description +
+# source)이라 task명이 줄 전체와 절대 일치하지 않아 suite가 있어도 항상 skip되는
+# 버그였다. 첫 컬럼만 뽑아 정확 일치를 본다.
+tasks_list="$(mise tasks ls --no-header 2>/dev/null | awk '{print $1}')"
+has_task() { printf '%s\n' "$tasks_list" | grep -qxF "$1"; }
+
+maybe_run() {
+  app_prefix="$1"; app_dir="$2"; task="$3"
+  echo "$changed" | grep -q "^$app_prefix" || return 0   # 이 앱은 안 바뀜
+  [ -d "$app_dir" ] || return 0
+  if has_task "$task"; then
+    echo "→ e2e (changed): $task"
+    mise run "$task" || exit 1
+    ran_any=1
+  else
+    # 바뀐 user-facing 앱인데 e2e suite가 없다 → 전역 stamp로 덮어 가짜 증거를
+    # 만들면 안 된다. 기록만 해 두고 마지막에 stamp를 막는다.
+    uncovered="$uncovered $app_prefix"
+  fi
+}
+
+maybe_run "apps/front/" apps/front "//apps/front:e2e"
+maybe_run "apps/back/" apps/back "//apps/back:e2e"
+
+if [ "$ran_any" -eq 0 ]; then
+  echo "[e2e:changed] no changed app with an e2e suite, skipping (no evidence stamped)"
+  exit 0
+fi
+
+# P1 가드 1: stamp는 staged tree 해시(git write-tree)인데 e2e는 working tree를
+# 실행한다. tracked 미스테이징 변경뿐 아니라 untracked(.gitignore 제외) 파일도
+# "테스트한 트리 ≠ 증거 트리"를 만든다 — 새 라우트/헬퍼/fixture가 untracked면
+# e2e는 그걸로 통과하지만 git write-tree(인덱스)엔 없다. 둘 다 깨끗할 때만 stamp.
+if ! git diff --quiet || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+  echo "[e2e:changed] unstaged or untracked changes present — refusing to stamp (test tree != staged tree)." >&2
+  echo "[e2e:changed] stage everything you tested (git add -A) and re-run, or commit then re-run." >&2
+  exit 1
+fi
+
+# P1 가드 2: 바뀐 user-facing 앱 중 e2e suite가 없는 앱이 있으면 전역 stamp를
+# 막는다. 한 앱이 통과해도 suite 없는 다른 앱까지 같은 tree 해시로 덮어
+# 가짜 증거가 되기 때문.
+if [ -n "$uncovered" ]; then
+  echo "[e2e:changed] changed app(s) without an e2e suite:$uncovered — refusing to stamp." >&2
+  echo "[e2e:changed] add an e2e suite for them, or lower the flow marker if they are not user-facing." >&2
+  exit 1
+fi
+
+mkdir -p .harness/state
+git write-tree > .harness/state/e2e-last-run
+printf 'no\n' > .harness/state/touches-user-flow
+echo "[e2e:changed] passed; stamped .harness/state/e2e-last-run"
+'''

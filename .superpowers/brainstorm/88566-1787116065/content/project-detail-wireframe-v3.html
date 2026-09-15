@@ -1,0 +1,21 @@
+<h2>작업물 상세 페이지 · 데모와 아키텍처를 함께 제공</h2>
+<p class="subtitle">아키텍처 흐름은 데모의 대체재가 아니라, 모든 작업물에서 설계 의도를 설명하는 공통 증거로 사용합니다.</p>
+
+<div class="section" style="max-width:1000px;margin:20px auto 0;">
+  <div class="label">작업물 유형별 상단 진입점</div>
+  <div class="split">
+    <div class="mockup"><div class="mockup-header">프론트엔드가 있는 작업물</div><div class="mockup-body"><div class="label">PRODUCT · DEMO AVAILABLE</div><h3 style="margin:8px 0;font-size:21px;">예약 시스템 개선</h3><p style="font-size:13px;color:#6b7280;line-height:1.6;">사용자가 실제 예약 흐름을 체험할 수 있는 제품 작업물</p><div style="display:flex;gap:8px;margin-top:16px;"><button class="mock-button">데모 실행 ↗</button><button class="mock-button" style="background:#fff;color:#374151;border:1px solid #d1d5db;">아키텍처 흐름</button></div><div style="margin-top:14px;padding:10px;background:#f9fafb;font-size:12px;">화면 흐름 + API/상태 흐름 + 주요 설계 판단</div></div></div>
+    <div class="mockup"><div class="mockup-header">프론트엔드가 없는 작업물</div><div class="mockup-body"><div class="label">DEVOPS · DIAGRAM PRIMARY</div><h3 style="margin:8px 0;font-size:21px;">사내 DX 하네스 v2</h3><p style="font-size:13px;color:#6b7280;line-height:1.6;">실행 UI 대신 운영 흐름과 책임 경계를 설명하는 작업물</p><div style="display:flex;gap:8px;margin-top:16px;"><button class="mock-button">아키텍처 흐름 보기</button></div><div style="margin-top:14px;padding:10px;background:#f9fafb;font-size:12px;">배포 시퀀스 + 시크릿 흐름 + 운영 결과</div></div></div>
+  </div>
+</div>
+
+<div class="mockup" style="max-width:1000px;margin:26px auto 0;">
+  <div class="mockup-header">공통 상세 페이지 · 모든 작업물에 적용</div>
+  <div class="mockup-body" style="padding:0;background:#fff;color:#1f2937;">
+    <div style="padding:34px;border-bottom:1px solid #e5e7eb;"><div class="label">PROJECT DETAIL</div><h3 style="font-size:30px;margin:10px 0;">작업물 제목</h3><p style="max-width:740px;color:#4b5563;line-height:1.75;">짧은 요약은 문제와 결과를 한 문단으로 설명합니다. 상세한 사고 과정은 아래 본문에서 충분한 분량으로 이어집니다.</p><div style="display:flex;gap:9px;margin-top:18px;"><button class="mock-button">데모 실행 ↗ <small style="opacity:.75;">(조건부)</small></button><button class="mock-button">아키텍처 흐름 보기</button><span class="mock-sidebar">관련 인사이트</span></div></div>
+    <div style="padding:28px 34px;border-bottom:1px solid #e5e7eb;background:#fafafa;"><div class="label">공통 증거 블록</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;"><div class="mock-content"><strong>사용자/시스템 흐름</strong><br><small>누가 어떤 요청을 보내고 어떤 결과를 받는지</small></div><div class="mock-content"><strong>아키텍처 흐름</strong><br><small>컴포넌트와 책임 경계가 어떻게 연결되는지</small></div><div class="mock-content"><strong>결과와 검증</strong><br><small>수치, 운영 상태, 실패 대응으로 무엇을 증명하는지</small></div></div></div>
+    <div style="display:grid;grid-template-columns:210px 1fr;gap:0;"><aside style="padding:25px 20px;border-right:1px solid #e5e7eb;background:#fafafa;font-size:12px;line-height:2.25;"><div class="label">CONTENTS</div>1. 개요와 역할<br>2. 문제 상황<br>3. 제약과 판단<br><strong>4. 아키텍처 흐름</strong><br>5. 구현 세부<br>6. 결과와 검증<br>7. 회고</aside><main style="padding:28px 34px;"><div class="label">04 · ARCHITECTURE FLOW</div><h3 style="font-size:22px;margin:8px 0;">데모를 봐도, 다이어그램을 봐도 같은 설계 의도로 연결되도록</h3><p style="font-size:14px;line-height:1.85;color:#374151;">프론트엔드 작업물에서는 사용자의 화면 행동이 API와 상태 변화로 어떻게 이어지는지 보여줍니다. 백엔드·인프라 작업물에서는 요청, 검증, 큐·버퍼, 저장소, 배포 대상 등 시스템 주체의 순서를 보여줍니다.</p><div style="border:1px solid #d1d5db;border-radius:8px;padding:18px;margin-top:16px;background:#fff;"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;font-size:11px;"><div class="mock-sidebar">사용자 행동<br>예약 요청</div><div class="mock-sidebar">Frontend/API<br>검증·라우팅</div><div class="mock-sidebar">도메인 로직<br>외부 연동</div><div class="mock-sidebar">저장·응답<br>화면 갱신</div></div><div style="text-align:center;font-size:18px;color:#6b7280;margin:12px 0;">→　→　→</div><div style="padding:12px;background:#f9fafb;font-size:12px;line-height:1.6;">작업물에 따라 위 박스의 주체와 단계만 달라지고, “왜 이 경계를 선택했는가”에 대한 설명 방식은 동일하게 유지합니다.</div></div></main></div>
+  </div>
+</div>
+
+<div class="section" style="max-width:1000px;margin:24px auto 0;"><div class="label">최종 원칙</div><p><strong>데모는 경험을 보여주고, 아키텍처 흐름은 사고를 보여줍니다.</strong> 둘을 함께 제공하면 프론트엔드 작업물은 사용성과 설계력을 동시에, 백엔드·인프라 작업물은 실행 가능한 화면 없이도 구조와 운영 성과를 충분히 설명할 수 있습니다.</p></div>

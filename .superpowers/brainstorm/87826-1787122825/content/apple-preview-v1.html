@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BbaGyun — Apple-inspired portfolio direction</title>
+<style>
+  :root {
+    --black: #1d1d1f;
+    --pure-black: #000;
+    --white: #fff;
+    --gray: #f5f5f7;
+    --gray-2: #e8e8ed;
+    --gray-48: rgba(0,0,0,.48);
+    --blue: #0071e3;
+    --link: #0066cc;
+    --dark-surface: #1d1d1f;
+    --dark-card: #272729;
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; color: var(--black); background: var(--white); font-family: var(--font); -webkit-font-smoothing: antialiased; letter-spacing: -.02em; }
+  a { color: inherit; text-decoration: none; }
+  .nav { height: 52px; position: sticky; top: 0; z-index: 10; display: flex; align-items: center; background: rgba(0,0,0,.82); color: rgba(255,255,255,.8); backdrop-filter: saturate(180%) blur(20px); }
+  .nav-inner { width: min(980px, calc(100% - 40px)); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  .brand { color: #fff; font-size: 15px; font-weight: 600; letter-spacing: -.03em; }
+  .nav-links { display: flex; gap: 25px; align-items: center; font-size: 12px; }
+  .nav-links a:hover { color: #fff; }
+  .nav-action { padding: 6px 13px; border-radius: 980px; background: var(--blue); color: #fff; font-size: 12px; }
+  .hero { background: var(--gray); padding: 112px 20px 108px; text-align: center; }
+  .eyebrow { margin: 0 0 14px; color: var(--gray-48); font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  h1, h2, h3, p { margin-top: 0; }
+  .hero h1 { max-width: 760px; margin: 0 auto 22px; font-size: clamp(44px, 7vw, 72px); font-weight: 600; line-height: 1.04; letter-spacing: -.055em; }
+  .hero h1 span { color: var(--blue); }
+  .hero-copy { max-width: 560px; margin: 0 auto 30px; color: rgba(0,0,0,.68); font-size: 21px; line-height: 1.3; letter-spacing: -.025em; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+  .button { display: inline-flex; align-items: center; gap: 8px; padding: 11px 21px; border-radius: 980px; font-size: 17px; font-weight: 400; }
+  .button-blue { background: var(--blue); color: #fff; }
+  .button-outline { border: 1px solid var(--blue); color: var(--blue); }
+  .button-dark { background: var(--black); color: #fff; }
+  .button:hover { opacity: .86; }
+  .section { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 88px 0; }
+  .section-heading { margin-bottom: 36px; }
+  .section-heading h2 { margin: 0; font-size: 40px; line-height: 1.1; letter-spacing: -.055em; }
+  .section-heading p:last-child { max-width: 570px; margin: 15px 0 0; color: rgba(0,0,0,.58); font-size: 17px; line-height: 1.47; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 auto; padding: 34px 0 0; }
+  .stat { padding: 23px 0; border-top: 1px solid #d2d2d7; }
+  .stat strong { display: block; margin-bottom: 5px; font-size: 32px; font-weight: 600; letter-spacing: -.05em; }
+  .stat span { color: var(--gray-48); font-size: 14px; }
+  .dark-scene { background: var(--pure-black); color: #fff; }
+  .dark-scene .section { padding-top: 104px; padding-bottom: 104px; }
+  .dark-scene .eyebrow { color: rgba(255,255,255,.48); }
+  .dark-scene .section-heading h2 { color: #fff; }
+  .dark-scene .section-heading p:last-child { color: rgba(255,255,255,.68); }
+  .hero-project { display: grid; grid-template-columns: .84fr 1.16fr; gap: 60px; align-items: center; }
+  .hero-project h2 { max-width: 470px; margin: 0 0 16px; font-size: clamp(33px, 5vw, 52px); font-weight: 600; line-height: 1.05; letter-spacing: -.06em; }
+  .hero-project-copy { color: rgba(255,255,255,.68); font-size: 17px; line-height: 1.5; }
+  .hero-project-meta { display: flex; gap: 12px; margin: 25px 0 30px; color: rgba(255,255,255,.52); font-size: 12px; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 25px; color: rgba(255,255,255,.5); font-size: 12px; }
+  .project-tags span + span::before { content: "·"; margin-right: 8px; }
+  .architecture { padding: 30px; border-radius: 28px; background: var(--dark-card); }
+  .architecture-top { display: flex; justify-content: space-between; margin-bottom: 28px; color: rgba(255,255,255,.48); font-size: 12px; }
+  .architecture-title { color: #fff; font-size: 17px; }
+  .lanes { display: grid; grid-template-columns: repeat(3, 1fr); min-height: 238px; }
+  .lane { position: relative; padding: 12px 12px 0; border-left: 1px solid rgba(255,255,255,.12); }
+  .lane:last-child { border-right: 1px solid rgba(255,255,255,.12); }
+  .lane-label { color: rgba(255,255,255,.48); font-size: 11px; }
+  .flow { position: absolute; left: 12px; right: 12px; display: grid; gap: 9px; }
+  .flow.one { top: 60px; }.flow.two { top: 128px; }.flow.three { top: 190px; }
+  .flow span { display: block; padding: 9px 10px; border-radius: 8px; background: rgba(255,255,255,.1); color: rgba(255,255,255,.88); font-size: 11px; }
+  .arrow { position: absolute; top: 78px; right: -16px; z-index: 2; color: #2997ff; font-size: 18px; }
+  .work-section { background: var(--gray); }
+  .work-section .section { padding-top: 96px; padding-bottom: 96px; }
+  .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .work-card { min-height: 330px; display: flex; flex-direction: column; padding: 30px; border-radius: 28px; background: #fff; transition: transform .25s, box-shadow .25s; }
+  .work-card:hover { transform: translateY(-4px); box-shadow: rgba(0,0,0,.16) 3px 5px 30px 0; }
+  .work-card.dark { background: var(--dark-surface); color: #fff; }
+  .work-card:nth-child(3) { background: #e8e8ed; }
+  .card-top { display: flex; justify-content: space-between; color: var(--gray-48); font-size: 12px; }
+  .dark .card-top { color: rgba(255,255,255,.48); }
+  .work-card h3 { max-width: 340px; margin: auto 0 12px; font-size: 28px; font-weight: 400; line-height: 1.14; letter-spacing: -.035em; }
+  .work-card p { max-width: 390px; margin: 0 0 24px; color: rgba(0,0,0,.58); font-size: 14px; line-height: 1.5; }
+  .work-card.dark p { color: rgba(255,255,255,.68); }
+  .card-bottom { display: flex; align-items: center; justify-content: space-between; color: var(--link); font-size: 14px; }
+  .dark .card-bottom { color: #2997ff; }
+  .detail-section { background: #fff; }
+  .detail-preview { display: grid; grid-template-columns: 190px 1fr; gap: 65px; padding: 44px 0 0; border-top: 1px solid #d2d2d7; }
+  .detail-side { color: var(--gray-48); font-size: 13px; line-height: 1.6; }
+  .detail-side strong { display: block; margin-bottom: 18px; color: var(--black); font-size: 14px; }
+  .detail-side a { display: block; margin: 8px 0; color: var(--link); }
+  .detail-main h3 { max-width: 650px; margin: 0 0 19px; font-size: 34px; font-weight: 600; line-height: 1.1; letter-spacing: -.05em; }
+  .detail-main > p { max-width: 650px; color: rgba(0,0,0,.62); font-size: 17px; line-height: 1.55; }
+  .detail-evidence { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 32px; }
+  .evidence-card { padding: 22px; border-radius: 20px; background: var(--gray); }
+  .evidence-card strong { display: block; margin-bottom: 8px; font-size: 17px; }
+  .evidence-card span { color: var(--gray-48); font-size: 13px; line-height: 1.5; }
+  .footer { padding: 34px 20px; background: var(--gray); color: var(--gray-48); text-align: center; font-size: 12px; }
+  @media (max-width: 720px) {
+    .nav-links { display: none; }.nav-inner { width: calc(100% - 32px); }.hero { padding: 78px 16px 74px; }.hero h1 { font-size: 45px; }.hero-copy { font-size: 19px; }.section, .work-section .section { width: calc(100% - 32px); padding: 64px 0; }.section-heading h2 { font-size: 34px; }.stats, .hero-project, .detail-preview { grid-template-columns: 1fr; gap: 30px; }.stats { gap: 0; }.hero-project h2 { font-size: 39px; }.work-grid, .detail-evidence { grid-template-columns: 1fr; }.architecture { padding: 18px; overflow: hidden; }.lanes { min-width: 590px; }.detail-side { display: flex; gap: 14px; }.detail-side strong { margin: 0; }.detail-side a { margin: 0; }.detail-main h3 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+  <nav class="nav"><div class="nav-inner"><a class="brand" href="#top">BbaGyun</a><div class="nav-links"><a href="#work">작업물</a><a href="#architecture">아키텍처</a><a href="#records">개발 기록</a><a href="#insights">인사이트</a></div><a class="nav-action" href="#work">둘러보기</a></div></nav>
+  <main id="top">
+    <section class="hero"><p class="eyebrow">backend-first portfolio · 2026</p><h1>구조를 설계하고,<br><span>흐름을 운영하는</span> 개발자</h1><p class="hero-copy">풀스택을 다루지만, 문제의 경계를 나누고 데이터·API·배포·관찰 가능성까지 연결합니다.</p><div class="actions"><a class="button button-blue" href="#work">대표 작업물 보기 →</a><a class="button button-outline" href="#architecture">아키텍처 살펴보기</a></div><div class="stats"><div class="stat"><strong>08</strong><span>전체 작업물</span></div><div class="stat"><strong>∞</strong><span>운영 관점의 질문</span></div><div class="stat"><strong>01</strong><span>일관된 기록 방식</span></div></div></section>
+    <section id="architecture" class="dark-scene"><div class="section"><div class="hero-project"><div><p class="eyebrow">featured case study · 01</p><h2>사내 DX 하네스 v2 구축</h2><p class="hero-project-copy">Jenkins 중심의 배포 환경을 GitHub Actions, Infisical, 프로젝트 초기화 CLI, AI 작업 규칙이 연결된 하나의 DX 플랫폼으로 재설계했습니다.</p><div class="hero-project-meta"><span>DevOps</span><span>2026.04 – 2026.05</span></div><a class="button button-blue" href="#detail">케이스 스터디 읽기 →</a><div class="project-tags"><span>GitHub Actions</span><span>Infisical</span><span>Node.js</span><span>PM2</span></div></div><div class="architecture"><div class="architecture-top"><span class="architecture-title">system flow</span><span>diagram / 01</span></div><div class="lanes"><div class="lane"><span class="lane-label">developer</span><div class="flow one"><span>project init</span></div><div class="flow two"><span>push / PR</span></div></div><div class="lane"><span class="lane-label">harness</span><span class="arrow">→</span><div class="flow one"><span>profile detect</span></div><div class="flow two"><span>quality gates</span></div><div class="flow three"><span>deploy route</span></div></div><div class="lane"><span class="lane-label">runtime</span><div class="flow one"><span>Infisical</span></div><div class="flow two"><span>PM2 / Vercel</span></div><div class="flow three"><span>Slack signal</span></div></div></div></div></div></div></section>
+    <section id="work" class="work-section"><div class="section"><div class="section-heading"><p class="eyebrow">all eight projects</p><h2>작업물은 결과보다<br>판단을 보여줍니다.</h2><p>데모가 있는 작업물은 직접 테스트하고, 데모가 없는 작업물은 시스템 흐름·ERD·API·운영 증거로 읽습니다.</p></div><div class="work-grid"><a class="work-card dark" href="#detail"><div class="card-top"><span>02</span><span>BACKEND</span></div><h3>호텔 예약 · 결제 통합 플랫폼</h3><p>동시성 제어와 데이터 정합성을 중심으로 예약과 결제의 경계를 설계한 통합 플랫폼입니다.</p><div class="card-bottom"><span>케이스 스터디 →</span><span>TypeScript · NestJS</span></div></a><a class="work-card" href="#detail"><div class="card-top"><span>03</span><span>FRONTEND</span></div><h3>호텔 예약 시스템 플랫폼화</h3><p>하드코딩 복제 방식을 설정 주도 구조로 전환해 신규 프로젝트 확장 비용을 줄였습니다.</p><div class="card-bottom"><span>구조 보기 →</span><span>React · PHP</span></div></a><a class="work-card" href="#detail"><div class="card-top"><span>04</span><span>FULLSTACK</span></div><h3>화훼 도소매 B2B 주문 플랫폼</h3><p>실시간 주문 상태와 운영 트래픽을 관찰 가능한 흐름으로 연결했습니다.</p><div class="card-bottom"><span>구조 보기 →</span><span>Socket.io · MySQL</span></div></a><a class="work-card" href="#detail"><div class="card-top"><span>05</span><span>BACKEND</span></div><h3>통합 회원 관리 인증 서버</h3><p>서비스별 인증을 하나의 경계로 모으고 보안과 확장성을 함께 고려했습니다.</p><div class="card-bottom"><span>구조 보기 →</span><span>SSO · JWT</span></div></a></div></div></section>
+    <section id="detail" class="detail-section"><div class="section"><div class="section-heading"><p class="eyebrow">case study anatomy</p><h2>한 작업물을 읽는 방식</h2></div><div class="detail-preview"><aside class="detail-side"><strong>골프 예약 시스템 구축</strong><a href="#detail">프로젝트 개요</a><a href="#detail">문제 상황</a><a href="#detail">설계 의사결정</a><a href="#detail">아키텍처 흐름</a><a href="#detail">ERD / API</a><a href="#detail">결과와 회고</a></aside><div class="detail-main"><h3>외부 예약 API의 변동성을 내부 도메인에서 격리했습니다.</h3><p>소스코드를 공개하지 않아도 어떤 문제를 만났고, 어떤 대안을 비교했으며, 왜 현재 구조를 선택했는지 확인할 수 있도록 구성합니다.</p><div class="detail-evidence"><div class="evidence-card"><strong>시퀀스 다이어그램</strong><span>정상 흐름과 외부 연동 실패를 한 화면에서 확인</span></div><div class="evidence-card"><strong>예약 도메인 ERD</strong><span>Reservation과 Attempt를 분리한 데이터 책임</span></div><div class="evidence-card"><strong>API 계약</strong><span>내부 상태와 provider payload의 adapter 경계</span></div><div class="evidence-card"><strong>운영 증거</strong><span>timeout, rejection, retry를 구분하는 로그</span></div></div></div></div></div></section>
+    <section id="records" class="dark-scene"><div class="section"><div class="section-heading"><p class="eyebrow">development records</p><h2>매일의 작업은<br>다음 판단의 재료가 됩니다.</h2><p>Claude Code와 Codex로 진행한 작업을 문제·시도·결과 단위로 기록해 작업물과 인사이트에 연결합니다.</p><a class="button button-outline" href="#top">개발 기록 보기 →</a></div></div></section>
+    <section id="insights"><div class="section"><div class="section-heading"><p class="eyebrow">study & insights</p><h2>더 깊이 읽기</h2></div><div class="actions" style="justify-content:flex-start"><a class="button button-blue" href="#top">인사이트 전체 보기 →</a><a class="button button-outline" href="#top">공부 기록 보기</a></div></div></section>
+  </main>
+  <footer class="footer">BbaGyun · backend-first portfolio · 기존 화면과 비교할 수 있는 preview</footer>
+</body>
+</html>

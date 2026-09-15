@@ -1,0 +1,79 @@
+<style>
+  .main-card{margin-top:24px;overflow:hidden;border:2px solid #1f6feb;border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(24,32,48,.07)}
+  .head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid #e4e9f0;background:#f8fafc}
+  .head strong{color:#172033}.badge{padding:4px 9px;border-radius:999px;background:#e8f1ff;color:#0b4ca1;font-size:11px;font-weight:750}
+  .layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.7fr);gap:18px;padding:18px;background:#fbfcfe}
+  .canvas,.zoom{border:1px solid #d8dee8;border-radius:12px;background:#fff}.canvas{padding:10px}.zoom{padding:14px}
+  svg{display:block;width:100%;height:auto}.line{fill:none;stroke:#344256;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round}.exception{stroke:#c2414b;stroke-dasharray:7 5}
+  .node{fill:#fff;stroke:#526176;stroke-width:1.7}.node-text{fill:#27364a;font-size:10px;font-weight:750}
+  .port{fill:#fff;stroke:#344256;stroke-width:1.8}.port-exception{stroke:#c2414b}
+  .label-bg{fill:#fff;stroke:#cfd7e3}.label{fill:#334155;font-size:9px;font-weight:750}
+  .zoom h3{margin:0 0 6px;font-size:14px}.zoom p{margin:0 0 14px;color:#64748b;font-size:11px;line-height:1.5}
+  .rules{display:grid;gap:9px}.rule{padding:10px;border-radius:10px;background:#f6f8fb}.rule strong{display:block;color:#27364a;font-size:11px}.rule span{display:block;margin-top:3px;color:#64748b;font-size:10px;line-height:1.45}
+  .footer{padding:0 18px 18px;color:#526176;font-size:12px;line-height:1.6}
+  @media(max-width:850px){.layout{grid-template-columns:1fr}}
+</style>
+
+<h2>A1 종단부 수정 — 작은 화살촉과 명확한 도착 포트</h2>
+<p class="subtitle">화살표 몸통은 노드 뒤에 두고, 작은 화살촉과 수신 포트만 노드 위 레이어에 올려 도착 지점이 잘리지 않게 합니다.</p>
+
+<div class="card main-card" data-choice="small-marker-clear-port" onclick="toggleSelect(this)">
+  <div class="head"><strong>최종 연결선 후보</strong><span class="badge">작은 triangle · 명확한 arrival</span></div>
+  <div class="layout">
+    <div class="canvas">
+      <svg viewBox="0 0 500 315" aria-label="작은 화살촉과 도착 포트를 적용한 스윔레인 연결선">
+        <rect x="12" y="12" width="476" height="290" rx="13" fill="#fbfcfe" stroke="#e0e5ed"/>
+
+        <!-- edge shafts: nodes 아래 레이어 -->
+        <path class="line" d="M148 77H170Q184 77 184 91V141Q184 155 198 155"/>
+        <path class="line" d="M318 155H340Q354 155 354 141V91Q354 77 368 77"/>
+        <path class="line" d="M258 187V207Q258 221 272 221H354Q368 221 368 235"/>
+        <path class="line exception" d="M198 169H184Q170 169 170 183V237Q170 251 156 251"/>
+
+        <!-- node shapes: shaft 끝을 정리하는 레이어 -->
+        <rect class="node" x="38" y="53" width="110" height="48" rx="10"/><text class="node-text" x="93" y="81" text-anchor="middle">인증 API 요청</text>
+        <rect class="node" x="198" y="126" width="120" height="62" rx="11"/><text class="node-text" x="258" y="153" text-anchor="middle">Access Token</text><text class="node-text" x="258" y="168" text-anchor="middle">검증</text>
+        <rect class="node" x="368" y="53" width="96" height="48" rx="10"/><text class="node-text" x="416" y="81" text-anchor="middle">데이터 응답</text>
+        <rect class="node" x="368" y="227" width="96" height="48" rx="10"/><text class="node-text" x="416" y="255" text-anchor="middle">토큰 갱신</text>
+        <rect class="node" x="48" y="227" width="108" height="48" rx="10"/><text class="node-text" x="102" y="255" text-anchor="middle">인증 실패</text>
+
+        <!-- receive ports: 정확한 도착점 -->
+        <circle class="port" cx="198" cy="155" r="4.3"/>
+        <circle class="port" cx="368" cy="77" r="4.3"/>
+        <circle class="port" cx="368" cy="235" r="4.3"/>
+        <circle class="port port-exception" cx="156" cy="251" r="4.3"/>
+
+        <!-- compact arrowheads: port 위 레이어 -->
+        <path d="M190.5 151.2L198 155L190.5 158.8Z" fill="#344256"/>
+        <path d="M360.5 73.2L368 77L360.5 80.8Z" fill="#344256"/>
+        <path d="M364.2 227.5L368 235L371.8 227.5Z" fill="#344256"/>
+        <path d="M163.5 247.2L156 251L163.5 254.8Z" fill="#c2414b"/>
+
+        <!-- centered label pills -->
+        <g transform="translate(354 119)"><rect class="label-bg" x="-23" y="-10" width="46" height="20" rx="10"/><text class="label" y="3" text-anchor="middle">유효</text></g>
+        <g transform="translate(313 221)"><rect class="label-bg" x="-23" y="-10" width="46" height="20" rx="10"/><text class="label" y="3" text-anchor="middle">만료</text></g>
+        <g transform="translate(170 205)"><rect class="label-bg" x="-28" y="-10" width="56" height="20" rx="10"/><text class="label" y="3" text-anchor="middle">검증 실패</text></g>
+      </svg>
+    </div>
+
+    <div class="zoom">
+      <h3>도착부 확대</h3>
+      <p>삼각형을 기존보다 작게 하고, 팁이 변 중앙의 수신 포트를 정확히 가리킵니다.</p>
+      <svg viewBox="0 0 260 145" aria-label="도착 화살촉 확대 예시">
+        <path class="line" d="M24 72H132"/>
+        <rect class="node" x="140" y="35" width="96" height="74" rx="12"/>
+        <circle class="port" cx="140" cy="72" r="6"/>
+        <path d="M128 66L140 72L128 78Z" fill="#344256"/>
+        <text class="node-text" x="188" y="76" text-anchor="middle">도착 노드</text>
+        <path d="M140 120V128" stroke="#1f6feb" stroke-width="1.5"/>
+        <text x="140" y="140" text-anchor="middle" fill="#1f6feb" font-size="9" font-weight="700">변 중앙 수신 포트</text>
+      </svg>
+      <div class="rules">
+        <div class="rule"><strong>화살촉 7–8px</strong><span>선 굵기 2–2.5px에 맞춘 작은 triangle</span></div>
+        <div class="rule"><strong>수신 포트 4px</strong><span>흰 중심과 선 색 테두리로 도착 위치 표시</span></div>
+        <div class="rule"><strong>레이어 분리</strong><span>shaft → node → port·arrowhead 순서로 잘림 방지</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="footer">수신 포트는 출발점에는 상시 노출하지 않고 도착점에만 표시합니다. 예외 경로는 같은 구조를 유지하면서 destructive 색으로만 구분해 화살촉 크기와 문법은 통일합니다.</p>
+</div>

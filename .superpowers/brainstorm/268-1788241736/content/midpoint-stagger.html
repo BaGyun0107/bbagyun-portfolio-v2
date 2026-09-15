@@ -1,0 +1,16 @@
+<style>
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:22px}.panel{border:1px solid #d9dce3;border-radius:18px;overflow:hidden}.head{padding:18px;border-bottom:1px solid #eceef2}.head h3{margin:0 0 6px}.head p{margin:0;color:#667085}.flow{position:relative;height:270px;margin:18px;border:1px solid #d8dbe2;border-radius:12px;overflow:hidden}.branch{position:absolute;top:46px;bottom:34px;border-left:2px dashed #e11d48}.pill{position:absolute;transform:translateX(-50%);white-space:nowrap;border:1px solid #fecdd3;border-radius:999px;background:#fff;color:#e11d48;padding:4px 7px;font-size:11px;font-weight:700;z-index:2}.collision{box-shadow:0 0 0 4px rgba(225,29,72,.14)}.track{position:absolute;left:8px;right:8px;border-top:1px dotted #cbd0d8}.note{margin:0 18px 18px;padding:11px;border-radius:10px;background:#f3f5f8;color:#475467;font-size:12px}@media(max-width:900px){.compare{grid-template-columns:1fr}}
+</style>
+<h2>경로 중앙 라벨: 중앙점은 유지하고 충돌할 때만 위·아래 조정</h2>
+<p class="subtitle">실제 경로 길이는 다르지만 중앙점이 같은 가로 통로에 모여, 긴 라벨 영역끼리 겹칠 수 있습니다.</p>
+<div class="compare">
+  <div class="panel"><div class="head"><h3>중앙점만 사용</h3><p>서로 다른 중앙점이지만 긴 라벨 폭 때문에 3쌍이 겹칩니다.</p></div><div class="flow">
+    <i class="branch" style="left:18%"></i><i class="branch" style="left:41%"></i><i class="branch" style="left:64%"></i><i class="branch" style="left:86%"></i>
+    <span class="pill collision" style="left:25%;top:118px">예약·티켓 생성 확인</span><span class="pill collision" style="left:42%;top:111px">외부 PMS 장애</span><span class="pill collision" style="left:61%;top:115px">응답 미도달·생성 실패·PHP 예외</span><span class="pill collision" style="left:80%;top:115px">12초 timeout 조기 실패 오판</span>
+  </div><div class="note">중심 간격 약 104~110px · 라벨 폭 최대 199px</div></div>
+  <div class="panel"><div class="head"><h3>중앙점 + 최소 위·아래 조정</h3><p>한 줄 문구와 기존 edge를 유지하고, 충돌하는 라벨만 가까운 트랙으로 옮깁니다.</p></div><div class="flow">
+    <i class="branch" style="left:18%"></i><i class="branch" style="left:41%"></i><i class="branch" style="left:64%"></i><i class="branch" style="left:86%"></i><i class="track" style="top:101px"></i><i class="track" style="top:151px"></i>
+    <span class="pill" style="left:24%;top:88px">예약·티켓 생성 확인</span><span class="pill" style="left:40%;top:138px">외부 PMS 장애</span><span class="pill" style="left:59%;top:88px">응답 미도달·생성 실패·PHP 예외</span><span class="pill" style="left:80%;top:138px">12초 timeout 조기 실패 오판</span>
+  </div><div class="note">약 28~32px의 두 트랙이면 현재 블랙스톤 라벨 충돌은 0건입니다.</div></div>
+</div>
+<div class="options" style="margin-top:20px"><div class="option" data-choice="midpoint-stagger" onclick="toggleSelect(this)"><div class="letter">S</div><div class="content"><h3>경로 중앙 + 최소 위·아래 조정</h3><p>줄바꿈은 위·아래 조정으로도 공간이 없을 때만 마지막 수단으로 사용합니다.</p></div></div></div>

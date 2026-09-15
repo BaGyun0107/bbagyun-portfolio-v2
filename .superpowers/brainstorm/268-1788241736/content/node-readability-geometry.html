@@ -1,0 +1,20 @@
+<style>
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.panel{border:1px solid #d9dce3;border-radius:18px;overflow:hidden}.head{padding:18px;border-bottom:1px solid #eceef2}.head h3{margin:0 0 6px}.head p{margin:0;color:#667085}.phone{width:300px;max-width:calc(100% - 36px);margin:18px auto;border:1px solid #d8dbe2;border-radius:12px;overflow:hidden;background:#fff}.lanes{display:grid;grid-template-columns:repeat(4,1fr)}.lane{position:relative;border-right:1px solid #e1e4e9;min-height:var(--height)}.lane:last-child{border-right:0}.lane b{height:36px;display:grid;place-items:center;background:#eff0f3;border-bottom:1px solid #d8dbe2;font-size:var(--font)}.node{position:absolute;left:5px;right:5px;top:var(--top);min-height:var(--node-height);display:grid;place-items:center;border:1.5px solid #202124;border-radius:8px;background:#fff;padding:3px;text-align:center;font-size:var(--font);line-height:1.25;font-weight:700}.small{--height:300px;--font:3.2px;--node-height:15px}.readable{--height:560px;--font:10px;--node-height:42px}.note{display:grid;gap:8px;margin:0 18px 18px}.note div{padding:10px 12px;border-radius:10px;background:#f3f5f8;color:#475467;font-size:12px;line-height:1.45}.choice{margin-top:20px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
+<h2>같은 4-lane 구조에서 노드 글자만 읽을 수 있게 만드는 방법</h2>
+<p class="subtitle">lane·node 순서·연결 관계는 그대로 두고, 좁은 화면에서는 가로폭 대신 세로 길이를 사용합니다.</p>
+<div class="grid">
+  <div class="panel"><div class="head"><h3>현재: 전체 SVG 축소</h3><p>940px 좌표계를 252px에 맞추며 글자도 함께 3.2px가 됩니다.</p></div><div class="phone"><div class="lanes small">
+    <div class="lane"><b>이용자</b><span class="node" style="--top:55px">결제 요청</span><span class="node" style="--top:245px">예약 완료</span></div>
+    <div class="lane"><b>PHP 서버</b><span class="node" style="--top:120px">결제 정보 처리</span><span class="node" style="--top:185px">생성 결과 판단</span></div>
+    <div class="lane"><b>결제사</b><span class="node" style="--top:88px">결제 승인</span></div>
+    <div class="lane"><b>PMS·티켓</b><span class="node" style="--top:152px">예약·티켓 생성</span></div>
+  </div></div><div class="note"><div>노드와 글자가 모두 축소되어 구조는 보이지만 문구를 읽을 수 없습니다.</div></div></div>
+  <div class="panel"><div class="head"><h3>개선: 폭별 geometry 재계산</h3><p>글자는 최소 10px로 두고 좁은 노드는 여러 줄·높은 node로 표시합니다.</p></div><div class="phone"><div class="lanes readable">
+    <div class="lane"><b>이용자</b><span class="node" style="--top:62px">결제<br>요청</span><span class="node" style="--top:465px">예약<br>완료</span></div>
+    <div class="lane"><b>PHP 서버</b><span class="node" style="--top:205px">결제 정보<br>처리</span><span class="node" style="--top:350px">생성 결과<br>판단</span></div>
+    <div class="lane"><b>결제사</b><span class="node" style="--top:133px">결제<br>승인</span></div>
+    <div class="lane"><b>PMS·티켓</b><span class="node" style="--top:277px">예약·티켓<br>생성</span></div>
+  </div></div><div class="note"><div>4개 lane과 node 관계는 그대로이고, 다이어그램 높이만 늘어납니다.</div><div>본문과 크게 보기 모두 같은 폭별 geometry 규칙을 사용합니다.</div></div></div>
+</div>
+<div class="options choice"><div class="option" data-choice="responsive-geometry-readable-text" onclick="toggleSelect(this)"><div class="letter">R</div><div class="content"><h3>현재 구조 유지 + 최소 글자 크기 보장</h3><p>노드 글자를 최소 10px로 유지하고 필요한 만큼 node 높이와 row 간격을 확장합니다.</p></div></div></div>
