@@ -20,7 +20,7 @@
 
 **Decision**: `codi-harness-dx-platform-design`을 대표 인사이트의 정식 경로로 유지하고 네 짧은 insight 객체를 제거한다. redirect와 tombstone UI는 만들지 않는다.
 
-**Rationale**: 대표 경로는 이미 종합 글의 의미를 가지며, 제거 경로를 redirect하면 통합 완료 후에도 오래된 정보 구조를 공개 계약으로 유지하게 된다. 현재 insight page는 정적 registry 조회 실패 시 `notFound()`를 호출하므로 데이터 제거가 404 계약과 일치한다.
+**Rationale**: 대표 경로는 이미 종합 글의 의미를 가지며, 제거 경로를 redirect하면 통합 완료 후에도 오래된 정보 구조를 공개 계약으로 유지하게 된다. 데이터 제거 뒤 page 렌더 중 `notFound()`만 호출하면 Next.js streaming 응답이 404 UI와 `noindex`를 포함하면서도 HTTP 200을 반환할 수 있다. Insight는 저장소의 정적 registry가 전체 공개 집합이므로 `generateStaticParams()` 밖의 동적 경로를 router 단계에서 거부해 실제 HTTP 404 계약을 보장한다.
 
 **Alternatives considered**: 새 slug 생성, 네 경로를 대표 글로 redirect, 네 글을 archive 처리. 모두 기존 대표 URL의 안정성 또는 승인된 “redirect 없음” 범위와 충돌한다.
 

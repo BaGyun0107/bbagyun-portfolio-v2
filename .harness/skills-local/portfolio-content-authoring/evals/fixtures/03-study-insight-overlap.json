@@ -1,0 +1,45 @@
+{
+  "scenario": "공부 기록과 연결 인사이트 초안 편집",
+  "study": {
+    "slug": "async-queue-lab",
+    "route": "/study/async-queue-lab",
+    "title": "비동기 작업 큐 실험 일지",
+    "entries": [
+      "4월 3일 공식 큐 문서에서 재시도 횟수 설정을 읽고, 횟수가 많을수록 안전하다고 이해했다.",
+      "4월 5일 로컬 소비자 중단 실험에서 같은 주문이 두 번 처리되는 현상을 관찰했다. 재시도 1회와 3회 모두 중복이 발생했다.",
+      "4월 7일 요청 ID를 저장하는 실험에서는 중복 처리가 멈췄다. 재시도 설정보다 처리 경계가 먼저라는 쪽으로 이해가 바뀌었다.",
+      "다음에는 저장소 장애 중 ID 기록이 유실되는 경우를 확인할 예정이다."
+    ],
+    "evidence": {
+      "references": ["가상 큐 제품 공식 재시도 문서"],
+      "direct_experiments": [
+        "소비자 중단 뒤 재전달 관찰",
+        "재시도 횟수 1회와 3회 비교",
+        "요청 ID 저장 전후 비교"
+      ]
+    },
+    "related_insights": ["idempotency-before-retries"]
+  },
+  "insight": {
+    "slug": "idempotency-before-retries",
+    "route": "/insights/idempotency-before-retries",
+    "title": "재시도 횟수보다 중요한 멱등성 경계",
+    "draft_paragraphs": [
+      "4월 3일 공식 큐 문서에서 재시도 횟수 설정을 읽고, 횟수가 많을수록 안전하다고 이해했다.",
+      "4월 5일 로컬 소비자 중단 실험에서 같은 주문이 두 번 처리되는 현상을 관찰했다. 재시도 1회와 3회 모두 중복이 발생했다.",
+      "4월 7일 요청 ID를 저장하는 실험에서는 중복 처리가 멈췄다. 재시도 설정보다 처리 경계가 먼저라는 쪽으로 이해가 바뀌었다.",
+      "다음에는 저장소 장애 중 ID 기록이 유실되는 경우를 확인할 예정이다.",
+      "따라서 멱등 키를 두자."
+    ],
+    "editorial_metadata": {
+      "type": null,
+      "source_study_slug": "async-queue-lab",
+      "independent_reason": null,
+      "visual_assessment": null
+    }
+  },
+  "link_metadata": {
+    "study_to_insight": "/insights/idempotency-before-retries",
+    "insight_to_study": "/study/async-queue-lab"
+  }
+}

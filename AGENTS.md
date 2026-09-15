@@ -23,8 +23,8 @@ smallest useful role set.
 ### Phase 1~5 routing summary
 
 - P1 Strategy: Superpowers brainstorming for creative/product/architecture changes.
-- P2 Specify and plan: `speckit-specify` (request test tasks explicitly) -> `speckit-clarify` -> `speckit-plan` -> `speckit-tasks` -> `speckit-analyze`.
-- P3 Execution: implementation guided by unchecked tasks.md items plus Superpowers TDD/debugging/plan execution; the implement step never commits.
+- P2 Specify and plan: `speckit-specify` -> conditional `speckit-clarify` -> user handoff -> explicit `codi-auto-loop` for plan/tasks/required `speckit-analyze`.
+- P3 Execution: implementation guided by unchecked tasks.md items plus Superpowers TDD/debugging/plan execution; honor Spec Kit checklist confirmation gates; the implement step never commits.
 - P4 Review and verification: `speckit-converge` until "Converged" plus Superpowers verification discipline; Playwright MCP browser QA when live verification helps.
 - P5 Ship and completion: converge green -> update the root `ROADMAP.md` -> PR prep from the spec directory.
 
@@ -62,6 +62,11 @@ prints a phase routing reminder from there.
 For every later response, the Codex agent must apply the Phase 1~5 summary
 above and `.harness/policies/scenario-phase-routing.md` directly. There is no
 runtime keyword-matching skill-injector equivalent to Claude Code.
+
+After `speckit-specify`, Codex must report whether clarify is required or
+skipped. If required, wait for the user's answers; if skipped, say why. In
+both cases, ask the user to explicitly start `codi-auto-loop` and stop — do
+not continue into plan/tasks/implementation automatically.
 
 Codex hard stop for split app work: before editing implementation files for
 split frontend/backend, scaffold/import, or other multi-workstream app work,

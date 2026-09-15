@@ -1,0 +1,33 @@
+{
+  "scenario": "출처 메타데이터가 없는 기존 공개 기술 글",
+  "article": {
+    "slug": "websocket-reconnect-interval",
+    "route": "/insights/websocket-reconnect-interval",
+    "title": "WebSocket 재연결 간격을 정하는 법",
+    "current_excerpt": "재연결은 1초, 2초, 4초로 늘리면 대부분의 서비스에서 안정적이다. 최대 간격은 언제나 30초가 적합하다.",
+    "editorial_metadata": {
+      "type": null,
+      "source_project_slug": null,
+      "source_study_slug": null,
+      "independent_reason": null,
+      "visual_assessment": null
+    }
+  },
+  "available_evidence": {
+    "authoring_notes_found": false,
+    "experiment_logs_found": false,
+    "operator_recalls_origin": false,
+    "matching_project_or_study_found": false
+  },
+  "operator_preference": {
+    "keep_public": true,
+    "suggested_type": "technical-exploration",
+    "suggested_independent_reason": "좋은 내용이라서",
+    "allow_delete_without_approval": false
+  },
+  "link_metadata": {
+    "source_route": null,
+    "source_backlink": null,
+    "public_route_must_be_preserved_until_decision": true
+  }
+}

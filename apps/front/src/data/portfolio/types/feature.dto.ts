@@ -1,12 +1,12 @@
 /**
  * 기능 파트의 카테고리 정의
  */
-export type FeatureCategory = "Backend" | "Frontend" | "DevOps" | "Fullstack";
+export type FeatureCategory = 'Backend' | 'Frontend' | 'DevOps' | 'Fullstack';
 
 /**
  * 기능 파트의 상태 정의
  */
-export type FeatureStatus = "Production" | "Beta" | "Archived";
+export type FeatureStatus = 'Production' | 'Beta' | 'Archived' | 'In Progress' | 'On Hold';
 
 /**
  * 기능(Feature) 정보에 대한 DTO 인터페이스

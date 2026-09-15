@@ -1,6 +1,121 @@
 /**
  * 인사이트 정보에 대한 DTO 인터페이스
  */
+export type InsightType = 'project-case' | 'technical-exploration';
+
+export type InsightVisualKind =
+  | 'swimlane'
+  | 'sequence'
+  | 'erd'
+  | 'architecture'
+  | 'data-flow'
+  | 'state-transition'
+  | 'decision-matrix'
+  | 'timeline';
+
+export type InsightVisualAssessment =
+  | {
+      decision: 'not-needed';
+      rationale: string;
+    }
+  | {
+      decision: 'recommended';
+      kind: InsightVisualKind;
+      rationale: string;
+    }
+  | {
+      decision: 'provided';
+      kind: InsightVisualKind;
+      rationale: string;
+      question: string;
+      textAlternative: string;
+      nonDuplicationReason: string;
+    };
+
+export type InsightEditorialMetadata =
+  | {
+      type: 'project-case';
+      visualAssessment: InsightVisualAssessment;
+    }
+  | {
+      type: 'technical-exploration';
+      independentReason?: string;
+      visualAssessment: InsightVisualAssessment;
+    };
+
+export type InsightDataFlowNodeRole = 'state' | 'data' | 'action' | 'terminal';
+export type InsightDataFlowEdgeOutcome = 'normal' | 'success' | 'failure' | 'retry';
+
+export interface InsightDataFlowNode {
+  id: string;
+  label: string;
+  detail: string;
+  role: InsightDataFlowNodeRole;
+}
+
+export interface InsightDataFlowEdge {
+  id: string;
+  from: string;
+  to: string;
+  label: string;
+  outcome: InsightDataFlowEdgeOutcome;
+}
+
+export type InsightArchitectureActorRole =
+  | 'server'
+  | 'room'
+  | 'recipient'
+  | 'unrelated'
+  | 'source'
+  | 'relay'
+  | 'boundary'
+  | 'consumer';
+
+export interface InsightArchitectureActor {
+  id: string;
+  label: string;
+  role: InsightArchitectureActorRole;
+}
+
+export type InsightArchitectureConnectionScope = 'intended' | 'overbroad' | 'indirect' | 'direct';
+
+export interface InsightArchitectureConnection {
+  id: string;
+  from: string;
+  to: string;
+  label: string;
+  scope: InsightArchitectureConnectionScope;
+}
+
+export interface InsightArchitecturePanel {
+  id: 'before' | 'after';
+  title: string;
+  summary: string;
+  actors: InsightArchitectureActor[];
+  connections: InsightArchitectureConnection[];
+}
+
+interface InsightVisualBase {
+  id: string;
+  title: string;
+  question: string;
+  textAlternative: string;
+}
+
+export interface InsightDataFlowVisual extends InsightVisualBase {
+  variant: 'data-flow';
+  nodes: InsightDataFlowNode[];
+  edges: InsightDataFlowEdge[];
+}
+
+export interface InsightBeforeAfterVisual extends InsightVisualBase {
+  variant: 'before-after';
+  showActorRoleLabels?: boolean;
+  panels: [InsightArchitecturePanel, InsightArchitecturePanel];
+}
+
+export type InsightVisual = InsightDataFlowVisual | InsightBeforeAfterVisual;
+
 export interface InsightDto {
   id: string;
   title: string;
@@ -16,6 +131,8 @@ export interface InsightDto {
   readTime: string;
   featureSlug?: string | null;
   studySlug?: string | null;
+  editorial?: InsightEditorialMetadata | null;
+  visual?: InsightVisual | null;
   createdAt: Date | string;
   updatedAt: Date | string;
 }

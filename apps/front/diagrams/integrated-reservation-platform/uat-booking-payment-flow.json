@@ -1,0 +1,173 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "고객사 UAT 예약·결제 흐름",
+    "output": "public/diagrams/integrated-reservation-platform/uat-booking-payment-flow.html",
+    "animation": "none",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "customer-operator", "label": "고객사 운영자" },
+    { "id": "user", "label": "사용자" },
+    { "id": "nextjs-bff", "label": "Next.js BFF" },
+    { "id": "nest-api-db", "label": "Nest API·DB" },
+    { "id": "pg-test", "label": "PG 테스트" }
+  ],
+  "mainPath": [
+    "configure-inventory",
+    "browse-and-reserve",
+    "bff-forward",
+    "record-pending-and-decrement",
+    "pg-approve",
+    "confirm-order-and-payment",
+    "admin-confirm-or-cancel"
+  ],
+  "semanticChecks": {
+    "allowedRoots": ["configure-inventory"],
+    "allowedTerminals": ["admin-confirm-or-cancel", "inventory-conflict", "pg-failed"],
+    "requiredEdges": [
+      { "from": "record-pending-and-decrement", "to": "inventory-conflict" },
+      { "from": "pg-approve", "to": "pg-failed" }
+    ],
+    "requiredPaths": [
+      { "from": "configure-inventory", "to": "admin-confirm-or-cancel" }
+    ]
+  },
+  "nodes": [
+    {
+      "id": "configure-inventory",
+      "lane": "customer-operator",
+      "col": 0,
+      "width": 176,
+      "type": "frontend",
+      "label": "행사·호텔·객실·재고 등록",
+      "sublabel": "UAT 운영 설정"
+    },
+    {
+      "id": "browse-and-reserve",
+      "lane": "user",
+      "col": 1,
+      "width": 140,
+      "type": "frontend",
+      "label": "객실 조회·예약 요청",
+      "sublabel": "PG 테스트 결제 요청"
+    },
+    {
+      "id": "bff-forward",
+      "lane": "nextjs-bff",
+      "col": 2,
+      "width": 120,
+      "type": "backend",
+      "label": "Next.js BFF 전달",
+      "sublabel": "같은 Origin 경계"
+    },
+    {
+      "id": "record-pending-and-decrement",
+      "lane": "nest-api-db",
+      "col": 3,
+      "width": 148,
+      "type": "database",
+      "label": "PAYMENT_PENDING 기록",
+      "sublabel": "version 조건 재고 차감",
+      "tag": "충돌 검사"
+    },
+    {
+      "id": "inventory-conflict",
+      "lane": "nest-api-db",
+      "col": 4,
+      "width": 124,
+      "type": "security",
+      "label": "재고 version 충돌",
+      "sublabel": "PG 호출 전 재시도 안내",
+      "tag": "처리 중단"
+    },
+    {
+      "id": "pg-approve",
+      "lane": "pg-test",
+      "col": 4,
+      "type": "external",
+      "label": "PG 테스트 승인",
+      "sublabel": "승인 성공 또는 실패"
+    },
+    {
+      "id": "pg-failed",
+      "lane": "nest-api-db",
+      "col": 2,
+      "width": 124,
+      "type": "security",
+      "label": "PG 승인 실패 기록",
+      "sublabel": "CANCELLED · ABORTED",
+      "tag": "재고 자동 복구 미완성"
+    },
+    {
+      "id": "confirm-order-and-payment",
+      "lane": "nest-api-db",
+      "col": 5,
+      "type": "database",
+      "label": "주문·결제 확정",
+      "sublabel": "승인 결과 내부 반영"
+    },
+    {
+      "id": "admin-confirm-or-cancel",
+      "lane": "customer-operator",
+      "col": 5,
+      "width": 152,
+      "type": "frontend",
+      "label": "관리자 예약 확인·취소",
+      "sublabel": "고객사 UAT 완료"
+    }
+  ],
+  "edges": [
+    {
+      "id": "configure-inventory-browse-and-reserve",
+      "from": "configure-inventory",
+      "to": "browse-and-reserve"
+    },
+    {
+      "id": "browse-and-reserve-bff-forward",
+      "from": "browse-and-reserve",
+      "to": "bff-forward"
+    },
+    {
+      "id": "bff-forward-record-pending-and-decrement",
+      "from": "bff-forward",
+      "to": "record-pending-and-decrement"
+    },
+    {
+      "id": "record-pending-and-decrement-pg-approve",
+      "from": "record-pending-and-decrement",
+      "to": "pg-approve",
+      "label": "재고 차감 성공",
+      "variant": "emphasis"
+    },
+    {
+      "id": "pg-approve-confirm-order-and-payment",
+      "from": "pg-approve",
+      "to": "confirm-order-and-payment",
+      "label": "승인 성공",
+      "variant": "emphasis"
+    },
+    {
+      "id": "confirm-order-and-payment-admin-confirm-or-cancel",
+      "from": "confirm-order-and-payment",
+      "to": "admin-confirm-or-cancel"
+    },
+    {
+      "id": "inventory-version-conflict-stop",
+      "from": "record-pending-and-decrement",
+      "to": "inventory-conflict",
+      "label": "조건부 갱신 0건",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "pg-approval-failed-stop",
+      "from": "pg-approve",
+      "to": "pg-failed",
+      "label": "승인 실패",
+      "variant": "security",
+      "role": "error"
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "플랫폼 변경·검증·배포 흐름",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    { "id": "requirement", "label": "요구사항" },
+    { "id": "code-boundary", "label": "코드 경계" },
+    { "id": "delivery", "label": "검증·배포" }
+  ],
+  "nodes": [
+    {
+      "id": "request-change",
+      "lane": "requirement",
+      "col": 0,
+      "type": "frontend",
+      "width": 112,
+      "label": "변경 요청",
+      "sublabel": "기능 또는 정책 변경 접수"
+    },
+    {
+      "id": "classify-difference",
+      "lane": "requirement",
+      "col": 1,
+      "type": "frontend",
+      "label": "차이 분류",
+      "sublabel": "변경 성격 판단"
+    },
+    {
+      "id": "place-core",
+      "lane": "code-boundary",
+      "col": 2,
+      "type": "frontend",
+      "width": 160,
+      "label": "core에 공통 동작 배치",
+      "sublabel": "모든 플랫폼이 같은 동작"
+    },
+    {
+      "id": "place-rsconfig",
+      "lane": "code-boundary",
+      "col": 0,
+      "type": "frontend",
+      "width": 144,
+      "label": "rsConfig에 값 배치",
+      "sublabel": "동작은 같고 값만 다름"
+    },
+    {
+      "id": "delegate-platform",
+      "lane": "code-boundary",
+      "col": 1,
+      "type": "frontend",
+      "width": 188,
+      "label": "platform에 화면·로직 배치",
+      "sublabel": "플랫폼 고유 화면 또는 로직"
+    },
+    {
+      "id": "build-platforms",
+      "lane": "delivery",
+      "col": 3,
+      "type": "frontend",
+      "width": 128,
+      "label": "플랫폼별 빌드",
+      "sublabel": "build-time alias로 대상 선택"
+    },
+    {
+      "id": "verify-platforms",
+      "lane": "delivery",
+      "col": 4,
+      "type": "frontend",
+      "width": 144,
+      "label": "계약·동작 검증",
+      "sublabel": "alias·경로 계약과 주요 흐름 확인"
+    },
+    {
+      "id": "deploy-platforms",
+      "lane": "delivery",
+      "col": 5,
+      "type": "frontend",
+      "width": 160,
+      "label": "호텔별 운영 폴더 배포",
+      "sublabel": "검증된 플랫폼별 산출물 배포"
+    },
+    {
+      "id": "audit-operational-delta",
+      "lane": "requirement",
+      "col": 5,
+      "type": "frontend",
+      "width": 128,
+      "label": "운영 브랜치 감사",
+      "sublabel": "변경 의도와 범위 비교"
+    },
+    {
+      "id": "port-missing-delta",
+      "lane": "code-boundary",
+      "col": 5,
+      "type": "frontend",
+      "width": 174,
+      "label": "core·platform 수동 이식",
+      "sublabel": "누락 변경을 맞는 경계로 이식"
+    }
+  ],
+  "edges": [
+    { "id": "request-classify", "from": "request-change", "to": "classify-difference" },
+    {
+      "id": "classify-core",
+      "from": "classify-difference",
+      "to": "place-core",
+      "label": "모든 플랫폼 공통",
+      "role": "branch"
+    },
+    {
+      "id": "classify-rsconfig",
+      "from": "classify-difference",
+      "to": "place-rsconfig",
+      "label": "값만 다름",
+      "role": "branch"
+    },
+    {
+      "id": "classify-platform",
+      "from": "classify-difference",
+      "to": "delegate-platform",
+      "label": "화면·로직 차이",
+      "role": "branch"
+    },
+    { "id": "core-build", "from": "place-core", "to": "build-platforms" },
+    { "id": "rsconfig-build", "from": "place-rsconfig", "to": "build-platforms" },
+    { "id": "platform-build", "from": "delegate-platform", "to": "build-platforms" },
+    { "id": "build-verify", "from": "build-platforms", "to": "verify-platforms" },
+    {
+      "id": "verify-deploy",
+      "from": "verify-platforms",
+      "to": "deploy-platforms",
+      "label": "검증 통과",
+      "variant": "emphasis"
+    },
+    {
+      "id": "verify-audit",
+      "from": "verify-platforms",
+      "to": "audit-operational-delta",
+      "label": "패리티 누락",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "audit-port",
+      "from": "audit-operational-delta",
+      "to": "port-missing-delta"
+    },
+    {
+      "id": "port-reverify",
+      "from": "port-missing-delta",
+      "to": "verify-platforms",
+      "label": "수동 이식 후 재검증",
+      "variant": "dashed",
+      "role": "return"
+    }
+  ]
+}

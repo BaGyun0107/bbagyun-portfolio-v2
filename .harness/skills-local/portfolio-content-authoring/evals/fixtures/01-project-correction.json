@@ -1,0 +1,36 @@
+{
+  "scenario": "가상 예약 운영 도구의 역할 정정",
+  "editor_request": {
+    "scope": "작업물 상세만 오늘 수정하고 연결 인사이트는 다음 일정에 처리",
+    "preserve_public_routes": true
+  },
+  "approved_evidence": {
+    "kind": "approved_interview",
+    "recorded_at": "2024-04-02",
+    "facts": [
+      "2024년 3월 프런트엔드 담당자가 정산 불일치 패턴을 먼저 발견했다.",
+      "담당자는 검증 규칙과 오류 안내를 구현했다.",
+      "문의 건수 감소는 운영팀이 전달한 값이며 담당자가 직접 측정하지 않았다."
+    ]
+  },
+  "project": {
+    "slug": "aurora-booking-console",
+    "route": "/projects/aurora-booking-console",
+    "current_excerpt": "기획자가 정산 불일치를 발견했고, 나는 전달받은 화면을 구현했다. 개선 뒤 문의가 절반으로 감소하는 것을 직접 확인했다.",
+    "visual": null
+  },
+  "linked_insight": {
+    "slug": "booking-reconciliation-boundary",
+    "route": "/insights/booking-reconciliation-boundary",
+    "type": "project-case",
+    "source_project_slug": "aurora-booking-console",
+    "current_excerpt": "기획자가 찾아낸 오류를 전달받아 UI만 보완했다. 직접 측정한 문의 감소가 해결 효과를 입증했다.",
+    "visual": null
+  },
+  "link_metadata": {
+    "project_related_insights": [
+      "booking-reconciliation-boundary"
+    ],
+    "insight_source_route": "/projects/aurora-booking-console"
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "결제·보상취소 흐름",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "guest",
+      "label": "이용자"
+    },
+    {
+      "id": "php-service",
+      "label": "PHP 서버"
+    },
+    {
+      "id": "external-services",
+      "label": "결제사·PMS·티켓"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "submit-payment",
+      "lane": "guest",
+      "col": 0,
+      "type": "frontend",
+      "label": "결제 요청",
+      "width": 110
+    },
+    {
+      "id": "approve-payment",
+      "lane": "external-services",
+      "col": 1,
+      "type": "backend",
+      "label": "결제 승인",
+      "width": 110
+    },
+    {
+      "id": "persist-payment",
+      "lane": "php-service",
+      "col": 2,
+      "type": "backend",
+      "label": "결제 정보 처리",
+      "width": 140
+    },
+    {
+      "id": "create-reservation",
+      "lane": "external-services",
+      "col": 3,
+      "type": "backend",
+      "label": "예약·티켓 생성",
+      "width": 142
+    },
+    {
+      "id": "evaluate-result",
+      "lane": "php-service",
+      "col": 4,
+      "type": "security",
+      "label": "생성 결과 판단",
+      "width": 140
+    },
+    {
+      "id": "complete-service",
+      "lane": "guest",
+      "col": 5,
+      "type": "external",
+      "label": "예약 완료",
+      "width": 110
+    },
+    {
+      "id": "auto-compensation",
+      "lane": "external-services",
+      "col": 5,
+      "type": "external",
+      "label": "자동 보상취소",
+      "width": 140
+    },
+    {
+      "id": "pms-outage-observation",
+      "lane": "php-service",
+      "col": 5,
+      "type": "external",
+      "label": "장애 구간 확인",
+      "width": 140
+    },
+    {
+      "id": "timeout-mismatch",
+      "lane": "external-services",
+      "col": 4,
+      "type": "external",
+      "label": "조기 실패 오판",
+      "width": 140
+    }
+  ],
+  "edges": [
+    {
+      "id": "submit-approve",
+      "from": "submit-payment",
+      "to": "approve-payment",
+      "role": "main"
+    },
+    {
+      "id": "approve-persist",
+      "from": "approve-payment",
+      "to": "persist-payment",
+      "role": "main"
+    },
+    {
+      "id": "persist-create",
+      "from": "persist-payment",
+      "to": "create-reservation",
+      "role": "main"
+    },
+    {
+      "id": "create-evaluate",
+      "from": "create-reservation",
+      "to": "evaluate-result",
+      "role": "main"
+    },
+    {
+      "id": "evaluate-complete",
+      "from": "evaluate-result",
+      "to": "complete-service",
+      "label": "예약·티켓 생성 확인",
+      "role": "main"
+    },
+    {
+      "id": "evaluate-compensate",
+      "from": "evaluate-result",
+      "to": "auto-compensation",
+      "label": "응답 미도달·생성 실패·PHP 예외",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "evaluate-outage",
+      "from": "evaluate-result",
+      "to": "pms-outage-observation",
+      "label": "외부 PMS 장애",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "evaluate-timeout",
+      "from": "evaluate-result",
+      "to": "timeout-mismatch",
+      "label": "12초 timeout 조기 실패 오판",
+      "variant": "security",
+      "role": "error"
+    }
+  ]
+}

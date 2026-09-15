@@ -1,0 +1,147 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "설계·개발·검증",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "user",
+      "label": "사용자"
+    },
+    {
+      "id": "agent",
+      "label": "AI 에이전트·계획·구현"
+    },
+    {
+      "id": "verification",
+      "label": "리뷰·검증"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "request",
+      "lane": "user",
+      "col": 0,
+      "type": "frontend",
+      "label": "요청·맥락 전달",
+      "width": 140
+    },
+    {
+      "id": "define",
+      "lane": "agent",
+      "col": 0,
+      "type": "backend",
+      "label": "문제 정의",
+      "width": 110
+    },
+    {
+      "id": "plan",
+      "lane": "agent",
+      "col": 1,
+      "type": "backend",
+      "label": "명세·계획",
+      "width": 110
+    },
+    {
+      "id": "approve",
+      "lane": "user",
+      "col": 2,
+      "type": "security",
+      "label": "승인",
+      "width": 92
+    },
+    {
+      "id": "implement",
+      "lane": "agent",
+      "col": 3,
+      "type": "backend",
+      "label": "테스트·구현",
+      "width": 120
+    },
+    {
+      "id": "verify",
+      "lane": "verification",
+      "col": 4,
+      "type": "security",
+      "label": "리뷰·검증",
+      "width": 120
+    },
+    {
+      "id": "complete",
+      "lane": "verification",
+      "col": 5,
+      "type": "external",
+      "label": "완료",
+      "width": 92
+    }
+  ],
+  "edges": [
+    {
+      "id": "request-define",
+      "from": "request",
+      "to": "define",
+      "role": "main"
+    },
+    {
+      "id": "define-plan",
+      "from": "define",
+      "to": "plan",
+      "role": "main"
+    },
+    {
+      "id": "plan-approve",
+      "from": "plan",
+      "to": "approve",
+      "role": "main"
+    },
+    {
+      "id": "approve-implement",
+      "from": "approve",
+      "to": "implement",
+      "label": "승인",
+      "role": "main"
+    },
+    {
+      "id": "implement-verify",
+      "from": "implement",
+      "to": "verify",
+      "role": "main"
+    },
+    {
+      "id": "verify-complete",
+      "from": "verify",
+      "to": "complete",
+      "label": "통과",
+      "role": "main"
+    },
+    {
+      "id": "ambiguity-return",
+      "from": "define",
+      "to": "request",
+      "label": "요구 보강",
+      "variant": "security",
+      "role": "return"
+    },
+    {
+      "id": "approval-return",
+      "from": "approve",
+      "to": "plan",
+      "label": "미승인",
+      "variant": "security",
+      "role": "return"
+    },
+    {
+      "id": "verification-return",
+      "from": "verify",
+      "to": "implement",
+      "label": "실패",
+      "variant": "security",
+      "role": "return"
+    }
+  ]
+}

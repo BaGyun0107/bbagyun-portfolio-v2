@@ -1,0 +1,3 @@
+[tasks.e2e]
+description = "Run Playwright e2e for the frontend app"
+run = "pnpm exec playwright test"

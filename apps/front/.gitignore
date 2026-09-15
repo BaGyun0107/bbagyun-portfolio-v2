@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/test-results/
 
 # next.js
 /.next/
@@ -19,6 +20,9 @@
 
 # production
 /build
+
+# generated diagram verification sidecars (the delivered HTML remains tracked)
+/public/diagrams/**/*.visual-check.*
 
 # misc
 .DS_Store

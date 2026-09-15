@@ -1,0 +1,154 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "주문·결제·보상 취소 흐름",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "client",
+      "label": "주문 사용자"
+    },
+    {
+      "id": "order-server",
+      "label": "하이패스 서버·주문 DB"
+    },
+    {
+      "id": "payment",
+      "label": "Toss 결제"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "request-order",
+      "lane": "client",
+      "col": 0,
+      "type": "frontend",
+      "label": "주문·결제 요청",
+      "width": 136
+    },
+    {
+      "id": "begin-transaction",
+      "lane": "order-server",
+      "col": 0,
+      "type": "backend",
+      "label": "DB transaction 시작",
+      "width": 160
+    },
+    {
+      "id": "approve-payment",
+      "lane": "payment",
+      "col": 1,
+      "type": "backend",
+      "label": "결제 승인",
+      "width": 110
+    },
+    {
+      "id": "save-order",
+      "lane": "order-server",
+      "col": 2,
+      "type": "database",
+      "label": "주문 저장",
+      "width": 110
+    },
+    {
+      "id": "commit-order",
+      "lane": "order-server",
+      "col": 4,
+      "type": "backend",
+      "label": "commit",
+      "width": 92
+    },
+    {
+      "id": "complete-order",
+      "lane": "client",
+      "col": 5,
+      "type": "external",
+      "label": "주문 완료",
+      "width": 110
+    },
+    {
+      "id": "request-compensation",
+      "lane": "order-server",
+      "col": 3,
+      "type": "backend",
+      "label": "rollback·결제 취소 요청",
+      "width": 190
+    },
+    {
+      "id": "compensation-complete",
+      "lane": "payment",
+      "col": 4,
+      "type": "external",
+      "label": "결제 취소 성공·보상 종료",
+      "width": 190
+    },
+    {
+      "id": "compensation-failed",
+      "lane": "payment",
+      "col": 5,
+      "type": "external",
+      "label": "취소 API 실패·복구 미구현",
+      "width": 220
+    }
+  ],
+  "edges": [
+    {
+      "id": "request-begin",
+      "from": "request-order",
+      "to": "begin-transaction",
+      "role": "main"
+    },
+    {
+      "id": "begin-approve",
+      "from": "begin-transaction",
+      "to": "approve-payment",
+      "role": "main"
+    },
+    {
+      "id": "approve-save",
+      "from": "approve-payment",
+      "to": "save-order",
+      "role": "main"
+    },
+    {
+      "id": "save-commit",
+      "from": "save-order",
+      "to": "commit-order",
+      "label": "저장 성공",
+      "role": "main"
+    },
+    {
+      "id": "commit-complete",
+      "from": "commit-order",
+      "to": "complete-order",
+      "role": "main"
+    },
+    {
+      "id": "save-request-compensation",
+      "from": "save-order",
+      "to": "request-compensation",
+      "label": "DB 저장 실패",
+      "variant": "security",
+      "role": "return"
+    },
+    {
+      "id": "compensation-success",
+      "from": "request-compensation",
+      "to": "compensation-complete",
+      "role": "main"
+    },
+    {
+      "id": "compensation-api-failed",
+      "from": "request-compensation",
+      "to": "compensation-failed",
+      "label": "취소 API 실패",
+      "variant": "security",
+      "role": "error"
+    }
+  ]
+}

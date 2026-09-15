@@ -1,0 +1,63 @@
+{
+  "scenario": "서로 다른 유형의 인사이트 목차 표준화 요청",
+  "editor_request": {
+    "required_headings": [
+      "문제",
+      "배경",
+      "해결",
+      "결과",
+      "회고"
+    ],
+    "required_order": true
+  },
+  "insights": [
+    {
+      "slug": "retry-queue-isolation",
+      "route": "/insights/retry-queue-isolation",
+      "type": "project-case",
+      "source": {
+        "kind": "project",
+        "slug": "nova-settlement",
+        "route": "/projects/nova-settlement"
+      },
+      "evidence": {
+        "kind": "approved_feature_verification",
+        "summary": "2024년 2월 야간 배치 장애 기록, 담당자의 재시도 큐 구현, 운영 로그에서 확인한 격리 결과와 미검증 복구 한계"
+      },
+      "sections": [
+        {"heading": "새벽 장애가 남긴 질문", "meaning": "실제 문제와 당시 시점"},
+        {"heading": "한 번에 바꿀 수 없었던 것", "meaning": "역할과 제약"},
+        {"heading": "재시도 큐를 선택한 과정", "meaning": "대안, 선택과 구현"},
+        {"heading": "운영에서 확인한 것", "meaning": "결과 근거"},
+        {"heading": "아직 남은 위험", "meaning": "한계와 회고"}
+      ],
+      "visual_assessment": null
+    },
+    {
+      "slug": "browser-cache-invalidation",
+      "route": "/insights/browser-cache-invalidation",
+      "type": "technical-exploration",
+      "source": {
+        "kind": "study",
+        "slug": "web-cache-lab-notes",
+        "route": "/study/web-cache-lab-notes"
+      },
+      "evidence": {
+        "references": ["가상 브라우저 공식 캐시 문서"],
+        "direct_experiments": ["세 캐시 무효화 전략의 로컬 요청 로그 비교"]
+      },
+      "sections": [
+        {"heading": "무엇이 궁금했나", "meaning": "학습 질문"},
+        {"heading": "문서와 실험을 나눠 보기", "meaning": "참고와 직접 실험 구분"},
+        {"heading": "세 전략의 경계", "meaning": "개념과 대안 비교"},
+        {"heading": "적용하지 않을 때", "meaning": "적용 및 비적용 조건"},
+        {"heading": "다음 검증", "meaning": "한계와 추가 검증"}
+      ],
+      "visual_assessment": null
+    }
+  ],
+  "link_metadata": {
+    "all_sources_link_back": true,
+    "all_insights_link_to_source": true
+  }
+}

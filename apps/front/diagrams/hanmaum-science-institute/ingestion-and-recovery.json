@@ -1,0 +1,132 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "원문 적재와 실패 복구",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "admin",
+      "label": "관리자"
+    },
+    {
+      "id": "parsing",
+      "label": "파싱·적재"
+    },
+    {
+      "id": "validation",
+      "label": "검증"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "upload",
+      "lane": "admin",
+      "col": 0,
+      "type": "frontend",
+      "label": "원문 업로드",
+      "width": 120
+    },
+    {
+      "id": "convert",
+      "lane": "parsing",
+      "col": 1,
+      "type": "backend",
+      "label": "문서 변환",
+      "width": 110
+    },
+    {
+      "id": "match",
+      "lane": "parsing",
+      "col": 2,
+      "type": "backend",
+      "label": "규칙 매칭",
+      "width": 110
+    },
+    {
+      "id": "persist",
+      "lane": "parsing",
+      "col": 3,
+      "type": "backend",
+      "label": "트랜잭션 저장",
+      "width": 140
+    },
+    {
+      "id": "verify",
+      "lane": "validation",
+      "col": 4,
+      "type": "security",
+      "label": "매칭 누락 검사",
+      "width": 140
+    },
+    {
+      "id": "commit",
+      "lane": "parsing",
+      "col": 5,
+      "type": "external",
+      "label": "커밋 완료",
+      "width": 110
+    },
+    {
+      "id": "abort",
+      "lane": "validation",
+      "col": 5,
+      "type": "external",
+      "label": "적재 취소",
+      "width": 110
+    }
+  ],
+  "edges": [
+    {
+      "id": "upload-convert",
+      "from": "upload",
+      "to": "convert",
+      "role": "main"
+    },
+    {
+      "id": "convert-match",
+      "from": "convert",
+      "to": "match",
+      "role": "main"
+    },
+    {
+      "id": "match-persist",
+      "from": "match",
+      "to": "persist",
+      "role": "main"
+    },
+    {
+      "id": "persist-verify",
+      "from": "persist",
+      "to": "verify",
+      "role": "main"
+    },
+    {
+      "id": "verify-commit",
+      "from": "verify",
+      "to": "commit",
+      "label": "누락 없음",
+      "role": "main"
+    },
+    {
+      "id": "verify-abort",
+      "from": "verify",
+      "to": "abort",
+      "label": "누락 항목 있음",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "abort-upload",
+      "from": "abort",
+      "to": "upload",
+      "label": "규칙 보완 후 재실행",
+      "variant": "security",
+      "role": "return"
+    }
+  ]
+}

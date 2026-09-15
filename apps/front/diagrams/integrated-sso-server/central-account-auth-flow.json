@@ -1,0 +1,250 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "중앙 회원 인증과 서비스 로컬 검증",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "user",
+      "label": "사용자"
+    },
+    {
+      "id": "service",
+      "label": "HiPass 서버"
+    },
+    {
+      "id": "account",
+      "label": "중앙 회원 서버"
+    },
+    {
+      "id": "database",
+      "label": "HiPass DB·캐시"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "service-start",
+      "lane": "service",
+      "col": 0,
+      "type": "frontend",
+      "label": "서비스 시작",
+      "width": 120
+    },
+    {
+      "id": "request-provider",
+      "lane": "service",
+      "col": 1,
+      "type": "backend",
+      "label": "Provider 정보 요청",
+      "width": 150
+    },
+    {
+      "id": "provider-return",
+      "lane": "account",
+      "col": 1,
+      "type": "backend",
+      "label": "권한 확인과 키 반환",
+      "width": 150
+    },
+    {
+      "id": "cache-provider",
+      "lane": "database",
+      "col": 2,
+      "type": "database",
+      "label": "Provider 키 캐시",
+      "width": 140
+    },
+    {
+      "id": "user-login",
+      "lane": "user",
+      "col": 2,
+      "type": "backend",
+      "label": "로그인 요청",
+      "width": 110
+    },
+    {
+      "id": "forward-login",
+      "lane": "service",
+      "col": 3,
+      "type": "backend",
+      "label": "인증 요청 전달",
+      "width": 130
+    },
+    {
+      "id": "issue-token",
+      "lane": "account",
+      "col": 3,
+      "type": "backend",
+      "label": "검증과 토큰 발급",
+      "width": 150
+    },
+    {
+      "id": "persist-session",
+      "lane": "database",
+      "col": 3,
+      "type": "database",
+      "label": "회원 연결과 토큰 저장",
+      "width": 160
+    },
+    {
+      "id": "login-stop",
+      "lane": "account",
+      "col": 2,
+      "type": "external",
+      "label": "신규 로그인 중단",
+      "width": 140
+    },
+    {
+      "id": "api-request",
+      "lane": "user",
+      "col": 4,
+      "type": "backend",
+      "label": "인증 API 요청",
+      "width": 130
+    },
+    {
+      "id": "verify-token",
+      "lane": "service",
+      "col": 5,
+      "type": "security",
+      "label": "Access Token 검증",
+      "width": 150
+    },
+    {
+      "id": "refresh-token",
+      "lane": "account",
+      "col": 5,
+      "type": "backend",
+      "label": "Refresh Token 검증",
+      "width": 160
+    },
+    {
+      "id": "update-token",
+      "lane": "database",
+      "col": 5,
+      "type": "database",
+      "label": "로컬 토큰 갱신",
+      "width": 130
+    },
+    {
+      "id": "domain-response",
+      "lane": "user",
+      "col": 5,
+      "type": "database",
+      "label": "도메인 데이터 응답",
+      "width": 120
+    }
+  ],
+  "edges": [
+    {
+      "id": "start-request-provider",
+      "from": "service-start",
+      "to": "request-provider",
+      "role": "main"
+    },
+    {
+      "id": "request-provider-return",
+      "from": "request-provider",
+      "to": "provider-return",
+      "role": "main"
+    },
+    {
+      "id": "provider-return-cache",
+      "from": "provider-return",
+      "to": "cache-provider",
+      "role": "main"
+    },
+    {
+      "id": "provider-cache-fallback",
+      "from": "provider-return",
+      "to": "cache-provider",
+      "label": "Provider 키 조회 실패",
+      "variant": "security",
+      "role": "return"
+    },
+    {
+      "id": "cache-user-login",
+      "from": "cache-provider",
+      "to": "user-login",
+      "role": "main"
+    },
+    {
+      "id": "user-forward-login",
+      "from": "user-login",
+      "to": "forward-login",
+      "role": "main"
+    },
+    {
+      "id": "forward-issue-token",
+      "from": "forward-login",
+      "to": "issue-token",
+      "role": "main"
+    },
+    {
+      "id": "issue-persist-session",
+      "from": "issue-token",
+      "to": "persist-session",
+      "role": "main"
+    },
+    {
+      "id": "login-api-stop",
+      "from": "issue-token",
+      "to": "login-stop",
+      "label": "로그인 API 응답 없음",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "persist-api-request",
+      "from": "persist-session",
+      "to": "api-request",
+      "role": "main"
+    },
+    {
+      "id": "api-verify-token",
+      "from": "api-request",
+      "to": "verify-token",
+      "role": "main"
+    },
+    {
+      "id": "verify-domain-response",
+      "from": "verify-token",
+      "to": "domain-response",
+      "label": "Access Token 유효",
+      "role": "main"
+    },
+    {
+      "id": "verify-refresh-token",
+      "from": "verify-token",
+      "to": "refresh-token",
+      "label": "Access Token 만료",
+      "role": "main",
+      "fromSide": "left",
+      "toSide": "left",
+      "route": "return-left",
+      "channelX": 840,
+      "labelAt": [
+        851,
+        283
+      ]
+    },
+    {
+      "id": "refresh-update-token",
+      "from": "refresh-token",
+      "to": "update-token",
+      "role": "main"
+    },
+    {
+      "id": "update-domain-response",
+      "from": "update-token",
+      "to": "domain-response",
+      "role": "main",
+      "channelX": 1050
+    }
+  ]
+}

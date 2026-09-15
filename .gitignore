@@ -181,3 +181,5 @@ docs/feature-definition-planning-hub-guide.md
 .harness/config/traceability-schema.json
 
 .harness/config/user-flow-schema.json
+
+.playwright-mcp/

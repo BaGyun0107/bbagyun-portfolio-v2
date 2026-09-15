@@ -1,0 +1,95 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "검색 요청 처리",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    {
+      "id": "reader",
+      "label": "이용자"
+    },
+    {
+      "id": "routing",
+      "label": "라우팅"
+    },
+    {
+      "id": "storage",
+      "label": "데이터"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "query",
+      "lane": "reader",
+      "col": 0,
+      "type": "frontend",
+      "label": "검색어 입력",
+      "sublabel": "찾으려는 표현을 입력합니다.",
+      "width": 110
+    },
+    {
+      "id": "route",
+      "lane": "routing",
+      "col": 1,
+      "type": "backend",
+      "label": "검색어 구성 분석",
+      "sublabel": "검색어를 나눠 어느 단계에서 무엇을 맡을지 정합니다.",
+      "width": 196
+    },
+    {
+      "id": "narrow",
+      "lane": "storage",
+      "col": 2,
+      "type": "backend",
+      "label": "후보군 압축",
+      "sublabel": "인덱스로 전체 단락을 검토 가능한 범위까지 좁힙니다.",
+      "width": 196
+    },
+    {
+      "id": "refine",
+      "lane": "storage",
+      "col": 3,
+      "type": "backend",
+      "label": "정밀 검증",
+      "sublabel": "좁혀진 범위에서만 모든 검색어가 실제 문장에 있는지 확인합니다.",
+      "width": 236
+    },
+    {
+      "id": "respond",
+      "lane": "reader",
+      "col": 4,
+      "type": "external",
+      "label": "결과 확인",
+      "sublabel": "조건을 만족한 단락을 확인합니다.",
+      "width": 128
+    }
+  ],
+  "edges": [
+    {
+      "id": "query-route",
+      "from": "query",
+      "to": "route",
+      "role": "main"
+    },
+    {
+      "id": "route-narrow",
+      "from": "route",
+      "to": "narrow",
+      "role": "main"
+    },
+    {
+      "id": "narrow-refine",
+      "from": "narrow",
+      "to": "refine",
+      "role": "main"
+    },
+    {
+      "id": "refine-respond",
+      "from": "refine",
+      "to": "respond",
+      "role": "main"
+    }
+  ]
+}
