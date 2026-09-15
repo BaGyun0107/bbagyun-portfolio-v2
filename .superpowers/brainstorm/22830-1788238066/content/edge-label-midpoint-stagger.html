@@ -1,0 +1,76 @@
+<style>
+  .demo-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .demo { border:1px solid #d9dce3; border-radius:18px; overflow:hidden; background:#fff; }
+  .demo-head { padding:18px; border-bottom:1px solid #eceef2; }
+  .demo-head h3 { margin:0 0 6px; font-size:17px; }
+  .demo-head p { margin:0; color:#667085; font-size:13px; line-height:1.5; }
+  .flow { position:relative; height:330px; margin:18px; border:1px solid #d8dbe2; border-radius:12px; background:#fff; overflow:hidden; }
+  .decision { position:absolute; top:35px; left:calc(24% - 38px); width:76px; height:52px; display:grid; place-items:center; border:2px solid #222; background:#fff; transform:rotate(45deg); }
+  .decision span { transform:rotate(-45deg); font-size:10px; font-weight:700; text-align:center; }
+  .branch { position:absolute; top:95px; bottom:64px; border-left:2px dashed #e11d48; }
+  .branch::before { content:""; position:absolute; top:0; right:0; width:var(--run,40px); border-top:2px dashed #e11d48; }
+  .target { position:absolute; bottom:22px; width:76px; height:38px; display:grid; place-items:center; border:1.5px solid #e11d48; background:#fff; font-size:9px; font-weight:700; text-align:center; }
+  .pill { position:absolute; transform:translateX(-50%); white-space:nowrap; border:1px solid #fecdd3; border-radius:999px; background:#fff; color:#e11d48; padding:4px 7px; font-size:10px; font-weight:700; line-height:1.2; z-index:4; }
+  .collision { box-shadow:0 0 0 4px rgba(225,29,72,.14); }
+  .track { position:absolute; left:12px; right:12px; border-top:1px dotted #cbd0d8; }
+  .track-label { position:absolute; right:5px; transform:translateY(-50%); padding-left:6px; background:#fff; color:#98a2b3; font-size:9px; }
+  .facts { display:grid; gap:8px; margin:0 18px 18px; }
+  .fact { padding:10px 12px; border-radius:10px; background:#f3f5f8; color:#475467; font-size:12px; line-height:1.45; }
+  .choice { margin-top:20px; }
+  @media (max-width:900px) { .demo-grid { grid-template-columns:1fr; } }
+</style>
+
+<h2>경로 중앙을 기본으로 두고 충돌할 때만 위·아래 조정</h2>
+<p class="subtitle">라벨 문구는 한 줄 그대로 유지하고 lane·node·edge 구조도 바꾸지 않습니다.</p>
+
+<div class="demo-grid">
+  <div class="demo">
+    <div class="demo-head">
+      <h3>실제 중앙점만 사용</h3>
+      <p>경로 길이는 다르지만 네 중앙점이 같은 가로 통로에 모입니다.</p>
+    </div>
+    <div class="flow">
+      <div class="decision"><span>생성 결과<br>판단</span></div>
+      <div class="branch" style="left:19%"></div><div class="branch" style="left:41%"></div><div class="branch" style="left:64%"></div><div class="branch" style="left:86%"></div>
+      <div class="pill collision" style="left:27%;top:166px">예약·티켓 생성 확인</div>
+      <div class="pill collision" style="left:43%;top:159px">외부 PMS 장애</div>
+      <div class="pill collision" style="left:60%;top:163px">응답 미도달·생성 실패·PHP 예외</div>
+      <div class="pill collision" style="left:79%;top:163px">12초 timeout 조기 실패 오판</div>
+      <div class="target" style="left:8%">예약 완료</div><div class="target" style="left:33%">장애 구간 확인</div><div class="target" style="left:57%">자동 보상취소</div><div class="target" style="left:80%">조기 실패 오판</div>
+    </div>
+    <div class="facts"><div class="fact">중심 간격 약 104~110px · 라벨 폭 최대 199px → 충돌 3쌍</div></div>
+  </div>
+
+  <div class="demo">
+    <div class="demo-head">
+      <h3>중앙점 + 두 개의 근접 트랙</h3>
+      <p>겹치는 라벨만 중앙에서 위·아래 30px 안팎으로 옮깁니다.</p>
+    </div>
+    <div class="flow">
+      <div class="decision"><span>생성 결과<br>판단</span></div>
+      <div class="branch" style="left:19%"></div><div class="branch" style="left:41%"></div><div class="branch" style="left:64%"></div><div class="branch" style="left:86%"></div>
+      <div class="track" style="top:151px"><span class="track-label">위 트랙</span></div>
+      <div class="track" style="top:191px"><span class="track-label">아래 트랙</span></div>
+      <div class="pill" style="left:24%;top:139px">예약·티켓 생성 확인</div>
+      <div class="pill" style="left:40%;top:179px">외부 PMS 장애</div>
+      <div class="pill" style="left:58%;top:139px">응답 미도달·생성 실패·PHP 예외</div>
+      <div class="pill" style="left:79%;top:179px">12초 timeout 조기 실패 오판</div>
+      <div class="target" style="left:8%">예약 완료</div><div class="target" style="left:33%">장애 구간 확인</div><div class="target" style="left:57%">자동 보상취소</div><div class="target" style="left:80%">조기 실패 오판</div>
+    </div>
+    <div class="facts">
+      <div class="fact">기본 위치: 각 경로 전체 길이의 50%</div>
+      <div class="fact">충돌 시에만: 경로와 가까운 위·아래 후보 중 이동량이 가장 작은 위치 선택</div>
+      <div class="fact">최종 조건: 라벨끼리·node·다이어그램 경계 충돌 0건</div>
+    </div>
+  </div>
+</div>
+
+<div class="options choice">
+  <div class="option" data-choice="midpoint-stagger" onclick="toggleSelect(this)">
+    <div class="letter">S</div>
+    <div class="content">
+      <h3>경로 중앙 + 최소 위·아래 조정</h3>
+      <p>한 줄 라벨을 우선하고, 줄바꿈은 트랙 조정으로도 공간을 만들 수 없을 때만 마지막 수단으로 사용합니다.</p>
+    </div>
+  </div>
+</div>

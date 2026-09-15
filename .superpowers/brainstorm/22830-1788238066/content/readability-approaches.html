@@ -1,0 +1,97 @@
+<style>
+  .comparison-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; align-items:start; }
+  .diagram-card { border:1px solid #d9dce3; border-radius:18px; background:#fff; overflow:hidden; min-height:690px; }
+  .diagram-card.selected { outline:3px solid #2563eb; outline-offset:2px; }
+  .diagram-head { padding:18px 18px 14px; border-bottom:1px solid #eceef2; }
+  .diagram-head h3 { margin:0 0 6px; font-size:17px; }
+  .diagram-head p { margin:0; color:#667085; font-size:13px; line-height:1.5; }
+  .diagram-body { padding:18px; background:#fafafa; }
+  .flow-step { position:relative; border:1.5px solid #222; border-radius:12px; padding:11px 12px; margin:0 0 28px; background:#fff; font-size:13px; font-weight:650; }
+  .flow-step:not(:last-child)::after { content:"↓"; position:absolute; left:50%; bottom:-24px; transform:translateX(-50%); color:#475467; }
+  .lane-badge { display:inline-block; margin-right:7px; padding:2px 7px; border-radius:999px; background:#eef2f7; color:#475467; font-size:10px; font-weight:700; }
+  .decision { border-radius:4px; border-color:#111; background:#fffdf6; }
+  .success { border-color:#1f7a4d; background:#f3fbf6; }
+  .exceptions { margin-top:8px; display:grid; gap:8px; }
+  .exception { border:1px dashed #e11d48; border-radius:10px; background:#fff7f8; padding:10px; font-size:11px; line-height:1.45; color:#9f1239; }
+  .mini-lanes { display:grid; grid-template-columns:repeat(4,1fr); height:330px; border:1px solid #d8dbe2; border-radius:12px; overflow:hidden; background:#fff; }
+  .mini-lane { position:relative; border-right:1px solid #e1e4e9; }
+  .mini-lane:last-child { border-right:0; }
+  .mini-lane strong { display:block; padding:10px 2px; background:#f0f1f4; border-bottom:1px solid #d8dbe2; text-align:center; font-size:9px; }
+  .dot { position:absolute; width:22px; height:14px; border:1px solid #222; border-radius:999px; background:#fff; left:50%; transform:translateX(-50%); }
+  .dot::after { content:""; position:absolute; left:50%; top:14px; height:28px; border-left:1px solid #444; }
+  .mini-note { margin-top:12px; border-radius:10px; background:#f1f3f6; padding:13px; color:#667085; font-size:12px; line-height:1.55; }
+  .legend { margin-top:14px; display:grid; gap:8px; }
+  .legend-row { display:grid; grid-template-columns:25px 1fr; gap:8px; align-items:start; border:1px solid #e2e5ea; border-radius:10px; padding:9px; background:#fff; }
+  .legend-num { width:23px; height:23px; border-radius:50%; display:grid; place-items:center; background:#eef2f7; font-size:11px; font-weight:800; }
+  .legend-row b { display:block; font-size:12px; margin-bottom:2px; }
+  .legend-row span { color:#667085; font-size:11px; line-height:1.35; }
+  .choice-footer { padding:15px 18px; border-top:1px solid #eceef2; }
+  .choice-footer b { display:block; margin-bottom:5px; font-size:14px; }
+  .choice-footer span { color:#667085; font-size:12px; line-height:1.5; }
+  @media (max-width:1000px) { .comparison-grid { grid-template-columns:1fr; } .diagram-card { min-height:0; } }
+</style>
+
+<h2>본문 스윔레인 가독성 개선 방향</h2>
+<p class="subtitle">블랙스톤의 실제 단계와 예외 라벨을 기준으로 비교했습니다. 각 안을 클릭해 선택할 수 있습니다.</p>
+
+<div class="comparison-grid cards">
+  <div class="diagram-card card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="diagram-head">
+      <h3>A. 폭에 따라 세로 흐름으로 재배치</h3>
+      <p>본문 폭이 좁으면 lane을 배지로 바꾸고 모든 단계·분기를 한 열로 읽습니다.</p>
+    </div>
+    <div class="diagram-body">
+      <div class="flow-step"><span class="lane-badge">이용자</span>결제 요청</div>
+      <div class="flow-step"><span class="lane-badge">결제사</span>결제 승인</div>
+      <div class="flow-step"><span class="lane-badge">PHP 서버</span>결제 정보 처리</div>
+      <div class="flow-step"><span class="lane-badge">PMS·티켓</span>예약·티켓 생성</div>
+      <div class="flow-step decision"><span class="lane-badge">PHP 서버</span>생성 결과 판단</div>
+      <div class="flow-step success"><span class="lane-badge">이용자</span>예약 완료</div>
+      <div class="exceptions">
+        <div class="exception"><b>응답 미도달·생성 실패·PHP 예외</b><br>자동 보상취소로 이동</div>
+        <div class="exception"><b>외부 PMS 장애</b><br>장애 구간 확인으로 이동</div>
+        <div class="exception"><b>12초 timeout 조기 실패 오판</b><br>조기 실패 오판 확인으로 이동</div>
+      </div>
+    </div>
+    <div class="choice-footer"><b>가독성 최우선 · 권장</b><span>모든 글자를 유지하지만 좁은 화면에서는 전통적인 lane 열 배치가 사라집니다.</span></div>
+  </div>
+
+  <div class="diagram-card card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="diagram-head">
+      <h3>B. 본문은 구조 썸네일</h3>
+      <p>lane과 이동 방향만 작게 보여주고 상세 글자는 크게 보기에서만 읽습니다.</p>
+    </div>
+    <div class="diagram-body">
+      <div class="mini-lanes">
+        <div class="mini-lane"><strong>이용자</strong><i class="dot" style="top:65px"></i><i class="dot" style="top:270px"></i></div>
+        <div class="mini-lane"><strong>PHP 서버</strong><i class="dot" style="top:145px"></i><i class="dot" style="top:225px"></i></div>
+        <div class="mini-lane"><strong>결제사</strong><i class="dot" style="top:105px"></i></div>
+        <div class="mini-lane"><strong>PMS·티켓</strong><i class="dot" style="top:185px"></i></div>
+      </div>
+      <div class="mini-note"><b>전체 흐름 설명</b><br>결제 승인 뒤 예약·티켓 생성 결과를 확인하며 성공 시 예약을 완료하고 실패 시 보상취소·장애 확인으로 분기합니다.</div>
+      <button class="mock-button" style="width:100%;margin-top:12px">크게 보기에서 상세 확인</button>
+    </div>
+    <div class="choice-footer"><b>형태 보존 최우선</b><span>본문은 깔끔하지만 노드명과 예외 조건을 바로 읽을 수 없다는 한계가 남습니다.</span></div>
+  </div>
+
+  <div class="diagram-card card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="diagram-head">
+      <h3>C. 노드 흐름 + 분기 범례</h3>
+      <p>노드명은 세로 흐름에서 읽고 긴 edge 라벨은 번호가 붙은 목록으로 분리합니다.</p>
+    </div>
+    <div class="diagram-body">
+      <div class="flow-step"><span class="lane-badge">이용자</span>결제 요청</div>
+      <div class="flow-step"><span class="lane-badge">결제사</span>결제 승인</div>
+      <div class="flow-step"><span class="lane-badge">PHP 서버</span>결제 정보 처리</div>
+      <div class="flow-step"><span class="lane-badge">PMS·티켓</span>예약·티켓 생성</div>
+      <div class="flow-step decision"><span class="lane-badge">PHP 서버</span>생성 결과 판단</div>
+      <div class="legend">
+        <div class="legend-row"><div class="legend-num">1</div><div><b>예약·티켓 생성 확인</b><span>예약 완료로 이동</span></div></div>
+        <div class="legend-row"><div class="legend-num">2</div><div><b>응답 미도달·생성 실패·PHP 예외</b><span>자동 보상취소로 이동</span></div></div>
+        <div class="legend-row"><div class="legend-num">3</div><div><b>외부 PMS 장애</b><span>장애 구간 확인으로 이동</span></div></div>
+        <div class="legend-row"><div class="legend-num">4</div><div><b>12초 timeout 조기 실패 오판</b><span>조기 실패 오판 확인으로 이동</span></div></div>
+      </div>
+    </div>
+    <div class="choice-footer"><b>절충안</b><span>충돌은 확실히 없지만 선 위에서 조건을 바로 따라가는 느낌은 약해집니다.</span></div>
+  </div>
+</div>

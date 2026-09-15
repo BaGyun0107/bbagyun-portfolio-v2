@@ -1,0 +1,189 @@
+         박윤신 BbaGyun
+
+                                                                  박윤신 BbaGyun
+                                                                  안녕하세요!
+                                                                  사용자에게는 자연스러운 경험을,
+                                                                  팀에게는 유지하기 좋은 구조를 설계하는 개발자 박윤신입니
+                                                                  다.
+
+
+                                                                  포트폴리오ㅤbbagyun.com
+                                                                  깃허브ㅤㅤㅤgithub.com/BaGyun0107
+
+
+
+
+         ɴɪᴄᴇ ᴛᴏ ᴍᴇᴇᴛ ʏᴏᴜ
+                                               안녕하세요, 3년 차 웹 개발자 박윤신입니다.
+         방향을 정하고
+                                               저는 단순히 주어진 기능을 구현하는 개발자가 아니라,
+         깊이를 더하는                               이 기능이 왜 필요한지, 그리고 어떻게 만들어야 오래 사용할 수 있을지를 먼저 고민합니다.
+                                               특히 예약, 결제, 정산, 인증처럼 데이터 정합성과 운영 안정성이 중요한 기능을 설계하며,
+                                               빠른 결과를 만드는 것보다 시간이 지나도 유지될 수 있는 구조를 선택하는 일을 중요하게 생각해왔습
+                                               니다.
+                                               프로젝트를 진행하며 기획과 개발은 물론 고객과의 커뮤니케이션까지 함께 경험했습니다.
+                                               혼자 설계하고 구현해야 하는 상황도 있었지만, 모든 결정을 혼자 끌어안기보다 동료, 고객과의 대화
+                                               를 통해 더 나은 선택지를 찾으려 노력해왔습니다.
+                                               그렇게 만들어진 결정에는 끝까지 책임을 다하는 태도로 임하고 있습니다.
+                                               문제가 생기면 그것을 특정 영역의 일로 한정 짓지 않습니다.
+                                               코드, 데이터, 배포 환경, 운영 흐름 등 어디에서든 원인을 찾고 이해하려 하며,
+                                               최근에는 Jenkins 기반 배포 환경을 GitHub Actions와 사내 하네스로 전환하며 팀의 개발 경험과
+                                               운영 흐름을 함께 개선했습니다.
+                                               저는 잘 만드는 개발자를 넘어,
+                                               제품이 안정적으로 운영될 수 있는 구조를 함께 고민하고 함께 성장할 수 있는 개발자가 되고 싶습니
+                                               다.
+
+
+
+
+         ᴘʀᴏᴊᴇᴄᴛ
+
+         사내 DX 하네스 v2 구축                            Jenkins 서버 2대를 GitHub Actions 중심 배포 구조로 전환하여 월 20만 원 고정비 절감 구
+         2026.04 – 2026.05                          조 마련
+
+         BACK/DEVOPS                                ./harness CLI로 신규 프로젝트 초기화, Infisical 연결, profile 선택, doctor 검증 흐름 표준
+         본인 1명                                      화
+
+         GitHub Actions   Infisical   Docker        GitHub Secrets에는 Infisical bootstrap secret만 두고 실제 시크릿은 Infisical에서 프로젝
+         PM2   Vercel   Shell   Node.js             트/환경별 관리
+
+                                                    PM2, Docker, Vercel 배포 방식을 reusable workflow로 정리하여 기존/신규 프로젝트 대응
+                                                    project-profile.yaml, 패키지 매니저 정책, 위험 명령 차단 규칙으로 팀 개발 규칙과 AI 작업
+                                                    경계 표준화
+
+
+
+
+박윤신 BbaGyun                                                                                                                   1
+         호텔 예약·결제                                  NestJS + Prisma 기반 통합 예약·결제 백엔드 단독 설계 및 개발 (PM/PL 겸임)
+         통합 플랫폼 구축                                 객실·패키지·옵션을 통합 상품 모델(Core Product)로 재설계하여 주문/상품 구조 단순화
+         2025.12 – 2026.03
+                                                   예약 생성·재고 차감·결제 검증을 단일 트랜잭션으로 구성하고 Optimistic Lock 적용
+         BACK: 본인 1명
+                                                   예약 상태와 결제 상태 분리 설계로 외부 API 실패 대비 및 데이터 일관성 유지
+         PM/PL: 본인 1명
+         TypeScript    NestJS   MySQL     Prisma
+                                                   Access/Refresh Token 기반 인증 구조와 CSRF 방어 흐름 구현
+         Jenkins
+
+
+
+
+         호텔 예약 시스템                                 복제형 프로젝트 구조를 Config-driven 아키텍처로 재설계하여 기능 ON/OFF 기반 확장 구조
+         플랫폼화 및 구조 고도화                             구축
+
+         2024.11 – 2025.10                         React Context를 도메인 단위(user/config/예약/결제)로 분리하여 상태 관리 및 리렌더링 범
+         FRONT : 본인 외 1명                           위 최적화
+         BACK: 본인 1명                               서버 중심 결제 검증 흐름 설계로 승인·예약 데이터 정합성 확보
+         JavaScript    React    PHP   MySQL        라우터 가드 기반 예약 단계 접근 제어로 프로세스 순차성 보장
+         Sequelize    Jenkins
+                                                   localStorage 캐시 전략 도입으로 서버 부하 축소
+
+
+         화훼 B2B 주문·구독 플랫폼                          월 주문 약 100건, 월 결제액 약 400~500만 원, 정산 대상 화원 약 50개 규모의 주문·정산 흐
+         구축                                        름 운영
+
+         2024.08 – 2025.08                         운영 중 확인된 범위 내 정산 중복 지급/누락 0건 유지
+         FRONT : 본인 외 2명                           React 기반 FrontEnd 아키텍처 설계 및 Node.js/Express 백엔드 단독 설계·구현
+         BACK : 본인 1명
+                                                   Socket.IO 기반 실시간 주문 상태 동기화 구조 설계 (Polling 제거)
+         JavaScript    React    Node.js
+                                                   토스 빌링 결제 연동 및 서버 중심 자동결제 트랜잭션 설계
+         Express     MySQL   Sequelize
+
+         Jenkins                                   node-schedule 기반 정산 자동화 및 파일 기반 Outbox 유사 구조로 내구성 확보
+                                                   구독 테이블 설계 및 nextBillingDate 관리로 반복 결제 시스템 구축
+
+
+
+         통합 인증 플랫폼 구축                              NestJS 기반 통합 회원 인증 서버 단독 설계 및 구축
+         2024.07 – 2024.12                         Provider 기반 JWT Secret·Authorization Key·허용 IP 분리 관리 구조 설계
+         BACK : 본인 1명                              Access/Refresh Token 정책 수립 및 DB 저장 기반 강제 로그아웃 구현
+         TypeScript    NestJS   MySQL     Prisma   Server-to-Server Refresh 검증 구조 설계로 인증 신뢰 모델 중앙화
+         Jenkins
+                                                   Prisma 모델링 및 Jenkins 기반 CI/CD 환경 구축
+
+
+         블랙스톤 벨포레 리조트 웹                            PHP 기반 레거시 구조를 유지하며 React SPA(/app/*) 공존 아키텍처 설계 및 구축
+         사이트 구축                                    Nginx 라우팅·fallback 설정을 통한 same-origin 기반 SPA 통합 환경 구성
+         2023.12 – 2024.10
+                                                   WebView 환경 JWT 로그인 유지 문제 분석 및 앱 브릿지 연동으로 세션 유지 개선
+         FRONT: 본인 외 2명
+                                                   분리되어 있던 결제 로직을 단일 흐름으로 통합하여 데이터 불일치 문제 해결
+         BACK : 본인 1명
+                                                   파트너사와 API 응답 구조 공동 설계 및 예약/티켓 기능 백엔드 단독 구현
+         JavaScript    React    Node.js
+
+         Express     MySQL   Sequelize    PHP
+         Jenkins
+
+
+
+
+         한마음과학원 DB 마이그레이                            Word 기반 교재 데이터(최대 77만 자)를 파싱하여 DB 구조화 및 마이그레이션 수행
+         션 및 검색 시스템 구축                              MySQL FULLTEXT 기반 검색 구현으로 단락 단위 검색 기능 구축 (1500ms → 400ms 개
+         2023.06 – 2023.10                          선)
+         BACK : 본인 1명                               Sequelize 트랜잭션 적용으로 대용량 업로드 시 데이터 무결성 확보
+                                                    GitHub Actions 기반 CI/CD 환경 구축으로 수동 배포 제거 및 운영 안정성 향상
+
+
+박윤신 BbaGyun                                                                                                        2
+         JavaScript      React    Node.js   Express
+
+         MySQL     Sequelize     PHP   GitHub
+         Actions
+
+
+
+
+         더시에나 골프 예약 시스템 구                                     외부 예약 API 의존 구조에서 발생 가능한 타임아웃·중복 요청 문제를 분석하고 방어 로직 설
+         축                                                    계
+
+         2023.05 – 2023.06                                    cURL 통신 로그를 DB → 파일 기반 구조로 분리하여 병목 제거 및 시스템 안정성 개선
+         FRONT : 본인 1명                                        요청/응답 단위 로깅 체계 구축으로 비정상 트래픽 이슈에 대한 객관적 증적 확보
+         PHP     MySQL                                        로깅 모듈을 비즈니스 로직과 분리하여 장애 전파 가능성 축소
+
+
+
+
+         ᴡᴏʀᴋ ᴇxᴘᴇʀɪᴇɴᴄᴇ                              호텔·골프 등 예약 플랫폼의 프론트엔드 및 백엔드 개발과 운영 전반 담당
+
+                                                      신규 서비스 초기 아키텍처 설계 및 공통 모듈·유틸·인프라 구조 수립
+         코디웍스
+         2023.04 - Now                                NestJS 기반 통합 회원 인증 서버 단독 설계 및 구축 (DB 모델링, 인증·권한 체계 설계)
+                                                      PG 연동(토스, 나이스페이) 및 예약·결제·정산 로직 설계, 트랜잭션 기반 정합성 확보
+                                                      실시간 주문·구독·빌링 시스템 설계 및 서버 중심 결제 검증 구조 구현
+
+                                                      Jenkins 기반 배포 환경을 GitHub Actions와 Infisical 중심의 사내 DX 하네스로 전환하며 CI/CD, 시
+                                                      크릿 관리, 배포 검증 흐름 표준화
+
+                                                      운영 중 서비스의 성능 개선, 결제 안정화, 검색 최적화 등 구조적 리팩토링 수행
+
+                                                      고객사·기획자와 직접 협업하며 요구사항 정의부터 설계·개발·운영까지 전 과정 수행
+
+
+
+
+         ʙʙᴀɢʏᴜɴ'ꜱ ᴘᴏʀᴛꜰᴏʟɪᴏ
+
+                                                              with
+         제 포트폴리오도
+         참고해 보세요!
+                                                               TypeScript   Next.js   Tailwind CSS   React   SQLite   Prisma
+
+
+
+
+              BbaGyun's Portfolio
+              구조를 설계하고 흐름을 만드는 개발자 박윤신의 포트폴리오입니다.
+                 https://bbagyun.com/
+
+
+
+         Updated June 8, 2026                                                                                         ㅤGitHub
+
+
+
+
+박윤신 BbaGyun                                                                                                                      3
+

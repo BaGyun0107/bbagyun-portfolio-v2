@@ -1,0 +1,112 @@
+<style>
+  .diagram-shell { overflow:auto; padding:14px; border:1px solid #d8e0eb; border-radius:12px; background:#f7f9fc; }
+  .diagram { min-width:820px; width:100%; background:white; border:1px solid #aeb9c8; border-radius:8px; }
+  .note { margin-top:12px; display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+  .note div { padding:9px 10px; border-left:3px solid #dc7c7c; border-radius:5px; background:#fff4f4; font-size:12px; }
+  .decision { fill:#fff0d8; stroke:#da9538; }
+  .step { fill:#e6f2fc; stroke:#85a9ce; }
+  .start { fill:#dcf4df; stroke:#62a96b; }
+  .stop { fill:#fff0f0; stroke:#cb6b6b; }
+  .finish { fill:#dff3e4; stroke:#62a96b; }
+  .flow { fill:none; stroke:#344256; stroke-width:2.2; marker-end:url(#arrow2); }
+  .return { fill:none; stroke:#c75e5e; stroke-width:2.2; stroke-dasharray:6 4; marker-end:url(#returnArrow2); }
+  .lane-title { font-size:14px; font-weight:700; fill:#253044; }
+  .node-title { font-size:13px; font-weight:700; fill:#253044; text-anchor:middle; }
+  .node-sub { font-size:10px; fill:#5f6c7f; text-anchor:middle; }
+  .line-label { font-size:10px; font-weight:700; fill:#a74343; }
+</style>
+
+<h2>CI/CD·시크릿·배포 — 핵심 흐름 시안</h2>
+<p class="subtitle">변경 감지부터 배포 확인까지를 한 줄기로 연결하고, 품질 또는 환경·시크릿 검증 실패 시 배포를 시작하지 않는 경계를 표시합니다.</p>
+
+<div class="mockup">
+  <div class="mockup-header">GitHub → Actions → Infisical → 배포 대상으로 책임이 이동하는 과정</div>
+  <div class="mockup-body">
+    <div class="diagram-shell">
+      <svg class="diagram" viewBox="0 0 920 770" role="img" aria-label="코드 변경을 감지해 품질 검사, 환경과 대상 결정, 시크릿 조회, 병렬 배포와 결과 확인을 수행하며 검증 실패 시 배포를 중단하고 처음부터 재실행하는 흐름">
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#344256"/></marker>
+          <marker id="returnArrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c75e5e"/></marker>
+        </defs>
+
+        <rect x="0" y="0" width="230" height="770" fill="#f4f8fc"/>
+        <rect x="230" y="0" width="230" height="770" fill="#fbfcfe"/>
+        <rect x="460" y="0" width="230" height="770" fill="#f4f8fc"/>
+        <rect x="690" y="0" width="230" height="770" fill="#fbfcfe"/>
+        <line x1="230" y1="0" x2="230" y2="770" stroke="#c4cedb"/>
+        <line x1="460" y1="0" x2="460" y2="770" stroke="#c4cedb"/>
+        <line x1="690" y1="0" x2="690" y2="770" stroke="#c4cedb"/>
+        <line x1="0" y1="50" x2="920" y2="50" stroke="#aeb9c8"/>
+
+        <text class="lane-title" x="115" y="31" text-anchor="middle">GitHub 저장소</text>
+        <text class="lane-title" x="345" y="31" text-anchor="middle">GitHub Actions</text>
+        <text class="lane-title" x="575" y="31" text-anchor="middle">Infisical</text>
+        <text class="lane-title" x="805" y="31" text-anchor="middle">배포 대상</text>
+
+        <rect class="start" x="45" y="75" width="140" height="55" rx="24"/>
+        <text class="node-title" x="115" y="100">1. 변경 감지</text>
+        <text class="node-sub" x="115" y="117">브랜치·변경 파일 확인</text>
+
+        <rect class="step" x="275" y="160" width="140" height="58" rx="7"/>
+        <text class="node-title" x="345" y="184">2. 품질 검사</text>
+        <text class="node-sub" x="345" y="202">타입·테스트·빌드·보안</text>
+
+        <polygon class="decision" points="345,245 400,285 345,325 290,285"/>
+        <text class="node-title" x="345" y="281">통과?</text>
+        <text class="node-sub" x="345" y="297">배포 가능 여부</text>
+
+        <rect class="step" x="275" y="355" width="140" height="58" rx="7"/>
+        <text class="node-title" x="345" y="379">3. 환경·대상 결정</text>
+        <text class="node-sub" x="345" y="397">dev/main과 변경 범위</text>
+
+        <rect class="step" x="505" y="445" width="140" height="58" rx="7"/>
+        <text class="node-title" x="575" y="469">4. 시크릿 조회</text>
+        <text class="node-sub" x="575" y="487">선택 환경 값만 주입</text>
+
+        <polygon class="decision" points="575,530 630,570 575,610 520,570"/>
+        <text class="node-title" x="575" y="566">확인?</text>
+        <text class="node-sub" x="575" y="582">환경·시크릿 일치</text>
+
+        <rect class="step" x="735" y="625" width="140" height="58" rx="7"/>
+        <text class="node-title" x="805" y="649">5. 병렬 배포</text>
+        <text class="node-sub" x="805" y="667">검증된 대상만 실행</text>
+
+        <rect class="finish" x="735" y="705" width="140" height="42" rx="21"/>
+        <text class="node-title" x="805" y="731">6. 결과 확인</text>
+
+        <rect class="stop" x="45" y="520" width="140" height="62" rx="7"/>
+        <text class="node-title" x="115" y="546">배포 중단</text>
+        <text class="node-sub" x="115" y="564">원인 수정 전 실행하지 않음</text>
+
+        <path class="flow" d="M185 102 H345 V158"/>
+        <path class="flow" d="M345 218 V243"/>
+        <path class="flow" d="M345 325 V353"/>
+        <path class="flow" d="M415 384 H575 V443"/>
+        <path class="flow" d="M575 503 V528"/>
+        <path class="flow" d="M630 570 H805 V623"/>
+        <path class="flow" d="M805 683 V703"/>
+
+        <path class="return" d="M290 285 H115 V518"/>
+        <text class="line-label" x="178" y="276">실패</text>
+        <path class="return" d="M520 570 H187"/>
+        <text class="line-label" x="350" y="560">불일치</text>
+        <path class="return" d="M115 520 V140 H44 V102"/>
+        <text class="line-label" x="52" y="333">수정 후 workflow 재실행</text>
+      </svg>
+    </div>
+
+    <div class="note">
+      <div><strong>품질 검사 실패</strong><br>시크릿 조회와 배포를 시작하지 않고 원인을 수정합니다.</div>
+      <div><strong>환경·시크릿 불일치</strong><br>배포를 중단하고 설정을 수정한 뒤 workflow를 처음부터 다시 실행합니다.</div>
+    </div>
+  </div>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="approve-deployment-flow" onclick="toggleSelect(this)">
+    <div class="letter">✓</div><div class="content"><h3>이 구조로 확정</h3><p>6단계 주 흐름과 두 중단 조건만 유지합니다.</p></div>
+  </div>
+  <div class="option" data-choice="revise-deployment-flow" onclick="toggleSelect(this)">
+    <div class="letter">↺</div><div class="content"><h3>구조 수정 필요</h3><p>단계, lane 또는 중단·재실행 표현을 조정합니다.</p></div>
+  </div>
+</div>

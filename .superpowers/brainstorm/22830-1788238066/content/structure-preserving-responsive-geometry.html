@@ -1,0 +1,100 @@
+<style>
+  .compare { display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; }
+  .panel { border:1px solid #d9dce3; border-radius:18px; overflow:hidden; background:#fff; }
+  .panel-head { padding:18px; border-bottom:1px solid #eceef2; }
+  .panel-head h3 { margin:0 0 6px; font-size:17px; }
+  .panel-head p { margin:0; color:#667085; font-size:13px; line-height:1.5; }
+  .phone { width:320px; max-width:calc(100% - 32px); margin:18px auto; border:1px solid #cfd3da; border-radius:16px; background:#fafafa; padding:14px; }
+  .lane-grid { display:grid; grid-template-columns:repeat(4,1fr); position:relative; border:1px solid #d8dbe2; border-radius:10px; overflow:hidden; background:#fff; }
+  .lane { min-height:590px; border-right:1px solid #e1e4e9; position:relative; }
+  .lane:last-child { border-right:0; }
+  .lane-title { height:38px; display:grid; place-items:center; background:#eff0f3; border-bottom:1px solid #d8dbe2; font-size:9px; font-weight:750; }
+  .node { position:absolute; left:5px; right:5px; min-height:40px; display:grid; place-items:center; padding:5px 3px; border:1.5px solid #202124; border-radius:8px; background:#fff; text-align:center; font-size:10px; line-height:1.25; font-weight:700; z-index:3; }
+  .node.start,.node.end { border-radius:999px; }
+  .node.decision { border-radius:3px; transform:rotate(45deg); left:12px; right:12px; min-height:40px; }
+  .node.decision span { transform:rotate(-45deg); font-size:9px; }
+  .node.exception { border-color:#e11d48; color:#9f1239; border-radius:2px; }
+  .line { position:absolute; border-color:#202124; z-index:1; }
+  .v { border-left:1.5px solid; width:1px; }
+  .h { border-top:1.5px solid; height:1px; }
+  .dash { border-color:#e11d48; border-style:dashed; }
+  .edge-label { position:absolute; z-index:4; border:1px solid #d9dce3; border-radius:999px; background:#fff; padding:3px 5px; text-align:center; font-size:8px; line-height:1.25; color:#344054; }
+  .edge-label.red { color:#e11d48; border-color:#fecdd3; }
+  .bad .lane { min-height:360px; }
+  .bad .node { min-height:18px; padding:1px; font-size:3.2px; border-width:1px; }
+  .bad .lane-title { font-size:3.5px; height:25px; }
+  .bad .edge-label { font-size:3.2px; padding:1px 2px; white-space:nowrap; }
+  .bad .collision { box-shadow:0 0 0 2px rgba(225,29,72,.16); }
+  .callouts { display:grid; gap:8px; margin:0 18px 18px; }
+  .callout { display:flex; gap:9px; align-items:flex-start; padding:10px 12px; border-radius:10px; background:#f3f5f8; font-size:12px; line-height:1.45; color:#475467; }
+  .check { color:#087443; font-weight:900; }
+  .x { color:#c01048; font-weight:900; }
+  .select-box { margin:22px 0 0; }
+  @media (max-width:900px) { .compare { grid-template-columns:1fr; } }
+</style>
+
+<h2>스윔레인 구조는 유지하고 geometry만 반응형으로 변경</h2>
+<p class="subtitle">두 화면 모두 같은 4개 lane, 같은 node, 같은 edge와 선 위 라벨을 사용합니다.</p>
+
+<div class="compare">
+  <div class="panel">
+    <div class="panel-head">
+      <h3>현재: 940px 전체를 통째로 축소</h3>
+      <p>320px 카드에서 배율 0.268, 12px 노드 글자가 실제 약 3.2px가 됩니다.</p>
+    </div>
+    <div class="phone bad">
+      <div class="lane-grid">
+        <div class="lane"><div class="lane-title">이용자</div><div class="node start" style="top:52px">결제 요청</div><div class="node end" style="top:285px">예약 완료</div></div>
+        <div class="lane"><div class="lane-title">PHP 서버</div><div class="node" style="top:132px">결제 정보 처리</div><div class="node decision" style="top:210px"><span>생성 결과 판단</span></div><div class="node exception" style="top:310px">장애 구간 확인</div></div>
+        <div class="lane"><div class="lane-title">결제사</div><div class="node" style="top:92px">결제 승인</div><div class="node exception" style="top:310px">자동 보상취소</div></div>
+        <div class="lane"><div class="lane-title">PMS·티켓</div><div class="node" style="top:172px">예약·티켓 생성</div><div class="node exception" style="top:310px">조기 실패 오판</div></div>
+        <div class="edge-label collision" style="left:72px;top:282px">예약·티켓 생성 확인</div>
+        <div class="edge-label red collision" style="left:122px;top:282px">외부 PMS 장애</div>
+        <div class="edge-label red collision" style="left:158px;top:282px">응답 미도달·생성 실패</div>
+        <div class="edge-label red collision" style="left:201px;top:282px">12초 timeout 조기 실패 오판</div>
+      </div>
+    </div>
+    <div class="callouts">
+      <div class="callout"><b class="x">×</b><span>본문 폭이 좁아질수록 글자와 노드가 함께 축소됩니다.</span></div>
+      <div class="callout"><b class="x">×</b><span>라벨 배치가 서로를 고려하지 않아 같은 구간에서 겹칩니다.</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h3>개선: 같은 lane 구조 안에서 재계산</h3>
+      <p>lane은 그대로 두고 노드 높이·행 간격·라벨 위치를 현재 폭에 맞춰 다시 계산합니다.</p>
+    </div>
+    <div class="phone">
+      <div class="lane-grid">
+        <div class="lane"><div class="lane-title">이용자</div><div class="node start" style="top:58px">결제<br>요청</div><div class="node end" style="top:330px">예약<br>완료</div></div>
+        <div class="lane"><div class="lane-title">PHP 서버</div><div class="node" style="top:145px">결제 정보<br>처리</div><div class="node decision" style="top:235px"><span>생성 결과<br>판단</span></div><div class="node exception" style="top:405px">장애 구간<br>확인</div></div>
+        <div class="lane"><div class="lane-title">결제사</div><div class="node" style="top:100px">결제<br>승인</div><div class="node exception" style="top:475px">자동<br>보상취소</div></div>
+        <div class="lane"><div class="lane-title">PMS·티켓</div><div class="node" style="top:190px">예약·티켓<br>생성</div><div class="node exception" style="top:545px">조기 실패<br>오판</div></div>
+        <div class="line v" style="left:36px;top:100px;height:28px"></div><div class="line h" style="left:36px;top:128px;width:72px"></div>
+        <div class="line v" style="left:108px;top:128px;height:28px"></div><div class="line h" style="left:108px;top:173px;width:72px"></div>
+        <div class="line v" style="left:180px;top:140px;height:58px"></div><div class="line h" style="left:108px;top:218px;width:144px"></div>
+        <div class="line v" style="left:252px;top:218px;height:38px"></div><div class="line h" style="left:108px;top:278px;width:144px"></div>
+        <div class="edge-label" style="left:8px;top:302px;width:112px">예약·티켓 생성 확인</div>
+        <div class="edge-label red" style="left:82px;top:365px;width:96px">외부 PMS 장애</div>
+        <div class="edge-label red" style="left:139px;top:430px;width:106px">응답 미도달·생성 실패<br>PHP 예외</div>
+        <div class="edge-label red" style="left:177px;top:508px;width:104px">12초 timeout<br>조기 실패 오판</div>
+      </div>
+    </div>
+    <div class="callouts">
+      <div class="callout"><b class="check">✓</b><span>lane 열과 흐름 관계를 유지하고 글자는 10~12px 아래로 축소하지 않습니다.</span></div>
+      <div class="callout"><b class="check">✓</b><span>노드명은 여러 줄, 라벨은 여러 후보 위치를 평가해 충돌 0건으로 만듭니다.</span></div>
+      <div class="callout"><b class="check">✓</b><span>가로폭 대신 세로 길이가 늘어나므로 가로 스크롤도 생기지 않습니다.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="options select-box">
+  <div class="option" data-choice="keep-structure-responsive-geometry" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>현재 구조 유지 + 반응형 geometry</h3>
+      <p>lane·node·edge·선 위 라벨은 유지하고, 폭별 node 크기·줄바꿈·row 간격·라벨 충돌 회피만 바꿉니다.</p>
+    </div>
+  </div>
+</div>

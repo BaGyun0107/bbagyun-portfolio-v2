@@ -1,0 +1,73 @@
+<style>
+  .label-compare { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .label-panel { border:1px solid #d9dce3; border-radius:18px; overflow:hidden; background:#fff; }
+  .label-head { padding:18px; border-bottom:1px solid #eceef2; }
+  .label-head h3 { margin:0 0 6px; font-size:17px; }
+  .label-head p { margin:0; color:#667085; font-size:13px; line-height:1.5; }
+  .canvas { position:relative; height:360px; margin:18px; border:1px solid #d8dbe2; border-radius:12px; background:linear-gradient(to right,transparent 24.8%,#e5e7eb 25%,transparent 25.2%,transparent 49.8%,#e5e7eb 50%,transparent 50.2%,transparent 74.8%,#e5e7eb 75%,transparent 75.2%); overflow:hidden; }
+  .decision { position:absolute; top:34px; left:calc(25% - 38px); width:76px; height:52px; display:grid; place-items:center; border:2px solid #222; background:#fff; transform:rotate(45deg); }
+  .decision span { transform:rotate(-45deg); font-size:10px; font-weight:700; }
+  .target { position:absolute; bottom:26px; width:82px; height:42px; display:grid; place-items:center; border:1.5px solid #e11d48; background:#fff; font-size:10px; font-weight:700; text-align:center; }
+  .branch { position:absolute; top:97px; height:190px; border-left:2px dashed #e11d48; }
+  .branch::before { content:""; position:absolute; top:0; right:0; width:var(--run); border-top:2px dashed #e11d48; }
+  .pill { position:absolute; top:177px; transform:translateX(-50%); border:1px solid #fecdd3; border-radius:999px; background:#fff; color:#e11d48; padding:4px 7px; font-size:11px; font-weight:700; line-height:1.25; text-align:center; z-index:4; }
+  .bad-pill { white-space:nowrap; box-shadow:0 0 0 3px rgba(225,29,72,.12); }
+  .good-pill { width:82px; white-space:normal; }
+  .rule-list { display:grid; gap:8px; margin:0 18px 18px; }
+  .rule { border-radius:10px; background:#f3f5f8; padding:10px 12px; color:#475467; font-size:12px; line-height:1.5; }
+  .result { margin:20px 0 0; }
+  @media (max-width:900px) { .label-compare { grid-template-columns:1fr; } }
+</style>
+
+<h2>제안한 “각 경로 중앙 라벨”을 실제 문구에 적용</h2>
+<p class="subtitle">중앙점은 유지하고, 각 분기 폭 안에서 라벨을 줄바꿈해야 충돌이 사라집니다.</p>
+
+<div class="label-compare">
+  <div class="label-panel">
+    <div class="label-head">
+      <h3>중앙점만 적용</h3>
+      <p>라벨 중심은 분리되지만 긴 pill 폭이 이웃 분기까지 침범합니다.</p>
+    </div>
+    <div class="canvas">
+      <div class="decision"><span>생성 결과<br>판단</span></div>
+      <div class="branch" style="left:18%"></div><div class="branch" style="left:42%"></div><div class="branch" style="left:65%"></div><div class="branch" style="left:87%"></div>
+      <div class="pill bad-pill" style="left:20%">예약·티켓 생성 확인</div>
+      <div class="pill bad-pill" style="left:42%">외부 PMS 장애</div>
+      <div class="pill bad-pill" style="left:64%">응답 미도달·생성 실패·PHP 예외</div>
+      <div class="pill bad-pill" style="left:83%">12초 timeout 조기 실패 오판</div>
+      <div class="target" style="left:8%">예약 완료</div><div class="target" style="left:34%">장애 구간<br>확인</div><div class="target" style="left:58%">자동<br>보상취소</div><div class="target" style="left:80%">조기 실패<br>오판</div>
+    </div>
+    <div class="rule-list"><div class="rule">계산 결과: 기존과 같은 라벨 충돌 3쌍</div></div>
+  </div>
+
+  <div class="label-panel">
+    <div class="label-head">
+      <h3>중앙점 + 분기 폭 줄바꿈</h3>
+      <p>각 라벨은 자기 경로 중앙에 있으면서 이웃 경로 영역을 넘지 않습니다.</p>
+    </div>
+    <div class="canvas">
+      <div class="decision"><span>생성 결과<br>판단</span></div>
+      <div class="branch" style="left:18%"></div><div class="branch" style="left:42%"></div><div class="branch" style="left:65%"></div><div class="branch" style="left:87%"></div>
+      <div class="pill good-pill" style="left:18%">예약·티켓<br>생성 확인</div>
+      <div class="pill good-pill" style="left:42%">외부 PMS<br>장애</div>
+      <div class="pill good-pill" style="left:65%">응답 미도달·생성 실패<br>PHP 예외</div>
+      <div class="pill good-pill" style="left:87%">12초 timeout<br>조기 실패 오판</div>
+      <div class="target" style="left:8%">예약 완료</div><div class="target" style="left:34%">장애 구간<br>확인</div><div class="target" style="left:58%">자동<br>보상취소</div><div class="target" style="left:80%">조기 실패<br>오판</div>
+    </div>
+    <div class="rule-list">
+      <div class="rule">1. 각 edge의 전체 경로 길이 50% 지점을 기본 중심으로 사용</div>
+      <div class="rule">2. 라벨 최대 폭을 이웃 분기까지의 여유 폭으로 제한하고 여러 줄 표시</div>
+      <div class="rule">3. 그래도 충돌하면 같은 경로 위 40%·60% 지점을 순서대로 평가</div>
+    </div>
+  </div>
+</div>
+
+<div class="options result">
+  <div class="option" data-choice="path-midpoint-wrap" onclick="toggleSelect(this)">
+    <div class="letter">M</div>
+    <div class="content">
+      <h3>경로 중앙 + 가용 폭 줄바꿈</h3>
+      <p>현재 lane·node·edge 구조와 선 위 라벨을 유지하는 최소 변경안입니다.</p>
+    </div>
+  </div>
+</div>

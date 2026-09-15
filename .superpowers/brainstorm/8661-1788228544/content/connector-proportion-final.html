@@ -1,0 +1,69 @@
+<style>
+  .spec{margin:18px 0;padding:13px 15px;border:1px solid #b9cff1;border-radius:12px;background:#f3f7ff;color:#334155;font-size:12px;line-height:1.65}
+  .final-card{overflow:hidden;border:2px solid #1f6feb;border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(24,32,48,.07)}
+  .head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid #e4e9f0;background:#f8fafc}
+  .head strong{color:#172033}.badge{padding:4px 9px;border-radius:999px;background:#e8f1ff;color:#0b4ca1;font-size:11px;font-weight:750}
+  .layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.62fr);gap:18px;padding:18px;background:#fbfcfe}
+  .canvas,.detail{border:1px solid #d8dee8;border-radius:12px;background:#fff;padding:12px}svg{display:block;width:100%;height:auto}
+  .line{fill:none;stroke:#344256;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round}.exception{stroke:#c2414b;stroke-dasharray:6 5}
+  .node{fill:#fff;stroke:#526176;stroke-width:1.5}.node-text{fill:#27364a;font-size:10px;font-weight:750}
+  .label-bg{fill:#fff;stroke:#d4dbe5}.label{fill:#334155;font-size:9px;font-weight:750}
+  .detail h3{margin:0 0 6px;font-size:14px}.detail p{margin:0 0 14px;color:#64748b;font-size:11px;line-height:1.55}
+  .token{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-radius:9px;background:#f6f8fb;color:#526176;font-size:10px}.token+ .token{margin-top:8px}.token strong{color:#27364a}
+  .footer{padding:0 18px 18px;color:#526176;font-size:12px;line-height:1.6}
+  @media(max-width:850px){.layout{grid-template-columns:1fr}}
+</style>
+
+<h2>연결선 비례 최종안</h2>
+<div class="spec"><strong>수정 기준:</strong> 화살촉을 줄인 만큼 모서리 곡률도 14px에서 8px로 줄였습니다. 도착부에는 circle·port·halo를 전혀 그리지 않고, 화살촉 아래의 둥근 line-cap도 제거했습니다.</div>
+
+<div class="card final-card" data-choice="approve-proportional-connector" onclick="toggleSelect(this)">
+  <div class="head"><strong>작은 곡률 + 작은 화살촉 + 깨끗한 종단</strong><span class="badge">최종 후보</span></div>
+  <div class="layout">
+    <div class="canvas">
+      <svg viewBox="0 0 500 315" aria-label="곡률과 화살촉 크기를 함께 줄인 연결선">
+        <defs>
+          <marker id="small-arrow" viewBox="0 0 6 6" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+            <path d="M0.8 0.8L5.5 3L0.8 5.2Z" fill="#344256"/>
+          </marker>
+          <marker id="small-error" viewBox="0 0 6 6" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+            <path d="M0.8 0.8L5.5 3L0.8 5.2Z" fill="#c2414b"/>
+          </marker>
+        </defs>
+        <rect x="12" y="12" width="476" height="290" rx="13" fill="#fbfcfe" stroke="#e0e5ed"/>
+
+        <rect class="node" x="38" y="53" width="110" height="48" rx="9"/><text class="node-text" x="93" y="81" text-anchor="middle">인증 API 요청</text>
+        <rect class="node" x="198" y="126" width="120" height="62" rx="9"/><text class="node-text" x="258" y="153" text-anchor="middle">Access Token</text><text class="node-text" x="258" y="168" text-anchor="middle">검증</text>
+        <rect class="node" x="368" y="53" width="96" height="48" rx="9"/><text class="node-text" x="416" y="81" text-anchor="middle">데이터 응답</text>
+        <rect class="node" x="368" y="227" width="96" height="48" rx="9"/><text class="node-text" x="416" y="255" text-anchor="middle">토큰 갱신</text>
+        <rect class="node" x="48" y="227" width="108" height="48" rx="9"/><text class="node-text" x="102" y="255" text-anchor="middle">인증 실패</text>
+
+        <path class="line" marker-end="url(#small-arrow)" d="M148 77H176Q184 77 184 85V147Q184 155 192 155H198"/>
+        <path class="line" marker-end="url(#small-arrow)" d="M318 155H346Q354 155 354 147V85Q354 77 362 77H368"/>
+        <path class="line" marker-end="url(#small-arrow)" d="M318 169H336Q344 169 344 177V243Q344 251 352 251H368"/>
+        <path class="line exception" marker-end="url(#small-error)" d="M198 169H178Q170 169 170 177V243Q170 251 162 251H156"/>
+
+        <g transform="translate(354 116)"><rect class="label-bg" x="-22" y="-9" width="44" height="18" rx="9"/><text class="label" y="3" text-anchor="middle">유효</text></g>
+        <g transform="translate(344 210)"><rect class="label-bg" x="-22" y="-9" width="44" height="18" rx="9"/><text class="label" y="3" text-anchor="middle">만료</text></g>
+        <g transform="translate(170 207)"><rect class="label-bg" x="-27" y="-9" width="54" height="18" rx="9"/><text class="label" y="3" text-anchor="middle">검증 실패</text></g>
+      </svg>
+    </div>
+
+    <div class="detail">
+      <h3>종단부 확대</h3>
+      <p>도착점에는 별도 도형이 없습니다. butt cap을 사용해 선 끝의 둥근 뭉침을 없애고 작은 marker의 팁만 노드 테두리에 닿습니다.</p>
+      <svg viewBox="0 0 260 145" aria-label="점이나 포트 없이 끝나는 작은 화살촉">
+        <defs><marker id="detail-arrow" viewBox="0 0 6 6" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0.8 0.8L5.5 3L0.8 5.2Z" fill="#344256"/></marker></defs>
+        <path class="line" marker-end="url(#detail-arrow)" d="M24 72H140"/>
+        <rect class="node" x="140" y="36" width="96" height="72" rx="9"/>
+        <text class="node-text" x="188" y="76" text-anchor="middle">도착 노드</text>
+        <text x="130" y="128" text-anchor="middle" fill="#64748b" font-size="9">circle 없음 · round cap 없음</text>
+      </svg>
+      <div class="token"><strong>Arrowhead</strong><span>6px</span></div>
+      <div class="token"><strong>Corner radius</strong><span>8px</span></div>
+      <div class="token"><strong>Stroke</strong><span>2px</span></div>
+      <div class="token"><strong>Line cap</strong><span>butt</span></div>
+    </div>
+  </div>
+  <p class="footer">노드와 연결선의 크기가 확대 Dialog에서도 함께 비례하므로, 크게 보기에서도 곡률이나 화살촉만 과장되지 않습니다.</p>
+</div>

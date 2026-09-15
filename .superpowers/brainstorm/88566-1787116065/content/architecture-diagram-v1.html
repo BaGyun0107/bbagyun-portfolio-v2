@@ -1,0 +1,38 @@
+<h2>아키텍처 흐름 · 실제 스윔레인 다이어그램 예시</h2>
+<p class="subtitle">텍스트 설명을 읽기 전에, 누가 언제 어떤 책임을 수행하는지 한 장의 흐름으로 이해할 수 있게 합니다.</p>
+
+<div class="mockup" style="max-width:1100px;margin:24px auto 0;">
+  <div class="mockup-header">Architecture flow · 사내 DX 하네스 v2</div>
+  <div class="mockup-body" style="padding:22px;background:#fff;color:#1f2937;">
+    <div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:14px;"><div><div class="label">DEPLOYMENT PIPELINE</div><h3 style="margin:7px 0 0;font-size:22px;">코드 변경이 운영 환경에 도착하기까지</h3></div><span class="mock-sidebar" style="font-size:11px;">전체 보기 · 확대 · 범례</span></div>
+    <div style="overflow-x:auto;border:1px solid #d1d5db;border-radius:8px;background:#fff;">
+      <svg viewBox="0 0 1040 510" width="1040" height="510" role="img" aria-label="개발자, GitHub Actions, Infisical, 배포 대상, 운영 알림 스윔레인 다이어그램" style="display:block;min-width:900px;font-family:ui-sans-serif,system-ui,sans-serif;">
+        <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4b5563"/></marker></defs>
+        <rect x="0" y="0" width="1040" height="510" fill="#ffffff"/>
+        <rect x="0" y="0" width="1040" height="58" fill="#f3f4f6"/>
+        <line x1="170" y1="0" x2="170" y2="510" stroke="#d1d5db"/><line x1="170" y1="58" x2="1040" y2="58" stroke="#d1d5db"/>
+        <line x1="170" y1="148" x2="1040" y2="148" stroke="#e5e7eb"/><line x1="170" y1="238" x2="1040" y2="238" stroke="#e5e7eb"/><line x1="170" y1="328" x2="1040" y2="328" stroke="#e5e7eb"/><line x1="170" y1="418" x2="1040" y2="418" stroke="#e5e7eb"/>
+        <rect x="0" y="58" width="1040" height="90" fill="#ffffff"/><rect x="0" y="148" width="1040" height="90" fill="#fafafa"/><rect x="0" y="238" width="1040" height="90" fill="#ffffff"/><rect x="0" y="328" width="1040" height="90" fill="#fafafa"/><rect x="0" y="418" width="1040" height="92" fill="#ffffff"/>
+        <text x="24" y="35" font-size="14" font-weight="700" fill="#111827">주체 / 단계</text><text x="220" y="35" font-size="12" font-weight="700" fill="#4b5563">1. 변경 감지</text><text x="410" y="35" font-size="12" font-weight="700" fill="#4b5563">2. 공통 검증</text><text x="605" y="35" font-size="12" font-weight="700" fill="#4b5563">3. 시크릿 주입</text><text x="805" y="35" font-size="12" font-weight="700" fill="#4b5563">4. 배포 실행</text>
+        <text x="24" y="108" font-size="13" font-weight="700" fill="#111827">개발자</text><text x="24" y="126" font-size="11" fill="#6b7280">코드 소유자</text>
+        <text x="24" y="198" font-size="13" font-weight="700" fill="#111827">GitHub Actions</text><text x="24" y="216" font-size="11" fill="#6b7280">pipeline.yml</text>
+        <text x="24" y="288" font-size="13" font-weight="700" fill="#111827">Infisical</text><text x="24" y="306" font-size="11" fill="#6b7280">secret source</text>
+        <text x="24" y="378" font-size="13" font-weight="700" fill="#111827">배포 대상</text><text x="24" y="396" font-size="11" fill="#6b7280">PM2 / Docker / Vercel</text>
+        <text x="24" y="468" font-size="13" font-weight="700" fill="#111827">운영 피드백</text><text x="24" y="486" font-size="11" fill="#6b7280">Slack / doctor</text>
+        <rect x="204" y="85" width="126" height="38" rx="6" fill="#e0e7ff" stroke="#6366f1"/><text x="267" y="108" text-anchor="middle" font-size="11" fill="#312e81">git push</text>
+        <rect x="390" y="175" width="138" height="38" rx="6" fill="#dbeafe" stroke="#3b82f6"/><text x="459" y="198" text-anchor="middle" font-size="11" fill="#1e3a8a">diff 분석</text>
+        <rect x="565" y="175" width="152" height="38" rx="6" fill="#dbeafe" stroke="#3b82f6"/><text x="641" y="198" text-anchor="middle" font-size="11" fill="#1e3a8a">Node · 보안 검사</text>
+        <rect x="575" y="265" width="156" height="38" rx="6" fill="#dcfce7" stroke="#22c55e"/><text x="653" y="288" text-anchor="middle" font-size="11" fill="#14532d">목적별 secret 반환</text>
+        <rect x="786" y="355" width="166" height="38" rx="6" fill="#fef3c7" stroke="#f59e0b"/><text x="869" y="378" text-anchor="middle" font-size="11" fill="#78350f">선택된 대상 배포</text>
+        <rect x="790" y="445" width="162" height="38" rx="6" fill="#f3e8ff" stroke="#a855f7"/><text x="871" y="468" text-anchor="middle" font-size="11" fill="#581c87">결과 알림 · 상태 점검</text>
+        <line x1="330" y1="104" x2="390" y2="194" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/><line x1="528" y1="194" x2="565" y2="194" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/><line x1="717" y1="194" x2="653" y2="265" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/><line x1="731" y1="284" x2="786" y2="374" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/><line x1="869" y1="393" x2="871" y2="445" stroke="#4b5563" stroke-width="2" marker-end="url(#arrow)"/>
+        <rect x="353" y="70" width="160" height="22" rx="11" fill="#111827"/><text x="433" y="85" text-anchor="middle" font-size="10" fill="#ffffff">변경 범위만 실행</text>
+      </svg>
+    </div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:14px;font-size:11px;"><span class="mock-sidebar">파랑 · 공통 검증</span><span class="mock-sidebar">초록 · 시크릿 경계</span><span class="mock-sidebar">노랑 · 배포 대상</span><span class="mock-sidebar">보라 · 운영 피드백</span></div>
+  </div>
+</div>
+
+<div class="section" style="max-width:1000px;margin:24px auto 0;"><div class="label">페이지 안에서의 표현 방식</div><div class="cards"><div class="card"><div class="card-body"><h3>기본 상태</h3><p>상세 페이지 본문에 전체 다이어그램을 이미지처럼 노출합니다. 확대하거나 좌우로 이동할 수 있고, 각 단계 아래 설명으로 이어집니다.</p></div></div><div class="card"><div class="card-body"><h3>상세 상태</h3><p>다이어그램의 특정 단계 선택 시 해당 단계의 입력·처리·출력·실패 대응을 본문 아래에서 펼칩니다.</p></div></div></div></div>
+
+<div class="section" style="max-width:1000px;margin:24px auto 0;"><div class="label">결론</div><p>네. 아키텍처 흐름은 이처럼 실제 스윔레인 이미지/다이어그램으로 보여주는 것이 더 읽기 좋습니다. 다만 원본은 SVG 또는 Mermaid로 관리해 선명도와 수정 가능성을 확보하고, 페이지에는 이미지처럼 렌더링하는 방식을 권장합니다.</p></div>

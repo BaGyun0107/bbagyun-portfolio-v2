@@ -1,0 +1,93 @@
+<style>
+  .connector-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:24px}
+  .connector-card{overflow:hidden;border:1px solid #d7dce5;border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(24,32,48,.06)}
+  .connector-card.recommended{border:2px solid #1f6feb}
+  .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;border-bottom:1px solid #e5e9f0;background:#f8fafc}
+  .title{font-weight:750;color:#172033}.badge{padding:4px 8px;border-radius:999px;background:#e8f1ff;color:#0b4ca1;font-size:11px;font-weight:750}
+  .canvas{padding:12px;background:#fbfcfe}.canvas svg{display:block;width:100%;height:auto;border:1px solid #d8dee8;border-radius:10px;background:#fff}
+  .note{padding:0 14px 15px;color:#64748b;font-size:12px;line-height:1.55}
+  .lane{fill:#fff;stroke:#e0e5ed}.lane-head{fill:#eef2f6;stroke:#d8dee8}.lane-title{fill:#364152;font-size:9px;font-weight:700}
+  .node{fill:#fff;stroke:#526176;stroke-width:1.5}.node-text{fill:#27364a;font-size:8.5px;font-weight:700}
+  .line{fill:none;stroke:#344256;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .exception{stroke:#c2414b;stroke-dasharray:6 5}.label-bg{fill:#fff;stroke:#d8dee8}.label{fill:#334155;font-size:8px;font-weight:750}
+  @media(max-width:900px){.connector-grid{grid-template-columns:1fr}}
+</style>
+
+<h2>A안에 어떤 연결선을 적용할까요?</h2>
+<p class="subtitle">세 안 모두 본문 너비 맞춤과 크게 보기 Dialog는 동일합니다. 곡선의 성격과 복잡한 흐름에서의 안정성만 비교해 주세요.</p>
+
+<div class="connector-grid">
+  <div class="card connector-card recommended" data-choice="rounded-elbow" onclick="toggleSelect(this)">
+    <div class="card-head"><span class="title">A1. 둥근 직교 연결선</span><span class="badge">추천 · FigJam형</span></div>
+    <div class="canvas">
+      <svg viewBox="0 0 330 235" aria-label="둥근 직교 연결선 예시">
+        <defs><marker id="a1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#344256"/></marker><marker id="a1e" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#c2414b"/></marker></defs>
+        <rect class="lane" x="8" y="8" width="78" height="218"/><rect class="lane" x="86" y="8" width="78" height="218"/><rect class="lane" x="164" y="8" width="78" height="218"/><rect class="lane" x="242" y="8" width="80" height="218"/>
+        <rect class="lane-head" x="8" y="8" width="78" height="30"/><rect class="lane-head" x="86" y="8" width="78" height="30"/><rect class="lane-head" x="164" y="8" width="78" height="30"/><rect class="lane-head" x="242" y="8" width="80" height="30"/>
+        <text class="lane-title" x="47" y="27" text-anchor="middle">사용자</text><text class="lane-title" x="125" y="27" text-anchor="middle">HiPass</text><text class="lane-title" x="203" y="27" text-anchor="middle">중앙 회원</text><text class="lane-title" x="282" y="27" text-anchor="middle">DB·캐시</text>
+        <rect class="node" x="18" y="57" width="58" height="28" rx="7"/><text class="node-text" x="47" y="74" text-anchor="middle">로그인</text>
+        <rect class="node" x="96" y="101" width="58" height="28" rx="7"/><text class="node-text" x="125" y="118" text-anchor="middle">요청 전달</text>
+        <rect class="node" x="174" y="57" width="58" height="28" rx="7"/><text class="node-text" x="203" y="74" text-anchor="middle">토큰 발급</text>
+        <rect class="node" x="252" y="101" width="60" height="28" rx="7"/><text class="node-text" x="282" y="118" text-anchor="middle">세션 저장</text>
+        <rect class="node" x="96" y="165" width="58" height="28" rx="7"/><text class="node-text" x="125" y="182" text-anchor="middle">로컬 검증</text>
+        <path class="line" marker-end="url(#a1)" d="M76 71H84Q96 71 96 83V101"/>
+        <path class="line" marker-end="url(#a1)" d="M154 115H162Q174 115 174 103V85"/>
+        <path class="line" marker-end="url(#a1)" d="M232 71H240Q252 71 252 83V101"/>
+        <path class="line" marker-end="url(#a1)" d="M282 129V145Q282 157 270 157H166Q154 157 154 169"/>
+        <path class="line exception" marker-end="url(#a1e)" d="M203 85V139Q203 151 191 151H166Q154 151 154 165"/>
+        <g transform="translate(173 136)"><rect class="label-bg" x="-21" y="-9" width="42" height="18" rx="9"/><text class="label" y="3" text-anchor="middle">만료</text></g>
+      </svg>
+    </div>
+    <p class="note">기본은 수평·수직으로 읽히되 모서리를 둥글게 연결합니다. 노드를 피해 경로를 예측하기 쉽고, 분기 라벨은 선 위의 독립된 pill로 표시합니다.</p>
+  </div>
+
+  <div class="card connector-card" data-choice="bezier" onclick="toggleSelect(this)">
+    <div class="card-head"><span class="title">A2. 부드러운 자유 곡선</span><span class="badge">유기적</span></div>
+    <div class="canvas">
+      <svg viewBox="0 0 330 235" aria-label="부드러운 베지어 곡선 예시">
+        <defs><marker id="a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#344256"/></marker><marker id="a2e" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#c2414b"/></marker></defs>
+        <rect class="lane" x="8" y="8" width="78" height="218"/><rect class="lane" x="86" y="8" width="78" height="218"/><rect class="lane" x="164" y="8" width="78" height="218"/><rect class="lane" x="242" y="8" width="80" height="218"/>
+        <rect class="lane-head" x="8" y="8" width="78" height="30"/><rect class="lane-head" x="86" y="8" width="78" height="30"/><rect class="lane-head" x="164" y="8" width="78" height="30"/><rect class="lane-head" x="242" y="8" width="80" height="30"/>
+        <text class="lane-title" x="47" y="27" text-anchor="middle">사용자</text><text class="lane-title" x="125" y="27" text-anchor="middle">HiPass</text><text class="lane-title" x="203" y="27" text-anchor="middle">중앙 회원</text><text class="lane-title" x="282" y="27" text-anchor="middle">DB·캐시</text>
+        <rect class="node" x="18" y="57" width="58" height="28" rx="7"/><text class="node-text" x="47" y="74" text-anchor="middle">로그인</text>
+        <rect class="node" x="96" y="101" width="58" height="28" rx="7"/><text class="node-text" x="125" y="118" text-anchor="middle">요청 전달</text>
+        <rect class="node" x="174" y="57" width="58" height="28" rx="7"/><text class="node-text" x="203" y="74" text-anchor="middle">토큰 발급</text>
+        <rect class="node" x="252" y="101" width="60" height="28" rx="7"/><text class="node-text" x="282" y="118" text-anchor="middle">세션 저장</text>
+        <rect class="node" x="96" y="165" width="58" height="28" rx="7"/><text class="node-text" x="125" y="182" text-anchor="middle">로컬 검증</text>
+        <path class="line" marker-end="url(#a2)" d="M76 71C105 71 77 115 96 115"/>
+        <path class="line" marker-end="url(#a2)" d="M154 115C184 115 145 71 174 71"/>
+        <path class="line" marker-end="url(#a2)" d="M232 71C270 71 228 115 252 115"/>
+        <path class="line" marker-end="url(#a2)" d="M282 129C282 192 188 137 154 179"/>
+        <path class="line exception" marker-end="url(#a2e)" d="M203 85C210 149 158 126 154 165"/>
+        <g transform="translate(182 136)"><rect class="label-bg" x="-21" y="-9" width="42" height="18" rx="9"/><text class="label" y="3" text-anchor="middle">만료</text></g>
+      </svg>
+    </div>
+    <p class="note">가장 FigJam처럼 가볍고 유연해 보입니다. 다만 연결선이 많아지면 곡선끼리 겹치거나 어느 노드로 가는지 추적하기 어려워질 수 있습니다.</p>
+  </div>
+
+  <div class="card connector-card" data-choice="hybrid" onclick="toggleSelect(this)">
+    <div class="card-head"><span class="title">A3. 짧은 곡선 혼합형</span><span class="badge">절충</span></div>
+    <div class="canvas">
+      <svg viewBox="0 0 330 235" aria-label="직선과 곡선을 섞은 연결선 예시">
+        <defs><marker id="a3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#344256"/></marker><marker id="a3e" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#c2414b"/></marker></defs>
+        <rect class="lane" x="8" y="8" width="78" height="218"/><rect class="lane" x="86" y="8" width="78" height="218"/><rect class="lane" x="164" y="8" width="78" height="218"/><rect class="lane" x="242" y="8" width="80" height="218"/>
+        <rect class="lane-head" x="8" y="8" width="78" height="30"/><rect class="lane-head" x="86" y="8" width="78" height="30"/><rect class="lane-head" x="164" y="8" width="78" height="30"/><rect class="lane-head" x="242" y="8" width="80" height="30"/>
+        <text class="lane-title" x="47" y="27" text-anchor="middle">사용자</text><text class="lane-title" x="125" y="27" text-anchor="middle">HiPass</text><text class="lane-title" x="203" y="27" text-anchor="middle">중앙 회원</text><text class="lane-title" x="282" y="27" text-anchor="middle">DB·캐시</text>
+        <rect class="node" x="18" y="57" width="58" height="28" rx="7"/><text class="node-text" x="47" y="74" text-anchor="middle">로그인</text>
+        <rect class="node" x="96" y="101" width="58" height="28" rx="7"/><text class="node-text" x="125" y="118" text-anchor="middle">요청 전달</text>
+        <rect class="node" x="174" y="57" width="58" height="28" rx="7"/><text class="node-text" x="203" y="74" text-anchor="middle">토큰 발급</text>
+        <rect class="node" x="252" y="101" width="60" height="28" rx="7"/><text class="node-text" x="282" y="118" text-anchor="middle">세션 저장</text>
+        <rect class="node" x="96" y="165" width="58" height="28" rx="7"/><text class="node-text" x="125" y="182" text-anchor="middle">로컬 검증</text>
+        <path class="line" marker-end="url(#a3)" d="M76 71C86 71 88 94 96 104"/>
+        <path class="line" marker-end="url(#a3)" d="M154 108C162 98 164 71 174 71"/>
+        <path class="line" marker-end="url(#a3)" d="M232 71C242 71 244 104 252 111"/>
+        <path class="line" marker-end="url(#a3)" d="M282 129V145C282 154 270 158 260 158H170C160 158 154 166 154 172"/>
+        <path class="line exception" marker-end="url(#a3e)" d="M203 85V138C203 148 191 151 181 151H168C158 151 154 158 154 165"/>
+        <g transform="translate(184 138)"><rect class="label-bg" x="-21" y="-9" width="42" height="18" rx="9"/><text class="label" y="3" text-anchor="middle">만료</text></g>
+      </svg>
+    </div>
+    <p class="note">인접 노드는 짧은 곡선으로, 먼 경로는 둥근 직교선으로 연결합니다. 흐름은 안정적이지만 한 화면 안에서 선의 문법이 두 가지로 보일 수 있습니다.</p>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:22px"><strong>권장:</strong> A1 — 현재 데이터의 anchor·waypoint 구조를 살리면서도 FigJam처럼 부드럽게 만들 수 있고, 복잡한 예외 경로에서도 읽는 방향이 흔들리지 않습니다.</p>

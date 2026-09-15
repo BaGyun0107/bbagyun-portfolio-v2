@@ -1,0 +1,65 @@
+<h2>포트폴리오에서 스윔레인을 어떻게 열까요?</h2>
+<p class="subtitle">Archify의 풍부한 기능은 감추고, 독자가 흐름을 읽는 데 필요한 진입 방식만 비교합니다.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px;background:#0f172a;color:#e2e8f0;min-height:250px">
+      <div style="font-weight:700;font-size:17px">플랫폼 변경·검증·배포 흐름</div>
+      <p style="font-size:12px;color:#94a3b8;margin:8px 0 22px">변경 성격에 따라 코드 경계를 선택하고 검증한 뒤 배포한 흐름입니다.</p>
+      <div style="height:88px;border:1px dashed #475569;border-radius:10px;display:grid;place-items:center;color:#94a3b8;text-align:center;padding:12px">
+        카드에서는 다이어그램을 표시하지 않음<br><span style="font-size:11px">본문의 설명과 예외 대응에 집중</span>
+      </div>
+      <button class="mock-button" style="margin-top:18px;width:100%">다이어그램 크게 보기</button>
+    </div>
+    <div class="card-body">
+      <h3>A. 버튼으로만 진입</h3>
+      <p>추천안. 카드에는 제목·목적·본문만 두고, 크게 보기에서 Archify 다이어그램만 보여줍니다.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px;background:#0f172a;color:#e2e8f0;min-height:250px">
+      <div style="font-weight:700;font-size:17px">플랫폼 변경·검증·배포 흐름</div>
+      <p style="font-size:12px;color:#94a3b8;margin:8px 0 16px">변경 성격에 따라 코드 경계를 선택하고 검증한 뒤 배포한 흐름입니다.</p>
+      <div style="border:1px solid #334155;border-radius:10px;padding:14px;background:#111827">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:center">
+          <div style="padding:10px 4px;border:1px solid #22d3ee;border-radius:6px;text-align:center;font-size:11px">변경 요청</div>
+          <div style="padding:10px 4px;border:1px solid #22d3ee;border-radius:6px;text-align:center;font-size:11px">코드 경계</div>
+          <div style="padding:10px 4px;border:1px solid #22d3ee;border-radius:6px;text-align:center;font-size:11px">검증·배포</div>
+        </div>
+        <div style="text-align:center;color:#64748b;font-size:11px;margin-top:9px">3단계 요약 미리보기</div>
+      </div>
+      <button class="mock-button" style="margin-top:14px;width:100%">전체 흐름 크게 보기</button>
+    </div>
+    <div class="card-body">
+      <h3>B. 요약 미리보기 + 크게 보기</h3>
+      <p>작은 화면에는 핵심 구간만 다시 그린 요약을 두고, 전체 10개 단계는 크게 보기에서 제공합니다.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px;background:#0f172a;color:#e2e8f0;min-height:250px">
+      <div style="font-weight:700;font-size:17px">플랫폼 변경·검증·배포 흐름</div>
+      <p style="font-size:12px;color:#94a3b8;margin:8px 0 16px">변경 성격에 따라 코드 경계를 선택하고 검증한 뒤 배포한 흐름입니다.</p>
+      <div style="height:112px;border:1px solid #334155;border-radius:10px;padding:8px;background:#020617;overflow:hidden;position:relative">
+        <div style="transform:scale(.56);transform-origin:top left;width:178%;display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+          <div style="padding:16px 4px;border:2px solid #22d3ee;border-radius:7px;text-align:center;font-size:12px">변경 요청</div>
+          <div style="padding:16px 4px;border:2px solid #22d3ee;border-radius:7px;text-align:center;font-size:12px">차이 분류</div>
+          <div style="padding:16px 4px;border:2px solid #22d3ee;border-radius:7px;text-align:center;font-size:12px">세 코드 경계</div>
+          <div style="padding:16px 4px;border:2px solid #22d3ee;border-radius:7px;text-align:center;font-size:12px">계약 검증</div>
+          <div style="padding:16px 4px;border:2px solid #22d3ee;border-radius:7px;text-align:center;font-size:12px">호텔별 배포</div>
+        </div>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:18px 8px 7px;background:linear-gradient(transparent,#020617);text-align:center;font-size:10px;color:#64748b">전체 다이어그램 축소</div>
+      </div>
+      <button class="mock-button" style="margin-top:14px;width:100%">크게 보기</button>
+    </div>
+    <div class="card-body">
+      <h3>C. 전체 축소판 + 크게 보기</h3>
+      <p>현재와 비슷하지만 Archify 전체 결과를 축소합니다. 구조는 보이나 작은 글자는 읽기 어렵습니다.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px">
+  <p><strong>공통:</strong> 크게 보기에서는 Archify의 툴바·검색·내보내기·프레젠테이션 기능을 숨기고, 다이어그램과 닫기 동작만 제공합니다.</p>
+</div>

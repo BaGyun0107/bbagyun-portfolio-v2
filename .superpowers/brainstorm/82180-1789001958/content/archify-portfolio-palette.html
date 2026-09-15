@@ -1,0 +1,53 @@
+<h2>Archify 구조에 어떤 포트폴리오 색상 규칙을 적용할까요?</h2>
+<p class="subtitle">실제 구현에서는 고정 색상 대신 포트폴리오의 card·muted·foreground·border·destructive 토큰을 사용해 밝은/어두운 테마를 함께 따릅니다.</p>
+
+<div class="cards">
+  <div class="card" data-choice="a1" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:14px;background:#fafafa">
+      <div style="font-size:11px;color:#52525b;margin-bottom:7px">LIGHT</div>
+      <svg viewBox="0 0 420 135" style="width:100%;background:#fff;border:1px solid #e4e4e7;border-radius:8px">
+        <g fill="#fafafa" stroke="#e4e4e7"><rect x="6" y="6" width="408" height="37" rx="4"/><rect x="6" y="49" width="408" height="42" rx="4"/><rect x="6" y="97" width="408" height="32" rx="4"/></g>
+        <g fill="#fff" stroke="#18181b" stroke-width="1.2"><rect x="45" y="14" width="64" height="22" rx="5"/><rect x="137" y="14" width="64" height="22" rx="5"/><rect x="70" y="59" width="62" height="22" rx="5"/><rect x="179" y="54" width="62" height="22" rx="5"/><rect x="179" y="78" width="62" height="22" rx="5"/><rect x="288" y="59" width="62" height="22" rx="5"/><rect x="139" y="102" width="62" height="22" rx="5"/><rect x="258" y="102" width="62" height="22" rx="5"/></g>
+        <g fill="#18181b" font-size="7" text-anchor="middle" font-family="sans-serif"><text x="77" y="28">변경 요청</text><text x="169" y="28">차이 분류</text><text x="101" y="73">core</text><text x="210" y="68">rsConfig</text><text x="210" y="92">platform</text><text x="319" y="73">빌드</text><text x="170" y="116">검증</text><text x="289" y="116">배포</text></g>
+        <g stroke="#18181b" stroke-width="1.1" fill="none"><path d="M109 25H137"/><path d="M201 25C230 25 45 70 70 70"/><path d="M201 25C220 25 179 65 179 65"/><path d="M201 25C220 25 179 89 179 89"/><path d="M132 70H288"/><path d="M241 65H288"/><path d="M241 89H288"/><path d="M319 81C319 99 201 113 201 113"/><path d="M201 113H258"/></g>
+        <path d="M170 102C95 99 92 88 101 81" stroke="#d4183d" stroke-width="1.2" stroke-dasharray="4 3" fill="none"/>
+      </svg>
+      <div style="font-size:11px;color:#a1a1aa;margin:12px 0 7px">DARK</div>
+      <div style="background:#18181b;border:1px solid #3f3f46;border-radius:8px;padding:14px;color:#fafafa;display:flex;justify-content:space-between;align-items:center;font-size:11px"><span style="border:1px solid #fafafa;border-radius:5px;padding:8px 12px">변경 요청</span><span>→</span><span style="border:1px solid #fafafa;border-radius:5px;padding:8px 12px">검증</span><span style="color:#7f1d1d">┄ 예외</span></div>
+    </div>
+    <div class="card-body"><h3>A1. 현재 스윔레인 토큰 그대로</h3><p>추천안. node·정상선은 foreground, lane은 muted, 예외만 destructive를 사용합니다. 현재 React 스윔레인과 가장 자연스럽게 이어집니다.</p></div>
+  </div>
+
+  <div class="card" data-choice="a2" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:14px;background:#fafafa">
+      <div style="font-size:11px;color:#52525b;margin-bottom:7px">LIGHT</div>
+      <svg viewBox="0 0 420 135" style="width:100%;background:#fff;border:1px solid #e4e4e7;border-radius:8px">
+        <g fill="#f4f4f5" stroke="#d4d4d8"><rect x="6" y="6" width="408" height="37" rx="4"/><rect x="6" y="49" width="408" height="42" rx="4"/><rect x="6" y="97" width="408" height="32" rx="4"/></g>
+        <g fill="#fafafa" stroke="#71717a" stroke-width="1.2"><rect x="45" y="14" width="64" height="22" rx="5"/><rect x="137" y="14" width="64" height="22" rx="5"/><rect x="70" y="59" width="62" height="22" rx="5"/><rect x="179" y="54" width="62" height="22" rx="5"/><rect x="179" y="78" width="62" height="22" rx="5"/><rect x="288" y="59" width="62" height="22" rx="5"/><rect x="139" y="102" width="62" height="22" rx="5"/><rect x="258" y="102" width="62" height="22" rx="5"/></g>
+        <g fill="#27272a" font-size="7" text-anchor="middle" font-family="sans-serif"><text x="77" y="28">변경 요청</text><text x="169" y="28">차이 분류</text><text x="101" y="73">core</text><text x="210" y="68">rsConfig</text><text x="210" y="92">platform</text><text x="319" y="73">빌드</text><text x="170" y="116">검증</text><text x="289" y="116">배포</text></g>
+        <g stroke="#71717a" stroke-width="1.1" fill="none"><path d="M109 25H137"/><path d="M201 25C230 25 45 70 70 70"/><path d="M201 25C220 25 179 65 179 65"/><path d="M201 25C220 25 179 89 179 89"/><path d="M132 70H288"/><path d="M241 65H288"/><path d="M241 89H288"/><path d="M319 81C319 99 201 113 201 113"/><path d="M201 113H258"/></g>
+        <path d="M170 102C95 99 92 88 101 81" stroke="#d4183d" stroke-width="1.2" stroke-dasharray="4 3" fill="none"/>
+      </svg>
+      <div style="font-size:11px;color:#a1a1aa;margin:12px 0 7px">DARK</div>
+      <div style="background:#18181b;border:1px solid #3f3f46;border-radius:8px;padding:14px;color:#d4d4d8;display:flex;justify-content:space-between;align-items:center;font-size:11px"><span style="border:1px solid #71717a;border-radius:5px;padding:8px 12px">변경 요청</span><span style="color:#71717a">→</span><span style="border:1px solid #71717a;border-radius:5px;padding:8px 12px">검증</span><span style="color:#7f1d1d">┄ 예외</span></div>
+    </div>
+    <div class="card-body"><h3>A2. 더 부드러운 무채색</h3><p>구조는 같지만 node와 정상선을 muted 계열로 낮춥니다. 본문과 덜 경쟁하지만 흐름의 대비도 함께 낮아집니다.</p></div>
+  </div>
+
+  <div class="card" data-choice="a3" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:14px;background:#fafafa">
+      <div style="font-size:11px;color:#52525b;margin-bottom:7px">LIGHT</div>
+      <svg viewBox="0 0 420 135" style="width:100%;background:#fff;border:1px solid #e4e4e7;border-radius:8px">
+        <g fill="#fafafa" stroke="#e4e4e7"><rect x="6" y="6" width="408" height="37" rx="4"/><rect x="6" y="49" width="408" height="42" rx="4"/><rect x="6" y="97" width="408" height="32" rx="4"/></g>
+        <g fill="#fff" stroke="#18181b" stroke-width="1.2"><rect x="45" y="14" width="64" height="22" rx="5"/><rect x="137" y="14" width="64" height="22" rx="5"/><rect x="70" y="59" width="62" height="22" rx="5"/><rect x="179" y="54" width="62" height="22" rx="5"/><rect x="179" y="78" width="62" height="22" rx="5"/><rect x="288" y="59" width="62" height="22" rx="5"/><rect x="139" y="102" width="62" height="22" rx="5"/><rect x="258" y="102" width="62" height="22" rx="5"/></g>
+        <g fill="#18181b" font-size="7" text-anchor="middle" font-family="sans-serif"><text x="77" y="28">변경 요청</text><text x="169" y="28">차이 분류</text><text x="101" y="73">core</text><text x="210" y="68">rsConfig</text><text x="210" y="92">platform</text><text x="319" y="73">빌드</text><text x="170" y="116">검증</text><text x="289" y="116">배포</text></g>
+        <g stroke="#71717a" stroke-width="1.1" fill="none"><path d="M109 25H137"/><path d="M201 25C230 25 45 70 70 70"/><path d="M201 25C220 25 179 65 179 65"/><path d="M201 25C220 25 179 89 179 89"/><path d="M132 70H288"/><path d="M241 65H288"/><path d="M241 89H288"/></g>
+        <path d="M319 81C319 99 201 113 201 113M201 113H258" stroke="#16a34a" stroke-width="1.5" fill="none"/>
+        <path d="M170 102C95 99 92 88 101 81" stroke="#d4183d" stroke-width="1.2" stroke-dasharray="4 3" fill="none"/>
+      </svg>
+      <div style="font-size:11px;color:#a1a1aa;margin:12px 0 7px">DARK</div>
+      <div style="background:#18181b;border:1px solid #3f3f46;border-radius:8px;padding:14px;color:#fafafa;display:flex;justify-content:space-between;align-items:center;font-size:11px"><span style="border:1px solid #fafafa;border-radius:5px;padding:8px 12px">변경 요청</span><span style="color:#71717a">→</span><span style="border:1px solid #fafafa;border-radius:5px;padding:8px 12px">검증</span><span style="color:#22c55e">→ 정상</span></div>
+    </div>
+    <div class="card-body"><h3>A3. 상태에만 제한적 색상</h3><p>대부분 무채색으로 유지하고 정상 완료는 초록, 예외는 destructive로 구분합니다. 읽기는 빠르지만 현재보다 색 의미가 하나 늘어납니다.</p></div>
+  </div>
+</div>
