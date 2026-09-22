@@ -30,9 +30,7 @@
       { "from": "record-pending-and-decrement", "to": "inventory-conflict" },
       { "from": "pg-approve", "to": "pg-failed" }
     ],
-    "requiredPaths": [
-      { "from": "configure-inventory", "to": "admin-confirm-or-cancel" }
-    ]
+    "requiredPaths": [{ "from": "configure-inventory", "to": "admin-confirm-or-cancel" }]
   },
   "nodes": [
     {
