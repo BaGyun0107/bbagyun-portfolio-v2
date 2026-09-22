@@ -3,7 +3,36 @@ set -eu
 
 ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 
-# lock 모드 fresh clone 자가 부트스트랩 (specs/006 후속). clone 직후에는
+cmd="${1:-help}"
+if [ "$#" -gt 0 ]; then
+  shift
+fi
+
+# 잘못된 기동 요청은 bootstrap이 파일을 받거나 preflight가 상태를 바꾸기 전에 거부한다.
+case "$cmd" in
+  preflight)
+    if [ "$#" -ne 1 ] || { [ "$1" != "claude" ] && [ "$1" != "codex" ]; }; then
+      echo "사용법: ./harness preflight <claude|codex>" >&2
+      exit 2
+    fi
+    ;;
+  orch)
+    echo "orch 명령은 제거되었습니다. 일반 기동은 ./harness claude 또는 ./harness codex 를 사용하세요." >&2
+    exit 2
+    ;;
+  codex|claude)
+    for arg in "$@"; do
+      case "$arg" in
+        --orch|--orch=*)
+          echo "--orch 옵션은 제거되었습니다. 일반 기동은 ./harness $cmd 를 사용하세요." >&2
+          exit 2
+          ;;
+      esac
+    done
+    ;;
+esac
+
+# lock 모드 fresh clone 자가 부트스트랩. clone 직후에는
 # 공유 스크립트가 materialize 되지 않아 어떤 하위 명령도 실행할 수 없다.
 # 최소 셸만으로 harness.lock을 읽어 패키지를 한 번 수신하고, 이후 단계는
 # 패키지 안의 정식 스크립트(materialize/pkg-sync)에 위임한다.
@@ -39,6 +68,16 @@ ensure_lock_bootstrap() {
   fi
   rm -f "${ls_remote_err:-}"
   cache_dir="${CODI_HARNESS_CACHE_DIR:-$HOME/.codi-harness}"
+  mkdir -p "$cache_dir"
+  if ! mkdir "$cache_dir/fetch.lock" 2>/dev/null; then
+    echo "캐시 잠금 사용 중입니다. 실행 중 작업을 확인하고 재시도하세요." >&2
+    exit 1
+  fi
+  HARNESS_CACHE_LOCK_TOKEN="bootstrap-$$"
+  export HARNESS_CACHE_LOCK_TOKEN
+  printf '{"pid":%s,"token":"%s"}' "$$" "$HARNESS_CACHE_LOCK_TOKEN" > "$cache_dir/fetch.lock/owner.json"
+  # 중단 시 clone/materialize 자손이 남을 수 있으므로 정상 완료 때만 잠금을 푼다.
+  trap 'echo "초기 준비가 중단되어 캐시 잠금을 보존했습니다. 실행 중 작업을 확인하세요." >&2' EXIT
   pkg_dir="$cache_dir/versions/$lock_version"
   if [ ! -d "$pkg_dir" ]; then
     partial="$cache_dir/versions/$lock_version.partial.$$"
@@ -51,14 +90,53 @@ ensure_lock_bootstrap() {
     mv "$partial" "$pkg_dir"
   fi
   (cd "$ROOT_DIR" && sh "$pkg_dir/.harness/scripts/pkg/materialize.sh" "$lock_version")
+  rm -f "$cache_dir/fetch.lock/owner.json"
+  rmdir "$cache_dir/fetch.lock"
+  unset HARNESS_CACHE_LOCK_TOKEN
+  trap - EXIT
   echo "lock 부트스트랩 완료: v$lock_version (채널 정본 동기화는 pkg-sync가 이어서 수행)"
 }
-ensure_lock_bootstrap
+# 공유 스크립트가 없을 때의 최소 잠금 조회. 읽기 전용이며 아무것도 바꾸지
+# 않는다. 복구는 프로세스 그룹 판정이 필요하므로 정식 도구에만 맡긴다.
+minimal_lock_status() {
+  cache_dir="${CODI_HARNESS_CACHE_DIR:-$HOME/.codi-harness}"
+  lock_dir="$cache_dir/fetch.lock"
+  if [ ! -e "$lock_dir" ]; then
+    echo "캐시 잠금 없음: $lock_dir"
+    return 0
+  fi
+  echo "잠금 경로: $lock_dir"
+  echo "판정: unknown — 공유 진단 도구가 아직 materialize되지 않았습니다(최소 조회)."
+  if [ -f "$lock_dir/owner.json" ]; then
+    echo "owner.json:"
+    sed 's/^/  /' "$lock_dir/owner.json"
+    echo ""
+  else
+    echo "owner.json이 없습니다. 잠금 디렉터리 내용을 확인하세요."
+  fi
+  echo "이 잠금이 bootstrap을 막고 있다면, 실행 중 작업이 없는지 확인한 뒤"
+  echo "다른 준비된 저장소에서 ./harness cache-lock status 로 정식 판정을 받으세요."
+  return 0
+}
 
-cmd="${1:-help}"
-if [ "$#" -gt 0 ]; then
-  shift
-fi
+# 진단 명령이 진단 대상(캐시 잠금)에 막히면 안 된다. 잠금이 남으면
+# bootstrap이 실패하므로, 상태 조회와 조건부 복구는 그 앞에서 실행한다.
+# doctor는 bootstrap이 필요하지만, 잠금 때문에 막히는 경우에는 그 전에
+# 최소 진단을 먼저 보여 원인을 알 수 있게 한다.
+case "$cmd" in
+  pkg-gc|update-status|cache-lock|help|--help|-h) ;;
+  doctor)
+    if [ -f "$ROOT_DIR/harness.lock" ] &&
+       [ ! -e "$ROOT_DIR/.harness/scripts/pkg/pkg-sync.sh" ] &&
+       [ -e "${CODI_HARNESS_CACHE_DIR:-$HOME/.codi-harness}/fetch.lock" ]; then
+      echo "진단: 공유 캐시 잠금 때문에 준비가 막혀 있습니다."
+      minimal_lock_status
+      exit 1
+    fi
+    ensure_lock_bootstrap
+    ;;
+  *) ensure_lock_bootstrap ;;
+esac
 
 case "$cmd" in
   bootstrap)
@@ -75,9 +153,32 @@ case "$cmd" in
     cd "$ROOT_DIR"
     exec sh "$ROOT_DIR/.harness/scripts/pkg/pkg-sync.sh" "$@"
     ;;
+  update-status)
+    cd "$ROOT_DIR"
+    [ -f .harness/scripts/pkg/update-status.mjs ] || { echo "상태 진단 도구가 없습니다. ./harness bootstrap으로 먼저 준비하세요." >&2; exit 1; }
+    exec node "$ROOT_DIR/.harness/scripts/pkg/update-status.mjs" "$@"
+    ;;
   pkg-gc)
     cd "$ROOT_DIR"
+    [ -f .harness/scripts/pkg/cache-runtime.mjs ] || { echo "안전한 캐시 진단 도구가 없습니다. ./harness bootstrap으로 먼저 준비하세요." >&2; exit 1; }
     exec sh "$ROOT_DIR/.harness/scripts/pkg/pkg-gc.sh" "$@"
+    ;;
+  cache-lock)
+    cd "$ROOT_DIR"
+    # 초기 clone은 아직 공유 스크립트가 없는데, 잔여 잠금이 있으면 bootstrap
+    # 자체가 막힌다. 진단까지 막히면 원인을 확인할 경로가 사라지므로, 정식
+    # 도구가 없을 때는 셸만으로 읽기 전용 상태를 보고한다. 복구는 위임하지
+    # 않는다 — 프로세스 그룹 판정은 정식 도구가 필요하다.
+    if [ ! -f .harness/scripts/pkg/cache-runtime.mjs ]; then
+      case "${1:-status}" in
+        status) minimal_lock_status; exit 0 ;;
+        *)
+          echo "캐시 잠금 복구 도구가 아직 없습니다. 최소 조회는 ./harness cache-lock status 로 가능합니다." >&2
+          exit 1
+          ;;
+      esac
+    fi
+    exec node "$ROOT_DIR/.harness/scripts/pkg/cache-runtime.mjs" cache-lock "$@"
     ;;
   migrate)
     cd "$ROOT_DIR"
@@ -88,6 +189,10 @@ case "$cmd" in
     ;;
   context-check)
     exec mise exec -- node "$ROOT_DIR/.harness/scripts/checks/context-check.mjs" "$@"
+    ;;
+  comment-check)
+    cd "$ROOT_DIR"
+    exec mise exec -- node "$ROOT_DIR/.harness/scripts/checks/comment-style-check.mjs" "$@"
     ;;
   rule-check)
     exec mise exec -- node "$ROOT_DIR/.harness/scripts/checks/rule-check.mjs" "$@"
@@ -119,6 +224,9 @@ case "$cmd" in
     ;;
   speckit-vendor)
     exec "$ROOT_DIR/.harness/scripts/setup/speckit-vendor.sh" "$@"
+    ;;
+  speckit-update-check)
+    exec mise exec -- node "$ROOT_DIR/.harness/scripts/checks/speckit-update-check.mjs" "$@"
     ;;
   manifest)
     exec mise exec -- node "$ROOT_DIR/.harness/scripts/setup/generate-manifest.mjs" "$@"
@@ -158,12 +266,19 @@ case "$cmd" in
   wire-infisical)
     exec "$ROOT_DIR/.harness/scripts/setup/wire-infisical.sh" "$@"
     ;;
-  codex)
-    "$ROOT_DIR/.harness/scripts/agent/agent-preflight.sh" codex
-    exec codex "$@"
+  codex-hooks)
+    exec mise exec -- node "$ROOT_DIR/.harness/scripts/setup/codex-global-hooks.mjs" "$@"
     ;;
-  claude)
-    "$ROOT_DIR/.harness/scripts/agent/agent-preflight.sh" claude
+  preflight)
+    exec "$ROOT_DIR/.harness/scripts/agent/agent-preflight.sh" "$1"
+    ;;
+  codex|claude)
+    agent_name="$cmd"
+    if [ "$agent_name" = "codex" ]; then
+      HARNESS_LAUNCH_PID="$$" "$ROOT_DIR/.harness/scripts/agent/agent-preflight.sh" codex
+      exec codex "$@"
+    fi
+    HARNESS_LAUNCH_PID="$$" "$ROOT_DIR/.harness/scripts/agent/agent-preflight.sh" claude
     exec claude "$@"
     ;;
   help|--help|-h)
@@ -192,7 +307,12 @@ EOF
   ./harness claude        공통 preflight 실행 후 Claude Code 시작
 
 점검:
+  ./harness codex-hooks install|check|gc [--apply]
+                           Codex 전역 훅 설치·등록 검사 (최초 신뢰는 Codex에서 검토)
+  ./harness preflight <claude|codex>
+                           공통 준비 검사만 실행 (에이전트는 시작하지 않음)
   ./harness context-check AGENTS.md / CLAUDE.md 컨텍스트 정합성 점검
+  ./harness comment-check [--staged|--all] 변경 주석 검사 / 커밋 예정 / 전체 감사
   ./harness rule-check    네이티브 rule 파일 문서화/연결 상태 점검
   ./harness secret-surface-check
                            GitHub Secret 및 .env.example 노출면 점검
@@ -204,10 +324,12 @@ EOF
 
 패키지 관리:
   ./harness install       하네스 통합 도구를 설치하거나 갱신
-  ./harness update        copy 모드 shared 하네스 적용 (lock 모드 major 전환은 --major; --check 는 Superpowers 설치 상태 안내 — 하네스 버전 확인은 update-check)
+  ./harness update        lock 레포 pkg-sync 별칭 (major 전환은 --major; copy 적용은 은퇴 — 안내만 출력)
   ./harness pin <ver>     lock 모드 버전 고정/롤백 (--channel latest-minor 로 채널 복귀)
   ./harness pkg-sync      lock 모드 수동 동기화 (수신+materialize)
-  ./harness pkg-gc        버전 캐시 정리 — 미참조 구버전 제거 (--dry-run 지원)
+  ./harness pkg-gc        버전 캐시 조회 (--json, 승인된 삭제만 --apply)
+  ./harness cache-lock status|recover  공유 캐시 잠금 조회/조건부 복구 (bootstrap 없이 실행)
+  ./harness update-status [--remote] [--json]  갱신 상태 조회
   ./harness migrate       기존 레포를 lock 모드로 전환 (--dry-run 지원)
   ./harness update-check  일/주 단위 업데이트 확인 실행
 
@@ -226,7 +348,8 @@ EOF
                            다운스트림에 남은 upstream 전용 파일 체크/정리 (기본 check)
   ./harness wire-infisical <name>
                            Infisical 콘솔 작업 후 _PROJECT_ID_ 치환과 GitHub Secrets 등록
-  ./harness speckit-vendor <tag>
+  ./harness speckit-vendor <tag> [--candidate <dir>]
+  ./harness speckit-update-check [--json]
                            고정 릴리스 태그의 Spec Kit 공용 자산을 vendoring
   ./harness profile       프로젝트 profile mode 조회/변경
   ./harness role          개발자 role 마커 조회/설정 (front|back|fullstack)

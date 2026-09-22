@@ -1,0 +1,6 @@
+# 커밋 메시지 표기 규약 검사(type 접두사·에이전트 표지·이모지·제목 길이).
+# 정본은 .harness/policies/commit-pr-style.md. 사람·Claude·Codex 가 같은
+# 검사기를 타므로 런타임 훅이 없는 경로에서도 판정이 같다.
+if [ -f .harness/scripts/checks/message-style-check.mjs ]; then
+  node .harness/scripts/checks/message-style-check.mjs --commit-msg "$1"
+fi
