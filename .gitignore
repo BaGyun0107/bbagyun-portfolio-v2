@@ -128,7 +128,7 @@ vendor/
 
 .codex/rules
 
-.codex/hooks.json
+# .codex/hooks.json  # codi-harness: remove .planning via git rm, not ignore
 
 .codex/config.example.toml
 
@@ -183,3 +183,19 @@ docs/feature-definition-planning-hub-guide.md
 .harness/config/user-flow-schema.json
 
 .playwright-mcp/
+
+# >>> codi-harness managed (Codex project hooks) >>>
+# .codex/hooks.json은 프로젝트 전용 훅이므로 버전 관리한다.
+# <<< codi-harness managed (Codex project hooks) <<<
+
+.harness/tooling/node/node_modules/
+
+.harness/scripts/ci
+
+!.harness/scripts/checks/comment-style-check.mjs
+
+.harness/config/codex-hooks.json
+
+.harness/config/speckit-template-baselines.json
+
+.harness/defaults

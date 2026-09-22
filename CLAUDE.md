@@ -27,7 +27,7 @@ Code-specific wiring; keep it a thin entrypoint per
 
 Always loaded: `phase-routing.md` (Medium+ Hard Gate, Plan-of-Record Gate),
 `skill-ownership.md`, `work-safety.md`, `e2e-validation.md`,
-`tool-call-payload-safety.md`. Path-scoped: `monorepo-packages.md` (loads
+`tool-call-payload-safety.md`, `commit-pr-style.md`. Path-scoped: `monorepo-packages.md` (loads
 when app or package files are read), `php-monolith.md` (loads when PHP
 files are read). Each mirrors `.harness/policies/*` and
 names its Codex-side counterpart where one exists.

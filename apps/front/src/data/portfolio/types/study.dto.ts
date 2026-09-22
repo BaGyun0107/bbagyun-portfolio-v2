@@ -1,12 +1,12 @@
 /**
  * Study 파트의 카테고리 정의
  */
-export type StudyCategory = "Frontend" | "Backend" | "Architecture" | "CS" | "Etc";
+export type StudyCategory = 'Frontend' | 'Backend' | 'Architecture' | 'CS' | 'Etc';
 
 /**
  * Study 파트의 상태 정의
  */
-export type StudyStatus = "Draft" | "Published" | "Archived";
+export type StudyStatus = 'Draft' | 'Published' | 'Archived';
 
 /**
  * Study 정보에 대한 DTO 인터페이스

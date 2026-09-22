@@ -9,17 +9,17 @@
 
 ## 🛠️ 기술 스택
 
-| 구분 | 기술 |
-| --- | --- |
-| Framework | [Next.js](https://nextjs.org/) 16 (App Router, Turbopack) |
-| Runtime | [React](https://react.dev/) 19 |
-| Language | [TypeScript](https://www.typescriptlang.org/) 5 (strict) |
-| 스타일링 | [Tailwind CSS](https://tailwindcss.com/) 4 |
-| 컴포넌트 | [Radix UI](https://www.radix-ui.com/) + [shadcn/ui](https://ui.shadcn.com/), 일부 [MUI](https://mui.com/) |
-| 아이콘 | [Lucide React](https://lucide.dev/) |
-| 애니메이션 | [Motion](https://motion.dev/) |
-| 차트 | [Recharts](https://recharts.org/) |
-| 코드 품질 | ESLint 9 (Flat Config), TypeScript strict |
+| 구분       | 기술                                                                                                      |
+| ---------- | --------------------------------------------------------------------------------------------------------- |
+| Framework  | [Next.js](https://nextjs.org/) 16 (App Router, Turbopack)                                                 |
+| Runtime    | [React](https://react.dev/) 19                                                                            |
+| Language   | [TypeScript](https://www.typescriptlang.org/) 5 (strict)                                                  |
+| 스타일링   | [Tailwind CSS](https://tailwindcss.com/) 4                                                                |
+| 컴포넌트   | [Radix UI](https://www.radix-ui.com/) + [shadcn/ui](https://ui.shadcn.com/), 일부 [MUI](https://mui.com/) |
+| 아이콘     | [Lucide React](https://lucide.dev/)                                                                       |
+| 애니메이션 | [Motion](https://motion.dev/)                                                                             |
+| 차트       | [Recharts](https://recharts.org/)                                                                         |
+| 코드 품질  | ESLint 9 (Flat Config), TypeScript strict                                                                 |
 
 > 정확한 버전은 [`package.json`](./package.json)을 기준으로 합니다.
 
@@ -81,12 +81,12 @@ pnpm dev
 
 ## 📜 스크립트
 
-| 명령어 | 설명 |
-| --- | --- |
-| `pnpm dev` | 개발 서버 실행 (포트 1104) |
-| `pnpm build` | 프로덕션 빌드 |
-| `pnpm start` | 빌드 결과 실행 |
-| `pnpm lint` | ESLint 검사 |
+| 명령어       | 설명                       |
+| ------------ | -------------------------- |
+| `pnpm dev`   | 개발 서버 실행 (포트 1104) |
+| `pnpm build` | 프로덕션 빌드              |
+| `pnpm start` | 빌드 결과 실행             |
+| `pnpm lint`  | ESLint 검사                |
 
 ---
 

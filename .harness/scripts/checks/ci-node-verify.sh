@@ -330,6 +330,6 @@ if [ -f ".harness/scripts/docs/planning-check.mjs" ]; then
 else
   # lock 모드 다운스트림 checkout 에는 .harness/scripts/docs 가 없다(gitignore
   # 링크 경로). 게이트가 소리 없이 사라지면 안 되므로 스킵을 로그에 남긴다 —
-  # 로컬 pre-commit 훅이 1차 방어선으로 남는다 (2026-07-31 감사 M-6).
+  # 로컬 pre-commit 훅이 1차 방어선으로 남는다.
   log "Planning Hub strict check 스킵: planning-check.mjs 없음 (lock 모드 checkout)"
 fi

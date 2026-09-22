@@ -6,81 +6,46 @@ Shared context engineering rules are defined in `.harness/policies/context-engin
 
 ## Required Flow
 
-For non-trivial feature work, bug fixes, refactors, migrations, and reviews:
+Apply the common scenario/phase contract in
+`.harness/policies/scenario-phase-routing.md` and role ownership in
+`.harness/policies/agent-routing.md`. Think through strategy, planning,
+execution, review and verification without invoking every skill on every task.
 
-1. Brainstorming
-2. Planning
-3. Execution
-4. Review
-5. Verification
+Spec-required work uses Spec Kit before implementation: new subsystems, split
+apps/imports, multiple owners, public contracts, persistent data, deployment/
+security controls, distributed harness behavior or multi-session continuity.
+Localized reversible fixes and read-only audits may proceed directly.
+Medium+ declares Size; size alone does not require a new spec or approval.
 
-Do not skip directly to implementation unless the task is explicitly trivial.
-This flow does not mean every tool is used together on every phase. Follow the
-scenario and phase routing in `.harness/policies/scenario-phase-routing.md`,
-`.harness/policies/agent-routing.md`, and `.harness/workflow.md` to choose the
-smallest useful role set.
+Spec Kit owns the single spec/plan/tasks record. Conditional clarify resolves
+material decisions; then prepare plan/tasks/analyze as one reviewable package.
+The codi-auto-loop skill handles requested end-to-end application. Continue
+within existing user authorization; otherwise request review before implementation.
+Never invent human-owned checklist answers or approvals. Native tool permissions
+and destructive/production/secret-access approvals remain separate.
 
-### Phase 1~5 routing summary
+Resume the related feature; unrelated unchecked/deferred tasks do not block work.
+Use the session/worktree selection in the canonical policy when working concurrently.
+Keep decisions, failed approaches, evidence and remaining work in committed specs.
+Superpowers provides conditional brainstorming, TDD/debugging and review/evidence
+discipline without a second plan/task ledger.
 
-- P1 Strategy: Superpowers brainstorming for creative/product/architecture changes.
-- P2 Specify and plan: `speckit-specify` -> conditional `speckit-clarify` -> user handoff -> explicit `codi-auto-loop` for plan/tasks/required `speckit-analyze`.
-- P3 Execution: implementation guided by unchecked tasks.md items plus Superpowers TDD/debugging/plan execution; honor Spec Kit checklist confirmation gates; the implement step never commits.
-- P4 Review and verification: `speckit-converge` until "Converged" plus Superpowers verification discipline; Playwright MCP browser QA when live verification helps.
-- P5 Ship and completion: converge green -> update the root `ROADMAP.md` -> PR prep from the spec directory.
+## Runtime Capabilities
 
-For the canonical skill mapping, runtime syntax, escalation rules, and
-conditional skills, see `.harness/policies/scenario-phase-routing.md`.
+Both Claude Code and supported Codex CLI installations have prompt/tool hooks.
+Check actual version, trust, configuration and host support; report unsupported,
+absent, unwired or unknown states. The shared adapters normalize runtime events.
+When hooks are unavailable, apply the common policy directly after launcher preflight.
+Model identity is not proof that a hook or subagent tool is available.
 
-### Size routing summary
+For independent implementation streams, record a `Subagent decision:` with scope,
+authority, action and context boundaries. Delegate only when useful and authorized;
+bounded inline execution is valid when delegation is unavailable. Ask only when
+a real permission or independence requirement prevents progress.
+Before app work load codi-phase-routing and the project profile, then owner skills.
 
-Size controls routing, not elapsed time or raw file count. Small = fixed
-direction, obvious target, localized, reversible, directly verifiable. Medium
-starts as soon as the agent must decide what to inspect, change, or verify.
-Large adds multiple ownership boundaries, phases, role gates, handoff, or
-user/API impact. Extra large or risky covers production, data, auth/security,
-secrets, and other hard-to-reverse work. The canonical criteria and boundary
-rules live in `.harness/policies/scenario-phase-routing.md` ("Size Routing");
-this summary must not drift from it.
-
-For work that is not clearly Small (Medium+), declare the Size before
-implementing (`Size: <Medium|Large|Extra large>, because ...`); Small work is
-handled directly with no declaration. The plan of record for Medium+ work
-lives in a committed `specs/<NNN-feature>/` directory before implementation
-starts — Superpowers/brainstorm outputs are input material, fed to
-`speckit-specify`
-(see "Plan of Record" in `.harness/policies/scenario-phase-routing.md`). Medium may go direct only when the work is
-localized, single-stream, and does not need durable state; app scaffolds, split
-frontend/backend work, scaffold/import work, multi-stage implementation, and
-session-continuity work are Large/spec cases, not Medium direct cases.
-
-## Codex automation limits
-
-Unlike Claude Code, the Codex CLI does not support a UserPromptSubmit hook.
-`./harness codex` runs `.harness/scripts/agent/agent-preflight.sh` once at startup and
-prints a phase routing reminder from there.
-
-For every later response, the Codex agent must apply the Phase 1~5 summary
-above and `.harness/policies/scenario-phase-routing.md` directly. There is no
-runtime keyword-matching skill-injector equivalent to Claude Code.
-
-After `speckit-specify`, Codex must report whether clarify is required or
-skipped. If required, wait for the user's answers; if skipped, say why. In
-both cases, ask the user to explicitly start `codi-auto-loop` and stop — do
-not continue into plan/tasks/implementation automatically.
-
-Codex hard stop for split app work: before editing implementation files for
-split frontend/backend, scaffold/import, or other multi-workstream app work,
-Codex must first load `codi-phase-routing`, read the project profile, and check
-for in-flight features (unchecked `specs/<NNN-*>/tasks.md` items); then write
-the literal `Subagent decision:`
-block from `.harness/policies/agent-routing.md`. Without explicit user
-authorization for subagents, the selected action is `ask`, and Codex must stop
-for approval in that same response. Do not proceed inline, do not start package
-scaffolding, and do not write `specs/` only after implementation as a
-substitute for the Spec Kit planning stages.
-
-To preserve Codex/Claude parity, do not create Codex-only context files (such
-as `.codex/AGENTS.md`); see `.harness/policies/context-engineering.md`.
+To preserve parity, do not create Codex-only context documents such as
+`.codex/AGENTS.md`; use `.harness/policies/context-engineering.md`.
 
 ## Tool Responsibilities
 
@@ -102,7 +67,8 @@ Repo-local Codi skills adapt execution to the actual stack. The skill source of 
 - Frontend work: `codi-frontend`
 - Database work: `codi-db`
 - Developer workflow / mise work: `codi-dev-workflow`
-- Dependency audit, OSV, Renovate, and lockfile update review: `codi-dependency-review`
+- App lint/format and dependency inspection or repair: `codi-app-quality`
+- Harness version updates and cache maintenance: `codi-harness-update`
 - E2E gate setup/run/troubleshooting: `codi-e2e`
 - Gnuboard5/PHP mall work (php-monolith profile): `codi-gnuboard`
 - NestJS-specific work: load `nestjs-expert` when NestJS is detected
@@ -125,9 +91,11 @@ of truth.
 ## Language and Environment
 
 - Write code comments, commit descriptions, PR titles, issue titles, and PR/issue bodies in Korean unless an external API or standard term must remain in English. Code comments are written for human reviewers, not for AI — keep them Korean even when the surrounding code is in an AI-read file like a hook script or scanner.
+- Comment content follows `.harness/policies/code-comment-style.md`: body comments state the why/constraints the code cannot show (no what-summaries or spec/task provenance headers); `TODO`/`FIXME` need a trackable issue or spec-task reference; public API contracts go in JSDoc/TSDoc. Review nearby existing comments too, and run `./harness comment-check` for changed sources.
 - AI-read files are written in English: `AGENTS.md`, `CLAUDE.md`, and everything under `.harness/skills/`, `.harness/imported-rules/`, `.harness/policies/`, `.claude/rules/` (including `.claude/rules/references/`), and `.codex/rules/`. This applies to the *prose* in those files (rule text, headings, descriptions) — code comments inside scripts or examples in those files still follow the Korean-comment rule above. User-facing docs (`README.md`, `CONTRIBUTING.md`, `ARCHITECTURE.md`, `apps/*/AGENTS.md`, `apps/*/CLAUDE.md`) may stay in Korean.
 - Keep identifiers, function names, file names, and directory names in English.
-- Use commit messages in the form `<type>: <Korean description>`.
+- Use commit messages in the form `<type>: <Korean description>`; the full
+  convention (types, no `[claude]` tags, no emoji, PR shape) is `.harness/policies/commit-pr-style.md`.
 - App repo branch/environment mapping: `dev -> dev/development`, `main -> prod/production`.
 - The harness repo itself uses version branches and does not enforce the app repo `dev -> main` PR flow.
 - GitHub Secrets should only contain `INFISICAL_CLIENT_ID` and `INFISICAL_CLIENT_SECRET`; other secrets belong in Infisical.
@@ -146,6 +114,7 @@ Follow `.harness/policies/tool-permissions.md` for permission priority, MCP acce
 - AI may create PRs, but must never merge PRs.
 - App repo normal flow: feature branch -> `dev` PR -> user merge -> `dev` to `main` PR -> user merge.
 - In the harness repo, PRs may target version branches; choose the target based on user request or the current release branch.
+- Harness repo release gate: a PR that changes shared-distributed paths (members of `.harness/shared-manifest.json`) must add a new `## vX.Y.Z` section to `CHANGELOG.md` in the same PR, or explicitly declare batching in the PR body — a merge without a section releases nothing and never reaches downstream. See "Release gate and changelog" in `.harness/policies/update-policy.md`.
 - For a hotfix, skip the app repo normal flow and open a PR directly against `main`, with user merge.
 - After a hotfix is merged to `main`, proceed with a `main -> dev` reverse-sync PR and remind the user that it must be merged.
 - Always ask explicit approval before destructive or history-rewriting operations such as `rm -rf`, `DROP TABLE`, `git push --force`, `git reset --hard`, or production deploy/rollback. `gh pr merge` is stricter: AI must never run it, even with approval; the user merges PRs in GitHub.
@@ -154,7 +123,7 @@ Follow `.harness/policies/tool-permissions.md` for permission priority, MCP acce
 
 ## Source of Truth
 
-Chat is not the source of truth. For Medium or larger multi-stage work, use the
+Chat is not the source of truth. For spec-required work, use the
 Spec Kit feature flow and keep committed `specs/<NNN-feature>/` directories as
 durable state; Spec Kit runtime state lives in `.specify/`, and the
 cross-feature overview lives in the thin, manually maintained root
@@ -166,9 +135,10 @@ feature-spec file convention.
 
 ## Spec Kit and Context Budget
 
-Use Spec Kit before implementation for Medium or larger work, cross-repository
-changes, CI/CD or security operations, migrations, release-risk work, and any
-task expected to span multiple stages or sessions.
+Use Spec Kit for the boundaries in the canonical scenario-phase-routing policy:
+new subsystems, multiple owners, public contracts, data, deployment/security
+controls, distributed behavior and multi-session continuity. Local reversible
+fixes and read-only audits may proceed directly.
 
 Spec Kit reduces main-orchestrator context pressure by moving durable state
 out of chat and into committed `specs/<NNN-feature>/` directories. Record
@@ -177,10 +147,9 @@ results, and handoff notes there. The main orchestrator should load only the
 spec state needed for the current stage (the spec.md summary, plan.md, and
 unchecked tasks) instead of carrying the full conversation forward.
 
-At the start of a new Medium or larger task, check for in-flight features
-before creating new work. If any `specs/<NNN-*>/tasks.md` has unchecked
-items, resume or resolve that feature first unless the user explicitly
-redirects; unchecked tasks plus `.specify/` state are the checkpoint.
+At the start of spec-required work, check for related in-flight features.
+Resume the related feature's unchecked tasks and explicit selection; unrelated
+deferred or external tasks are not a repository-wide lock.
 
 Spec Kit does not automatically create subagents. When independent work
 streams are useful and the active environment allows subagents, route that
@@ -194,3 +163,7 @@ Use `./harness codex` instead of invoking `codex` directly. The launcher runs th
 Harness runtime versions are managed by `mise`; the harness root pins Node.js 24 in `mise.toml`.
 
 For target applications, preserve the app-declared runtime from app-local `mise.toml`, `.node-version`, `.nvmrc`, `package.json#engines`, or CI config. Do not upgrade Node.js 20/22 projects to Node.js 24 unless the user explicitly requests a runtime upgrade.
+
+For delegated work, apply **Delegated Worker Scope** in
+`.harness/policies/agent-routing.md`: the user-facing coordinator owns the request;
+workers return evidence for their assigned scope without restarting the whole loop.

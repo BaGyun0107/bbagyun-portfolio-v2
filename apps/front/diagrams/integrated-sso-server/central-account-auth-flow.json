@@ -228,10 +228,7 @@
       "toSide": "left",
       "route": "return-left",
       "channelX": 840,
-      "labelAt": [
-        851,
-        283
-      ]
+      "labelAt": [851, 283]
     },
     {
       "id": "refresh-update-token",

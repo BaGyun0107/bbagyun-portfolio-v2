@@ -17,4 +17,11 @@ if git diff --cached --name-only --diff-filter=ACMR \
   .harness/scripts/setup/skills-link.sh
 fi
 
-npx lint-staged
+node .harness/scripts/checks/comment-style-check.mjs --staged || exit 1
+
+lint_staged=.harness/tooling/node/node_modules/lint-staged/bin/lint-staged.js
+if [ ! -f "$lint_staged" ]; then
+  echo "하네스 Git 도구가 준비되지 않았습니다. ./harness bootstrap을 실행하세요." >&2
+  exit 1
+fi
+node "$lint_staged" --config .harness/tooling/lint-staged.config.mjs
