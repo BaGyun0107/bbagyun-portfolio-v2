@@ -8,10 +8,8 @@
   "bracketSpacing": true,
   "bracketSameLine": false,
   "jsxSingleQuote": true,
-  "jsxBracketSameLine": false,
   "endOfLine": "auto",
   "arrowParens": "always",
   "singleAttributePerLine": false,
-  "embeddedLanguageFormatting": "auto",
-  "singlelineComment": true
+  "embeddedLanguageFormatting": "auto"
 }
