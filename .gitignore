@@ -65,9 +65,9 @@ vendor/
 .gstack/
 
 # >>> codi-harness managed (.planning) — do not edit between markers >>>
-# Legacy planning state is scheduled for removal
-# (docs/audits/2026-07-07-planning-retirement.md); until deleted, do not
-# ignore it — removal goes through git rm, not ignore.
+# Legacy .planning is owner-controlled data; never hide or delete it automatically.
+# See .harness/policies/update-policy.md for the protection boundary.
+# Explicit retirement belongs to the owner and goes through git rm.
 # <<< codi-harness managed (.planning) <<<
 
 # >>> codi-harness managed (lock scripts) — do not edit between markers >>>
@@ -199,3 +199,7 @@ docs/feature-definition-planning-hub-guide.md
 .harness/config/speckit-template-baselines.json
 
 .harness/defaults
+
+.harness/scripts/lib
+
+.harness/config/speckit-overrides
