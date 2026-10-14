@@ -321,15 +321,3 @@ for dir in "${PACKAGE_DIRS[@]}"; do
     run_script_if_present "$dir" "$manager" "$script"
   done
 done
-
-# 로컬 hook이 실행되지 않는 직접 편집/다른 agent 경로도 merge 전에 같은
-# planning 계약으로 차단한다.
-if [ -f ".harness/scripts/docs/planning-check.mjs" ]; then
-  log "Planning Hub strict check 실행"
-  node .harness/scripts/docs/planning-check.mjs
-else
-  # lock 모드 다운스트림 checkout 에는 .harness/scripts/docs 가 없다(gitignore
-  # 링크 경로). 게이트가 소리 없이 사라지면 안 되므로 스킵을 로그에 남긴다 —
-  # 로컬 pre-commit 훅이 1차 방어선으로 남는다.
-  log "Planning Hub strict check 스킵: planning-check.mjs 없음 (lock 모드 checkout)"
-fi

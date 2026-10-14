@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process';
-import { lstatSync, readFileSync } from 'node:fs';
+import { lstatSync, readFileSync, realpathSync } from 'node:fs';
 import { extname, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const extensions = new Set(['.js', '.mjs', '.cjs', '.ts', '.mts', '.cts', '.sh', '.bash', '.py', '.php', '.css', '.yaml', '.yml', '.toml']);
 const excluded = /(?:^|\/)(?:\.git|node_modules|vendor|dist|build|coverage|\.specify)(?:\/|$)|^\.harness\/(?:cache|current|state)\//;
@@ -230,7 +230,8 @@ function inspect(root, mode, index, untracked, head) {
   return findings;
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+// 심링크(lock 모드 .harness/skills 등)로 불려도 본문이 돌도록 실경로끼리 비교한다.
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   try {
     const args = process.argv.slice(2);
     if (args.length > 1 || args.some(arg => !['--all', '--staged'].includes(arg))) throw new Error('사용법: comment-check [--staged|--all]');

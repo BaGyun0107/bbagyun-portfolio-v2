@@ -74,11 +74,6 @@ Repo-local Codi skills adapt execution to the actual stack. The skill source of 
 - NestJS-specific work: load `nestjs-expert` when NestJS is detected
 - Harness rule/policy authoring and Codex/Claude parity audits: `codi-rule-authoring`
 
-Before finishing feature work that touches `specs/` or the feature hub, run
-`mise run feature:status:sync`; apply deterministic adjacent transitions with
-`mise run feature:status:sync --apply`, and report ambiguous or `on-hold`
-cases instead of auto-applying them.
-
 For the practical step-by-step workflow, follow `CONTRIBUTING.md`.
 
 Before app work, read `.harness/config/project-profile.yaml`.
@@ -128,8 +123,7 @@ Spec Kit feature flow and keep committed `specs/<NNN-feature>/` directories as
 durable state; Spec Kit runtime state lives in `.specify/`, and the
 cross-feature overview lives in the thin, manually maintained root
 `ROADMAP.md`. Audit records live in `docs/audits/` (harness-owned, active);
-a leftover legacy `.planning/` directory is scheduled for removal per
-`docs/audits/2026-07-07-planning-retirement.md` — never read or update it
+legacy `.planning/` remains project-owned user data; never read or update it
 for routing. The 1-5 phase model is a thinking flow, not a local
 feature-spec file convention.
 

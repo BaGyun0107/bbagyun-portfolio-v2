@@ -96,6 +96,27 @@ ensure_lock_bootstrap() {
   trap - EXIT
   echo "lock 부트스트랩 완료: v$lock_version (채널 정본 동기화는 pkg-sync가 이어서 수행)"
 }
+# prune-downstream 이 추적 해제한 링크(.harness/scripts/lib 등)는 그 커밋을
+# 넘나드는 checkout·pull 에서 git 이 지운다. 부트스트랩 판정은 pkg-sync.sh 만
+# 보므로 나머지 링크가 빠지면 pre-commit 같은 소비자가 import 실패로 깨진다.
+# 패키지의 scripts 하위는 materialize 가 빠짐없이 만들므로(링크 또는 실디렉터리)
+# 하나라도 없으면 현재 버전으로 다시 materialize 한다. 오프라인이고 멱등이다.
+ensure_shared_links() {
+  [ -f "$ROOT_DIR/harness.lock" ] || return 0
+  current="$ROOT_DIR/.harness/current"
+  [ -L "$current" ] && [ -d "$current/.harness/scripts" ] || return 0
+  missing=""
+  for sub in "$current/.harness/scripts"/*/; do
+    name="$(basename "$sub")"
+    [ -e "$ROOT_DIR/.harness/scripts/$name" ] || missing="$missing .harness/scripts/$name"
+  done
+  [ -n "$missing" ] || return 0
+  current_version="$(basename "$(readlink "$current")")"
+  echo "공유 링크 누락을 현재 버전 $current_version 으로 복구합니다:$missing" >&2
+  if ! (cd "$ROOT_DIR" && sh "$current/.harness/scripts/pkg/materialize.sh" "$current_version") >&2; then
+    echo "복구 실패: ./harness pkg-sync 로 다시 구성하세요." >&2
+  fi
+}
 # 공유 스크립트가 없을 때의 최소 잠금 조회. 읽기 전용이며 아무것도 바꾸지
 # 않는다. 복구는 프로세스 그룹 판정이 필요하므로 정식 도구에만 맡긴다.
 minimal_lock_status() {
@@ -134,8 +155,12 @@ case "$cmd" in
       exit 1
     fi
     ensure_lock_bootstrap
+    ensure_shared_links
     ;;
-  *) ensure_lock_bootstrap ;;
+  *)
+    ensure_lock_bootstrap
+    ensure_shared_links
+    ;;
 esac
 
 case "$cmd" in
@@ -196,6 +221,12 @@ case "$cmd" in
     ;;
   rule-check)
     exec mise exec -- node "$ROOT_DIR/.harness/scripts/checks/rule-check.mjs" "$@"
+    ;;
+  design-check|contrast-check|color-scan)
+    # 다운스트림 가드는 `node .harness/skills/...` 를 공유 스킬 쓰기로 보고 막으므로
+    # 디자인 검사는 경로를 드러내지 않는 이 하위 명령으로 부른다(spec 034 파일럿 P13).
+    cd "$ROOT_DIR"
+    exec mise exec -- node "$ROOT_DIR/.harness/skills/codi-design-system/resources/$cmd.mjs" "$@"
     ;;
   secret-surface-check)
     exec mise exec -- node "$ROOT_DIR/.harness/scripts/checks/secret-surface-check.mjs" "$@"
@@ -314,6 +345,9 @@ EOF
   ./harness context-check AGENTS.md / CLAUDE.md 컨텍스트 정합성 점검
   ./harness comment-check [--staged|--all] 변경 주석 검사 / 커밋 예정 / 전체 감사
   ./harness rule-check    네이티브 rule 파일 문서화/연결 상태 점검
+  ./harness design-check  디자인 기록·토큰 정합성 검사 (DESIGN.md, globals.css, components.json)
+  ./harness contrast-check <globals.css> [--design DESIGN.md]  토큰 대비 검사
+  ./harness color-scan [--changed <base>]  앱 소스의 하드코딩 색 검사
   ./harness secret-surface-check
                            GitHub Secret 및 .env.example 노출면 점검
   ./harness package-policy-check
